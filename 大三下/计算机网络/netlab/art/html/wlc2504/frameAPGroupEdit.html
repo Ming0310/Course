@@ -1,0 +1,1649 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Wlans';
+
+///////////////////////////////////////
+// PT71: re-implemented tab widgets
+var lastTab = {
+	label: 'tabLabel1',
+	tab: 'tab1'
+};
+var lastSecTab = {
+	label: 'sectabLabel1',
+	tab: 'sectab1'
+};
+
+function clickTab(last, prefix, num) {
+	document.getElementById(last.label).className = "dojoTabPaneTab";
+	document.getElementById(last.tab).style.display = "none";
+	last.label = prefix + 'Label' + num;
+	last.tab = prefix + num;
+	document.getElementById(last.label).className = "dojoTabPaneTab current";
+	document.getElementById(last.tab).style.display = "block";
+}
+///////////////////////////////////////
+
+var availableWlans = <?=AVAILABLE-WLANS=?>;
+
+function ptOnload() {
+	onloadEvent();
+	
+	var selectIndex = 0;
+	for (var i=0; i<availableWlans.length; i++) {
+		var option = document.createElement("option");
+		var wlan = availableWlans[i];
+		option.value = wlan.id;
+		option.text = wlan.ssid + "(" + wlan.id + ")";
+		document.forms[0].new_wlanid.add(option);
+	}
+}
+
+function submitAction() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("loc_str", document.forms[0].loc_str.value);
+		top.CHttpFormExtractor.addKeyValue("loc_descr", document.forms[0].loc_descr.value);
+		
+		document.forms[0].submit();
+	}
+	
+	return false;   
+}
+
+</script>
+
+<link rel="stylesheet" href="styles/HtmlTabContainer.css" type="text/css">
+
+
+
+<!-- 
+<script language="javascript" src="javascript/dojo/dojo.js"></script>
+<script language="JavaScript" src="javascript/selectbox.js"></script>
+<script language="javascript" src="javascript/popup.js"></script>
+ -->
+<script language="javascript">
+
+var initial_11a,selected_11a,index,initial_11b,selected_11b;
+var check = "";
+
+
+function deleteAction(index) {
+         if(confirm(top.ARE_YOU_SURE_DELETE)){
+                 document.forms[0].buttonClicked.value = DELETE_CLICKED;
+                 document.forms[0].indexClicked.value = index;
+				 
+				top.CHttpFormExtractor.clearKeyValues();
+				top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+				top.CHttpFormExtractor.addKeyValue("loc_str", document.forms[0].loc_str.value);
+				top.CHttpFormExtractor.addKeyValue("indexClicked", document.forms[0].indexClicked.value);
+				
+                 document.forms[0].submit();
+         }
+}
+
+
+function createNewInterfaceMapping(){
+	document.forms[0].buttonClicked.value = CREATE_CLICKED;
+
+	top.CHttpFormExtractor.clearKeyValues();
+	top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+	top.CHttpFormExtractor.addKeyValue("loc_str", document.forms[0].loc_str.value);
+	top.CHttpFormExtractor.addKeyValue("new_wlanid", document.forms[0].new_wlanid.value);
+
+	document.forms[0].submit();
+}
+
+function createNewVenue(){
+        if(document.forms[0].new_language.value == "" || document.forms[0].new_venue_name.value == ""){
+           alert("Language and Venue Name fields should not be empty while adding an entry.");
+           return false;
+        }
+	document.forms[0].buttonClicked.value = CUSTOM6_CLICKED;
+	document.forms[0].submit();
+}
+
+function setPageTitleText()
+{
+   var getElmId = document.getElementById("pageTitleText");
+   getElmId.innerHTML = "Ap Groups &gt; Edit &nbsp;'" +  replaceSpecialCharacter(document.forms[0].loc_str.value) + "'";
+} 
+
+function onloadEvent()
+{
+   setPageTitleText();
+   initPage();
+   //hide the 'Add New'  button and Remove option for default group.
+   if(document.forms[0].loc_str.value == "default-group")
+   {
+      hideAddNewMappingButton();     
+      hideRemoveApButton();
+   }
+   //adjuct the NAC state mencu and remove(default-group)
+   //hideAllInterfaceMenu();
+   selTab();
+   if(document.forms[0].loc_str.value != "default-group")
+   {
+      index=document.forms[0].profile_802_11a.selectedIndex
+      initial_11a=document.forms[0].profile_802_11a.options[index].value;
+      index=document.forms[0].profile_802_11b.selectedIndex
+      initial_11b=document.forms[0].profile_802_11b.options[index].value;
+   }
+   CheckError();
+   getVenueType();
+   displayInfo();
+//   dojo.widget.byId("new_wlanid").dataProvider.searchLimit = 512; 
+   showTabForDefault();
+   EnableQinQ();
+   if(document.forms[0].loc_str.value != "default-group"){
+   preferModeStringDisplay();
+   }
+   if(document.forms[0].loc_str.value == "default-group"){
+        document.getElementById('preferMode_grp').style.display = 'none';
+   }
+}
+
+//override the dojo function handle arrow.
+//we are passing empty string so all the items in the combobox will be displayed.
+/*dojo.lang.extend(dojo.widget.html.ComboBox,{
+	handleArrowClick: function(){
+		this._handleBlurTimer(true, 0);
+		this.tryFocus();
+		if (this._result_list_open) {
+			this.hideResultList();
+		}
+		else {
+			//this.startSearchFromInput(); //this is the original dojo code commented out.
+			this.startSearch("");
+		}
+	}
+});
+*/
+
+function cancelAddUser()
+{
+   document.getElementById('add_user1').style.display = 'none';
+}
+
+function showAddSection()
+{
+   //show add rule section.  
+   document.getElementById('add_new').style.display = 'inline';   
+}
+function showAddSectionVen()
+{
+   //show add rule section.  
+   document.getElementById('add_new_ven').style.display = 'inline';   
+}
+
+function hideAddSection()
+{
+   //show add rule section.  
+   document.getElementById('add_new').style.display = 'none';   
+}
+function hideVenueSection()
+{
+   //show add rule section.  
+   document.getElementById('add_new_ven').style.display = 'none';   
+}
+
+function hideAddNewMappingButton()
+{
+   document.getElementById('addnewbutton').style.display = 'none';   
+}
+
+function hideRemoveApButton()
+{
+   document.getElementById('rem_apbutton').style.display = 'none';
+}
+
+function preferModeStringDisplay()
+{
+if(document.forms[0].loc_str.value != "default-group"){
+ if(document.forms[0].prefer_status.value == "false") {
+    document.forms[0].enablePreferMode.checked = false;
+    document.forms[0].preferred_mode_group.disabled = true;
+    document.getElementById('preferConfigDiv').style.display = 'none';
+ }
+ else{
+    document.forms[0].enablePreferMode.checked = true;
+    document.forms[0].preferred_mode_group.disabled = false;
+    document.getElementById('preferConfigDiv').style.display = 'block';
+ }
+}
+}
+function enablePreferDrop()
+{
+if(document.forms[0].loc_str.value != "default-group"){
+ if(document.forms[0].enablePreferMode.checked == true) {
+    document.forms[0].preferred_mode_group.disabled = false;
+    document.forms[0].prefer_str.value = "";
+    document.getElementById('preferConfigDiv').style.display = 'block';
+ }
+ else{
+    document.forms[0].prefer_str.value = "Not-Configured";
+    document.forms[0].preferred_mode_group.disabled = true;
+    document.getElementById('preferConfigDiv').style.display = 'none';
+ }
+}
+}
+
+function getFormSubmitValues()
+{
+   //change description.
+   var submittingForm = document.forms["siteSubmitform"];
+   submittingForm.loc_str.value = document.forms[0].loc_str.value;
+   submittingForm.loc_descr.value = document.forms[0].loc_descr.value;
+   submittingForm.nasid.value = document.forms[0].nasid.value;
+   submittingForm.qinqEnabled.checked = document.forms[0].qinqEnabled.checked;
+   submittingForm.qinqDhcpEnabled.checked = document.forms[0].qinqDhcpEnabled.checked;
+   submittingForm.qinqOuterVlanId.value = document.forms[0].qinqOuterVlanId.value;
+   submittingForm.pak_rssi_enable_grp.checked = document.forms[0].pak_rssi_enable_grp.checked;
+   submittingForm.pak_rssi_threshold_grp.value = document.forms[0].pak_rssi_threshold_grp.value;
+   submittingForm.pak_rssi_threshold_trig_grp.value = document.forms[0].pak_rssi_threshold_trig_grp.value;
+   submittingForm.pak_rssi_ntp_grp.value = document.forms[0].pak_rssi_ntp_grp.value;
+   submittingForm.lan1status.checked = document.forms[0].lan1status.checked;
+   submittingForm.poestatus.checked = document.forms[0].poestatus.checked;
+   submittingForm.lan2status.checked = document.forms[0].lan2status.checked;
+   submittingForm.lan3status.checked = document.forms[0].lan3status.checked;
+   submittingForm.modulestatus.checked = document.forms[0].modulestatus.checked;
+
+   submittingForm.lan1vap.value = document.forms[0].lan1vap.options[document.forms[0].lan1vap.selectedIndex].value;
+   submittingForm.lan2vap.value = document.forms[0].lan2vap.options[document.forms[0].lan2vap.selectedIndex].value;
+   submittingForm.lan3vap.value = document.forms[0].lan3vap.options[document.forms[0].lan3vap.selectedIndex].value;
+   submittingForm.modulevap.value = document.forms[0].modulevap.options[document.forms[0].modulevap.selectedIndex].value;
+
+   if(document.forms[0].loc_str.value != "default-group"){
+   submittingForm.preferred_mode_group.value = document.forms[0].preferred_mode_group.value;
+   submittingForm.enablePreferMode.checked = document.forms[0].enablePreferMode.checked;
+   }
+   //create new wlan.      
+  // var selectedId = //dojo.widget.byId("new_wlanid").comboBoxSelectionValue.value;
+   if(document.forms[0].new_wlanid.options.selectedIndex >= 0) {
+       submittingForm.new_wlanid.value = document.forms[0].new_wlanid.options[document.forms[0].new_wlanid.selectedIndex].value;
+   }
+   submittingForm.new_interface.value = document.forms[0].new_interface.options[document.forms[0].new_interface.selectedIndex].value;
+   submittingForm.nac_enable.checked = document.forms[0].nac_enable.checked;
+
+   //Do not submit 802.11u and RF profile settings for default-group
+   if(document.forms[0].loc_str.value != "default-group"){
+
+       submittingForm.profile_802_11a.value = document.forms[0].profile_802_11a.options[document.forms[0].profile_802_11a.selectedIndex].value;
+       submittingForm.profile_802_11b.value = document.forms[0].profile_802_11b.options[document.forms[0].profile_802_11b.selectedIndex].value;
+       submittingForm.venue_group.value = document.forms[0].venue_group.options[document.forms[0].venue_group.selectedIndex].value;
+       submittingForm.typeForGrpUnspecified.value = document.forms[0].typeForGrpUnspecified.options[document.forms[0].typeForGrpUnspecified.selectedIndex].value;
+       submittingForm.typeForGrpAssembly.value = document.forms[0].typeForGrpAssembly.options[document.forms[0].typeForGrpAssembly.selectedIndex].value;
+       submittingForm.typeForGrpBusiness.value = document.forms[0].typeForGrpBusiness.options[document.forms[0].typeForGrpBusiness.selectedIndex].value;
+       submittingForm.typeForGrpEdu.value = document.forms[0].typeForGrpEdu.options[document.forms[0].typeForGrpEdu.selectedIndex].value;
+       submittingForm.typeForGrpFactory.value = document.forms[0].typeForGrpFactory.options[document.forms[0].typeForGrpFactory.selectedIndex].value;
+       submittingForm.typeForGrpInstitution.value = document.forms[0].typeForGrpInstitution.options[document.forms[0].typeForGrpInstitution.selectedIndex].value;
+       submittingForm.typeForGrpMercantile.value = document.forms[0].typeForGrpMercantile.options[document.forms[0].typeForGrpMercantile.selectedIndex].value;
+       submittingForm.typeForResidential.value = document.forms[0].typeForResidential.options[document.forms[0].typeForResidential.selectedIndex].value;
+       submittingForm.typeForStorage.value = document.forms[0].typeForStorage.options[document.forms[0].typeForStorage.selectedIndex].value;
+       submittingForm.typeForMisc.value = document.forms[0].typeForMisc.options[document.forms[0].typeForMisc.selectedIndex].value;
+       submittingForm.typeForVehicular.value = document.forms[0].typeForVehicular.options[document.forms[0].typeForVehicular.selectedIndex].value;
+       submittingForm.typeForOutdoor.value = document.forms[0].typeForOutdoor.options[document.forms[0].typeForOutdoor.selectedIndex].value;
+   }
+   //delete the slelected interface mapping.  
+   
+   //delete clicked. get the value from.   
+   submittingForm.buttonClicked.value =  document.forms[0].buttonClicked.value;
+   if((document.forms[0].buttonClicked.value == DELETE_CLICKED) || (document.forms[0].buttonClicked.value == CUSTOM3_CLICKED) 
+       || (document.forms[0].buttonClicked.value == CUSTOM4_CLICKED) 
+       || (document.forms[0].buttonClicked.value == CUSTOM7_CLICKED) )
+   {
+     var delValue = getEmRowElmValue(document.forms[0], "wlanid", document.forms[0].indexClicked.value);
+     submittingForm.interface_mappings_wlanid.value = delValue;
+   }
+   submittingForm.sel_aps.value = document.forms[0].sel_aps.value;
+   if((document.forms[0].buttonClicked.value == CUSTOM5_CLICKED))
+   {
+      var lang = getEmRowElmValue(document.forms[0], "language", document.forms[0].indexClicked.value);
+      var ven_name = getEmRowElmValue(document.forms[0], "venue_name", document.forms[0].indexClicked.value);
+      submittingForm.act_language.value = lang;
+      submittingForm.act_venue_name.value = ven_name;
+   }
+   if((document.forms[0].buttonClicked.value == CUSTOM6_CLICKED))
+   {
+      submittingForm.act_language.value = document.forms[0].new_language.value;
+      submittingForm.act_venue_name.value = document.forms[0].new_venue_name.value;
+   }
+
+}
+
+function getOpClassSelection()
+{
+  var submittingForm = document.forms["siteSubmitform"];
+  var value = "";
+  var classCount =0;
+  var form1 = document.forms[0];
+  for(var loop=0; loop < form1.elements.length;loop++)
+  {
+    var elmN = form1.elements[loop].name;
+    if(elmN && elmN.indexOf(".op_class") > -1)
+    {
+
+          if (loop ==0)
+          {
+              if(form1.elements[loop].checked == true)
+              value  = "1";
+              else
+              value  = "0"
+          }
+          else {
+             if(form1.elements[loop].checked == true){
+                classCount++;
+                if (classCount > 10)
+                {
+                   alert("Cannot configure more than 10 operating classes for an AP group.");
+                   return false;
+                }
+                value += "1,";
+             }
+             else
+                value += "0,";
+          }
+    }
+   } //End of for loop
+   submittingForm.sel_class.value = value;
+   return true;
+}
+
+function submitTheDataForm()
+{
+  getFormSubmitValues(); 
+  if(getOpClassSelection() == false)
+  return false; 
+  document.forms["siteSubmitform"].submit();
+  return false;   
+}
+
+function initPage()
+{
+   //override the first form submit with the second form.
+//   document.forms[0].submit = submitTheDataForm;
+}
+
+function addApsFromGroup()
+{
+  var value = [];
+  var apCount = 0;
+  var form1 = document.forms[0];
+  for(var loop=0; loop < form1.elements.length;loop++)
+  { 
+    var elmN = form1.elements[loop].name;
+    if(elmN && elmN.indexOf(".out_ap_sel") > -1)
+    {
+          if(form1.elements[loop].checked == true)
+          {
+            apCount++;
+	    if(500 < apCount){
+              if (!confirm("Warning: Only the first 500 APs will be Added to the AP group. Are you sure you want to continue?"))
+                return false;
+	      else
+	        break;
+	    }
+            var clicindex = elmN.substring(0,elmN.indexOf("out_ap_sel"));           
+            //var apId = form1(clicindex + "out_vap_id").value;
+            //the above code not working in FireFox, works in IE, needs to be taken care in some other places also.
+            var apId = getListPageElementValue(form1,clicindex + "out_vap_id");
+           if(apId != null)
+           {
+			value.push(apId);
+           }
+          }
+    }
+   }
+   
+   if (value.length == 0)
+     return false;
+
+   if ( !confirm("Warning: Changing AP Group will reboot the AP and will rejoin the controller after a few minutes. AP3600 with 802.11ac module will advertise only first 8 WLANs subscribed on 5GHz radios. Are you sure you want to continue?") )
+      return false;
+
+   document.forms[0].buttonClicked.value = CUSTOM1_CLICKED;
+   document.forms[0].sel_aps.value = JSON.stringify(value);   
+   
+   top.CHttpFormExtractor.clearKeyValues();
+   top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+   top.CHttpFormExtractor.addKeyValue("loc_str", document.forms[0].loc_str.value);
+   top.CHttpFormExtractor.addKeyValue("sel_aps", document.forms[0].sel_aps.value);
+
+   document.forms[0].submit();
+}
+
+function removeApsFromGroup()
+{
+  var value = []; 
+  var apCount = 0;
+  var form1 = document.forms[0];
+  for(var loop=0; loop < form1.elements.length;loop++)
+  {        
+    var elmN = form1.elements[loop].name;
+    if(elmN && elmN.indexOf(".in_ap_sel") > -1)
+    {
+          if(form1.elements[loop].checked == true)
+          {
+            apCount++;
+	    if(500 < apCount){
+              if (!confirm("Warning: Only the first 500 APs will be removed from the AP group. Are you sure you want to continue?"))
+                return false;
+	      else
+	        break;
+	    }
+            var clicindex = elmN.substring(0,elmN.indexOf("in_ap_sel"));           
+            var apId = getListPageElementValue(form1,clicindex + "in_vap_id");
+            if(apId != null){
+				value.push(apId);
+           }
+          }
+    }
+  }
+  
+   if (value.length == 0)
+     return false;
+
+   if ( !confirm("Warning: Changing AP Group will reboot the AP and will rejoin the controller after a few minutes. Are you sure you want to continue?") )
+      return false;
+
+   document.forms[0].buttonClicked.value = CUSTOM2_CLICKED;
+   document.forms[0].sel_aps.value = JSON.stringify(value);   
+
+   top.CHttpFormExtractor.clearKeyValues();
+   top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+   top.CHttpFormExtractor.addKeyValue("loc_str", document.forms[0].loc_str.value);
+   top.CHttpFormExtractor.addKeyValue("sel_aps", document.forms[0].sel_aps.value);
+
+   document.forms[0].submit();
+   
+}
+
+//This function is to get the values on the list page. 
+//mainly to fix the FireFox issue, 1.0.1.elementName not working in FF and IE properly,
+//so we need enumurate all the elements to find out the value. should be moved to common.
+function getListPageElementValue(form1,elName)
+{
+	for (var loop = 0; loop < form1.elements.length; loop++) 
+	{
+		 if( form1.elements[loop].name == elName)
+		    return form1.elements[loop].value;
+	}
+	return null;
+}
+
+function selectAllAps(ap_sel,chkflg)
+{
+  var form1 = document.forms[0];
+  var maxSize = 0;
+
+  for(var loop=0; loop < form1.elements.length;loop++)
+  {        
+    if(maxSize <= 500){
+      var elmN = form1.elements[loop].name;
+      if(elmN && (-1 < elmN.indexOf(ap_sel)))
+      {
+          form1.elements[loop].checked = chkflg;
+	  maxSize++;
+      }
+    }
+    else{
+	alert('Only the first 500 APs will be selected ');
+	break;
+    }
+  }	
+}
+
+var NAC_ENABLE_MENU_POS = 0;
+var NAC_DISABLE_MENU_POS = 1;
+var REMOVE_MENU_POS = 2;
+function hideAllInterfaceMenu()
+{
+//find the index for default-group.
+	var form1 = document.forms[0];
+	var findName = ".nac_state";
+	var val = "";
+	for(var loop=0; loop < form1.elements.length;loop++)
+    {    
+      var elmN = form1.elements[loop].name;
+      if(elmN && elmN.indexOf(findName) > -1)
+      {
+          //get the index of element (1.0.18.rule_name --  (1.0.18) - format is (pageNum.index.totalEntries)          		 
+		 	 var pieces = elmN.split(".");
+			 var index = pieces[1];
+			 val = form1.elements[loop].value;
+			 if(document.forms[0].loc_str.value == "default-group")
+			 {
+			    //hideSubMenu(index,REMOVE_MENU_POS);
+			    //hidePopupMenu(index);
+			 }
+			 if(val == "Disabled")
+			 {
+			   //hideSubMenu(index,NAC_DISABLE_MENU_POS);
+			 }
+			 if(val == "Enabled")
+			 {
+			   //hideSubMenu(index,NAC_ENABLE_MENU_POS);
+			 }
+			    
+			 //if default_group hide Remove menu item.
+			 // hidePopupMenu(index);				         
+      }
+   }
+}
+
+// set the selected tab based on the value of currentTab
+function selTab()
+{
+ return;
+ var selTab = document.forms[0].buttonClicked.value;
+ if(selTab != null && selTab.length > 0)
+ {
+    var mainContW = dojo.widget.byId('mainTabContainer');
+    if(mainContW == null) return;    
+    if((selTab == CUSTOM1_CLICKED) || (selTab == CUSTOM2_CLICKED))
+    {       
+       var apContentPaneW = dojo.widget.byId('ap_tab');
+       mainContW.selectTab(apContentPaneW,true);
+    }
+	if((selTab == DELETE_CLICKED) || (selTab == CREATE_CLICKED) || (selTab == CUSTOM3_CLICKED) || (selTab == CUSTOM4_CLICKED))
+	{		
+	   var apContentPaneW = dojo.widget.byId('wlan_tab');
+       mainContW.selectTab(apContentPaneW,true);
+	}     
+  }
+  document.forms[0].buttonClicked.value = 0; // reinitialize the button clicked.
+}
+
+function enableNac(index)
+{ 
+     document.forms[0].indexClicked.value = index;
+     document.forms[0].buttonClicked.value = CUSTOM3_CLICKED;
+     document.forms[0].submit();
+}
+ 
+function disableNac(index)
+{
+     document.forms[0].indexClicked.value = index;
+     document.forms[0].buttonClicked.value = CUSTOM4_CLICKED;
+     document.forms[0].submit();
+      
+}
+
+function policyAction(index)
+{
+     document.forms[0].indexClicked.value = index;
+     document.forms[0].buttonClicked.value = CUSTOM7_CLICKED;
+     document.forms[0].submit();
+}
+ 
+function showTabForDefault()
+{
+	if(document.forms[0].loc_str.value == "default-group")
+	{
+		//dojo.widget.byId("mainTabContainer").removeChild(dojo.widget.byId("RfProfile_tab"));
+		//dojo.widget.byId("mainTabContainer").removeChild(dojo.widget.byId("u_tab"));
+                document.getElementById('ven_grp').style.display = 'none';
+                document.getElementById('ven_type').style.display = 'none';
+                document.getElementById('ven_name').style.display = 'none';
+	}
+        else{
+                document.getElementById('ven_grp').style.display = "";
+                document.getElementById('ven_type').style.display = "";
+                document.getElementById('ven_name').style.display = "";
+        }
+}
+
+function getVenueType()
+{
+	var selIndex = document.forms[0].venue_group.selectedIndex;
+    document.getElementById("optionForUnspecified").style.display = 'none';
+    document.getElementById("optionForAssembly").style.display = 'none';
+    document.getElementById("optionForBusiness").style.display = 'none';
+    document.getElementById("optionForEdu").style.display = 'none';
+    document.getElementById("optionForFactory").style.display = 'none';
+    document.getElementById("optionForInstitution").style.display = 'none';
+    document.getElementById("optionForMercantile").style.display = 'none';
+    document.getElementById("optionForResidential").style.display = 'none';
+    document.getElementById("optionForStorage").style.display = 'none';
+    document.getElementById("optionForMisc").style.display = 'none';
+    document.getElementById("optionForVehicular").style.display = 'none';
+    document.getElementById("optionForOutdoor").style.display = 'none';
+
+	if (selIndex == 0)
+		document.getElementById("optionForUnspecified").style.display = 'inline';
+    else if (selIndex == 1)
+        document.getElementById("optionForAssembly").style.display = 'inline';
+    else if (selIndex == 2)
+        document.getElementById("optionForBusiness").style.display = 'inline';
+    else if (selIndex == 3)
+        document.getElementById("optionForEdu").style.display = 'inline';
+    else if (selIndex == 4)
+        document.getElementById("optionForFactory").style.display = 'inline';
+    else if (selIndex == 5)
+        document.getElementById("optionForInstitution").style.display = 'inline';
+    else if (selIndex == 6)
+        document.getElementById("optionForMercantile").style.display = 'inline';
+    else if (selIndex == 7)
+        document.getElementById("optionForResidential").style.display = 'inline';
+    else if (selIndex == 8)
+        document.getElementById("optionForStorage").style.display = 'inline';
+    else if (selIndex == 9)
+        document.getElementById("optionForMisc").style.display = 'inline';
+    else if (selIndex == 10)
+        document.getElementById("optionForVehicular").style.display = 'inline';
+	else if (selIndex == 11)
+		document.getElementById("optionForOutdoor").style.display = 'inline';
+	else {}
+}
+displayInfoMsg = true;
+businessLogicImplemented = true;
+
+function validateBusinessLogic()
+{
+   if(document.forms[0].loc_str.value != "default-group"){
+
+   index=document.forms[0].profile_802_11a.selectedIndex;
+   selected_11a=document.forms[0].profile_802_11a.options[index].value;
+   index=document.forms[0].profile_802_11b.selectedIndex;
+   selected_11b=document.forms[0].profile_802_11b.options[index].value;
+  if ( selected_11a != initial_11a )
+  {
+   if ( selected_11a != check )
+    {
+    
+       if(!confirm("Applying RF Profiles on an active AP Group will reboot all APs in the group.Press OK to continue.")){
+          return false; }
+     
+    } 
+  else
+   {
+    if(!confirm("Deleting RF Profies on an actvie AP Group will reboot all APs in the group.Press OK to continue.")){
+      return false; } 
+    }   
+  } 
+ else if ( selected_11b != initial_11b )
+  {
+   if ( selected_11b != check )
+    {
+    
+       if(!confirm("Applying RF Profiles on an active AP Group will reboot all APs in the group.Press OK to continue.")){
+          return false; }
+    
+ 
+    }
+  else
+   {
+    if(!confirm("Deleting RF Profies on an actvie AP Group will reboot all APs in the group.Press OK to continue.")){
+      return false; }
+    }
+ }
+
+ } 
+ if(document.forms[0].loc_str.value != "default-group"){
+  var getPreferCheckBox = document.forms[0].enablePreferMode.checked;
+  var getPreferDropdown = document.forms[0].preferred_mode_group.value;
+  if(getPreferCheckBox != true){
+     var checkboxvalue = "false";
+     if(checkboxvalue != document.forms[0].prefer_status.value){
+         if(!confirm("Changing the AP's preferred mode will cause the AP to rejoin.\n Do you want to continue?"))
+            return false;
+     }
+  }
+  else if(getPreferCheckBox == true){
+      var checkboxvalue = "true";
+      if((checkboxvalue != document.forms[0].prefer_status.value) || (getPreferDropdown != document.forms[0].preferredModeGet.value)){
+         if(!confirm("Changing the AP's preferred mode will cause the AP to rejoin.\n Do you want to continue?"))
+            return false;
+      }
+  }
+}
+if(document.forms[0].loc_str.value == "default-group")
+{
+    if(document.forms[0].nasid.value != "none"){	
+      alert("Failed! NAS-ID is not editable for default group");
+      return false;
+    }  
+}	
+
+return true;
+}
+
+function EnableQinQ()
+{	
+ if(document.forms[0].qinqEnabled.checked)
+ {
+    document.forms[0].qinqDhcpEnabled.disabled = false;
+ }
+ else
+ {
+    document.forms[0].qinqDhcpEnabled.disabled = true;
+
+ }
+}
+</script>
+
+<style>
+	   #wlgrptbl {width:100%; height:30em;}
+	    #add_new {padding-left:5px; display:none;}
+	    #add_new_ven {padding-left:5px; display:none;}
+		#addnewbutton{ margin:0px 0px 0px 0px; padding:0px 0px 0px 0px; margin-left:40em;}
+        #ap_ingroup_head {	position:absolute;top:1em;height:3em;width:25em;}
+        #ap_ingroup {position:absolute;	width:25em;	height:25em;overflow:auto;margin-top:4em;}
+        #ap_outgroup_head {position:absolute;top:1em;width:25em;height:3em;left:27em;}
+		#ap_outgroup {position:absolute;left:27em;height:25em;width:25em;overflow:auto;margin-top:4em;}
+        .appbutton {position:absolute;right:0;width:25%;top:1em}
+		#applybutton{ margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;margin-left:31em;}      
+</style>
+
+<form method="post" action="frameAPGroupEdit.html">
+<input type="hidden" name="access_control" size="16" maxlength="15" value="1">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody><tr>
+      <td class="pageTitle">
+         <h1 id="pageTitleText">Ap Groups &gt; Edit &nbsp;'<?=AP-GROUP-NAME=?>'</h1>
+      </td>
+      <td align="right" class="pageTitle">
+	<input type="button" name="back" value="&lt; Back" class="button" onclick="javascript:window.location='frameAPGroupList.html'">
+
+        &nbsp;&nbsp;&nbsp;	
+	<script>getHtmlForHelpButton("/helppages/wwhelp.htm");</script>
+      </td>
+    </tr>
+  </tbody></table>
+  
+   <!-- main tab -->
+  <div id="mainTabContainer" class="dojoTabContainer dojoLayoutContainer" wairole="tabpanel" role="wairole:tabpanel" style="width: 98%; height: 35em;">
+	<div dojoattachpoint="dojoTabLabels" class="dojoTabLabels-top dojoAlignTop" style="left: 0px; top: 0px; bottom: auto; right: auto; width: 100%;">
+		<div role="wairole:tab" class="dojoTabPaneTab current" id="tabLabel1" onclick="clickTab(lastTab, 'tab', '1');"><span>General</span></div>
+		<div role="wairole:tab" class="dojoTabPaneTab" id="tabLabel2" onclick="clickTab(lastTab, 'tab', '2');"><span>WLANs</span></div>
+		<div role="wairole:tab" class="dojoTabPaneTab" id="tabLabel3" onclick="clickTab(lastTab, 'tab', '3');" style="display:<?=NON-DEFAULT-GROUP-DISPLAY=?>"><span>RF Profile</span></div>
+		<div role="wairole:tab" class="dojoTabPaneTab" id="tabLabel4" onclick="clickTab(lastTab, 'tab', '4');"><span>APs</span></div>
+		<div role="wairole:tab" class="dojoTabPaneTab" id="tabLabel5" onclick="clickTab(lastTab, 'tab', '5');"><span>802.11u</span></div>
+		<div role="wairole:tab" class="dojoTabPaneTab" id="tabLabel6" onclick="clickTab(lastTab, 'tab', '6');"><span>Location</span></div>
+		<div role="wairole:tab" class="dojoTabPaneTab" id="tabLabel7" onclick="clickTab(lastTab, 'tab', '7');"><span>Ports/Module</span></div>
+	</div>
+	<div class="dojoTabPaneWrapper dojoAlignClient" dojoattachpoint="containerNode" style="left: 0px; top: 22px; bottom: auto; right: auto; width: 100%; height: 535px; overflow:auto">
+    <div id="tab1" dojotype="ContentPane" label="General" style="top: 0px; left: 0px; width: 100%; height: 535px;" class="dojoTabPane">
+        <div class="tabcontent">           
+           <div id="applybutton">
+              <input type="button" name="apply" value="Apply" class="button" onclick="javascript:submitAction()">	
+                             
+           </div>
+           <table border="0" cellspacing="1" cellpadding="0" style="margin-top: 10px">
+           <tbody><tr>
+              <td class="label2" nowrap="">AP Group Name</td>
+                <td class="label2">
+                   <input type="text" name="loc_str" class="statictextboxlistDojo" size="38" maxlength="32" value="<?=AP-GROUP-NAME=?>">
+                </td>
+           </tr>
+           <tr> 
+                <td class="label2" nowrap="">AP Group Description</td>
+                <td class="label2">
+                   <input type="text" name="loc_descr" size="38" maxlength="32" value="<?=AP-GROUP-DESCRIPTION=?>">
+                 </td>
+            </tr>
+            <tr class="notSupported">
+                <!-- NAS-ID -->
+                <td class="label2" nowrap="">NAS-ID</td>
+                <td class="label2">
+                   <input type="text" name="nasid" id="nasid" size="32" maxlength="31" value="none" disabled>
+                 </td>
+            </tr>
+            <tr class="notSupported">
+                <!--client-traffic QinQ Enabled -->
+                <td class="label2" nowrap="">Enable Client Traffic QinQ</td>
+                <td class="label2">
+                   <input type="checkbox" name="qinqEnabled" onclick="EnableQinQ()" disabled>
+                 </td>
+            </tr>
+            <tr class="notSupported">
+                <!--QinQ Enabled -->
+                <td class="label2" nowrap="">Enable DHCPv4  QinQ
+                <sup title="See foot note below" onclick="alert('See foot note below');">3</sup> 
+		</td>
+                <td class="label2">
+                   <input type="checkbox" name="qinqDhcpEnabled" disabled="">
+                 </td>
+            </tr>
+            <tr class="notSupported">
+                <!-- QinQ outer Vlan ID -->
+                <td class="label2" nowrap="">QinQ Service Vlan Id</td>
+                <td class="label2">
+                   <input type="text" name="qinqOuterVlanId" size="4" maxlength="31" value="0" disabled>
+                 </td>
+            </tr>
+			</tbody></table>
+			<table>
+            <tbody><tr>
+              <td>
+               <div id="preferMode_grp" style="display:block">
+			   <table>
+               <tbody><tr class="notSupported">
+                <td class="label2" nowrap="">CAPWAP Preferred Mode</td>
+                <td class="label2">
+                   <table><tbody><tr class="notSupported">
+                      <td>
+                         <input type="checkbox" name="enablePreferMode" onclick="enablePreferDrop();" disabled>
+                      </td>
+                      <td>
+                        <div id="preferConfigDiv" style="display: none;">
+                         <select name="preferred_mode_group" disabled="">
+                             <option value="ipv4" selected="">ipv4</option>
+                             <option value="ipv6">ipv6</option>
+                         </select>
+                        </div>
+                      </td>
+                      <td>
+                         <input type="text" name="prefer_str" class="statictextboxlistDojo" readonly="" size="15" maxlength="15" value="Not-Configured" disabled>   
+                      </td>
+                   </tr></tbody></table>
+                </td>
+               </tr></tbody></table>
+               </div></td>
+            </tr>
+            </tbody></table>          
+         </div>
+      </div> <!-- End of General Tab --> 
+      
+       <!-- wlan tab -->    
+      <div id="tab2" dojotype="ContentPane" label="WLANs" style="top: 0px; left: 0px; width: 100%; height: 535px; display: none;" class="dojoTabPane">
+         <div class="tabcontent">
+           
+           <div id="addnewbutton">           	  
+           	  <input type="button" name="addnewac" value=" Add New " class="buttonstretch" onclick="showAddSection()">    
+                             
+           </div>            
+            
+           <div id="add_new">
+              <table border="0" cellspacing="1" cellpadding="0" width="400">
+                            <tbody><tr>
+                              <td colspan="2" class="label1">Add New</td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" class="horizLine"></td>
+                            </tr>
+
+                            <tr>
+                              <td class="label2">WLAN SSID</td>
+                              <td class="label2">
+                                <select name="new_wlanid" id="new_wlanid" maxlistlength="16" style="width:250px">
+								</select>
+						 </td>
+                            </tr>
+                            <tr class="notSupported">
+                              <td class="label2">Interface /Interface Group(G)</td>
+                              <td class="label2">
+                                <select name="new_interface" id="new_interface" style="width:250px" disabled></select>
+			      </td>		
+			      <td> <sup title="See foot note below" onclick="alert('See foot note below');">1</sup> </td>
+                            </tr>
+                            <tr class="notSupported">
+                             <td class="label2">SNMP NAC State </td>
+                             <td class="label2">
+                                <input name="nac_enable" id="nac_enable" type="checkbox" disabled>Enabled &nbsp;&nbsp;&nbsp;
+                             </td>
+                            </tr>
+                            <tr>
+                             <td>
+                                &nbsp;
+                             </td>
+                             <td class="label2">
+                              <input type="button" name="newInterfaceMapping" value=" Add " class="buttonstretch" onclick="createNewInterfaceMapping()">    
+
+                              <input type="button" name="cancelAdd" value="Cancel" class="buttonstretch" onclick="hideAddSection()">    
+
+                              </td>
+                            </tr>
+             </tbody></table>
+          </div>
+           
+          <div id="wlgrptbl">
+            <table border="0" cellspacing="1" cellpadding="0" width="100%" style="margin-top: 10px">
+			    <tbody><tr>
+			      <th align="left">WLAN ID</th>
+			      <th align="left">WLAN SSID<sup title="See foot note below" onclick="alert('See foot note below');">(2)(6) </sup></th>
+			      <th align="left">Interface/Interface Group(G)</th>
+			      <th align="left">SNMP NAC State</th>
+			      <th>&nbsp;</th>
+			    </tr>
+			
+<?=WLAN-ENTRY-begin=?>
+			    <tr>
+			      <td class="listNoPad">			      
+ 			                <input type="hidden" name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.lan_type" size="2" maxlength="1" value="1">
+				        <input type="text" class="statictextboxlistDojo" readonly="" name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.wlanid" size="10" maxlength="10" value="<?=WLAN-ID=?>">
+			      </td>
+			      <td class="listNoPad">
+				  <input type="text" name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.ssid" class="statictextboxlistDojo" readonly="" size="32" maxlength="32" value="<?=WLAN-SSID=?>">
+			      </td>
+			      <td class="listNoPad">
+				  <input type="text" name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.interface" class="statictextboxlistDojo" readonly="" size="32" maxlength="32" value="<?=WLAN-INTERFACE=?>">
+			      </td>
+			      <td class="listNoPad">
+			          <input type="text" name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.nac_state" class="statictextboxlistDojo" readonly="" size="15" maxlength="15" value="Disabled">
+			      </td>
+			        <td class="listNoPad"><a href="javascript:deleteAction(<?=WLAN-INDEX=?>);" style="display:<?=NON-DEFAULT-GROUP-DISPLAY=?>">Remove</a>
+			       </td>
+			    </tr>
+<?=WLAN-ENTRY-end=?>
+			
+			  </tbody></table>		  
+           </div>
+         </div>
+      </div><!-- End of Wlan Tab -->
+      
+       <!-- RF Profile Tab -->
+    <div id="tab3" name="RfProfile_tab" dojotype="ContentPane" label="RF Profile" style="top: 0px; left: 0px; width: 100%; height: 535px; display: none;" class="dojoTabPane">
+        <div class="tabcontent">
+
+           <div id="applybutton">
+              <input type="button" name="apply" value="Apply" class="button" onclick="javascript:submitAction()">	
+
+           </div>
+           <table border="0" cellspacing="1" cellpadding="0" style="margin-top: 10px">
+           <tbody><tr class="notSupported">
+              <td class="label2" nowrap="">802.11a</td>
+              <td class="label2">
+                   <select name="profile_802_11a" disabled>
+<option value="">none
+</option><option value="High-Client-Density-802.11a">High-Client-Density-802.11a
+</option><option value="Low-Client-Density-802.11a">Low-Client-Density-802.11a
+</option><option value="Typical-Client-Density-802.11a">Typical-Client-Density-802.11a</option></select>
+                </td>
+           </tr>
+           <tr class="notSupported">
+              <td class="label2" nowrap="">802.11b</td>
+              <td class="label2">
+                   <select name="profile_802_11b" disabled>
+<option value="">none
+</option><option value="High-Client-Density-802.11bg">High-Client-Density-802.11bg
+</option><option value="Low-Client-Density-802.11bg">Low-Client-Density-802.11bg
+</option><option value="Typical-Client-Density-802.11bg">Typical-Client-Density-802.11bg</option></select>
+               </td>
+            </tr>
+            </tbody></table>
+	    <!-- USE FOR DELETING RF PROFILE FROM AP GROUP
+	    <INPUT type="hidden" name="hiddenProfileName" size="16" maxlength="15" VALUE="">
+	    ------->
+         </div>
+    </div><!---End of RF Profile tab---> 
+
+       <!-- AP tab -->
+      <div id="tab4" dojotype="ContentPane" label="APs" style="top: 0px; left: 0px; width: 100%; height: 535px; display: none;" class="dojoTabPane">
+         <div class="tabcontent">
+            <div id="ap_ingroup_head">
+                <div class="appbutton">
+                  <div id="rem_apbutton">
+                  <input type="button" name="remaptogrp" value=" Remove APs " class="buttonstretch" onclick="removeApsFromGroup()">    
+                                                                       </div>
+
+                </div>
+                    <h2>APs currently in the Group</h2>
+
+                                <table cellpadding="0" cellspacing="1" border="0">
+                                  <tbody><tr>
+                     <td class="listNoPad">
+                       <input type="checkbox" name="in_ap_sel_all" class="statictextboxDojo" readonly="" size="10" maxlength="10" onclick="selectAllAps('in_ap_sel',this.checked)">
+                     </td>
+                     <th align="left" width="140">AP Name</th>
+                     <th align="left" width="140">Ethernet MAC</th>
+                  </tr>
+                            </tbody></table>
+                </div>
+            <div id="ap_ingroup">
+             <table cellpadding="0" cellspacing="1" border="0">
+
+               
+               <tbody>
+<?=IN-GROUP-AP-ENTRY-begin=?>
+			   <tr>
+                          <td class="listNoPad">
+                                     <input type="checkbox" name="2.<?=IN-GROUP-AP-INDEX=?>.<?=IN-GROUP-AP-COUNT=?>.in_ap_sel" class="statictextboxDojo" readonly="" size="10" maxlength="10">
+									 <input type="hidden" name="2.<?=IN-GROUP-AP-INDEX=?>.<?=IN-GROUP-AP-COUNT=?>.in_vap_id" size="16" maxlength="15" value="<?=IN-GROUP-AP-ID=?>">
+                              </td>                              <td class="listNoPad" width="150">
+                     <input type="text" name="2.<?=IN-GROUP-AP-INDEX=?>.<?=IN-GROUP-AP-COUNT=?>.in_ap_name" class="statictextboxDojo" readonly="" size="20" maxlength="32" value="<?=IN-GROUP-AP-NAME=?>">
+                  </td>                  <td class="listNoPad" width="150">
+                                     <input type="text" name="2.<?=IN-GROUP-AP-INDEX=?>.<?=IN-GROUP-AP-COUNT=?>.in_ap_mac" class="statictextboxDojo" readonly="" size="20" maxlength="32" value="<?=IN-GROUP-AP-MAC=?>">
+                              </td>
+				</tr>
+<?=IN-GROUP-AP-ENTRY-end=?>
+
+                              </tbody></table>
+                           </div>
+                  <div id="ap_outgroup_head">                 <div class="appbutton">
+                  <input type="button" name="addaptogrp" value=" Add APs " class="buttonstretch" onclick="addApsFromGroup()">    
+                                </div>
+                                <h2>Add APs to the Group </h2>                                <table cellpadding="0" cellspacing="1" border="0">
+                                  <tbody><tr>                     <td class="listNoPad">
+                       <input type="checkbox" name="out_ap_sel_all" class="statictextboxDojo" readonly="" size="10" maxlength="10" onclick="selectAllAps('out_ap_sel',this.checked)">
+                     </td>                     <th align="left" width="140">AP Name</th>
+                     <th align="left" width="140">Group Name</th>                  </tr>
+                            </tbody></table>                           </div>
+						 
+						 <div id="ap_outgroup">
+                 <table cellpadding="0" cellspacing="1" border="0">
+                   
+                   <tbody>
+<?=NOT-IN-GROUP-AP-ENTRY-begin=?>
+				   <tr>
+                             <td class="listNoPad">
+                                     <input type="checkbox" name="3.<?=NOT-IN-GROUP-AP-INDEX=?>.<?=NOT-IN-GROUP-AP-COUNT=?>.out_ap_sel" class="statictextboxDojo" readonly="" size="10" maxlength="10">
+									 <input type="hidden" name="3.<?=NOT-IN-GROUP-AP-INDEX=?>.<?=NOT-IN-GROUP-AP-COUNT=?>.out_vap_id" size="16" maxlength="15" value="<?=NOT-IN-GROUP-AP-ID=?>">
+                                 </td>
+                     <td class="listNoPad" width="150">
+                                     <input type="text" name="3.<?=NOT-IN-GROUP-AP-INDEX=?>.<?=NOT-IN-GROUP-AP-COUNT=?>.out_ap_name" class="statictextboxDojo" readonly="" size="20" maxlength="32" value="<?=NOT-IN-GROUP-AP-NAME=?>">
+                                 </td>
+                     <td class="listNoPad" width="150">
+                     <input type="text" name="3.<?=NOT-IN-GROUP-AP-INDEX=?>.<?=NOT-IN-GROUP-AP-COUNT=?>.out_ap_mac" class="statictextboxDojo" readonly="" size="20" maxlength="32" value="<?=NOT-IN-GROUP-AP-AP-GROUP=?>">
+                       </td>
+                     </tr>
+<?=NOT-IN-GROUP-AP-ENTRY-end=?>
+                </tbody></table>
+                         </div>
+
+         </div>
+     </div><!-- End of AP Tab -->
+
+      <div id="tab5" dojotype="ContentPane" label="802.11u" style="top: 0px; left: 0px; width: 100%; height: 535px; display: none;" class="dojoTabPane">
+         <div class="tabcontent">
+            <div id="applybutton">
+               <input type="button" name="apply" value="Apply" class="button" onclick="javascript:submitAction()">	
+
+            </div>
+            <table border="0" cellspacing="1" cellpadding="0" style="margin-top: 10px; display:<?=NON-DEFAULT-GROUP-DISPLAY=?>">
+            <tbody><tr id="ven_grp" class="notSupported">
+            <td class="label2"> Venue Group </td>
+            <td>
+               <select name="venue_group" onchange="getVenueType();" size="1" disabled>
+               <option value="vg11uUnspecified" selected="">Unspecified</option>
+               <option value="assembly">Assembly</option>
+               <option value="business">Business</option>
+               <option value="educational">Educational</option>
+               <option value="factoryAndIndustrial">Factory and Industrial</option>
+               <option value="institutional">Institutional</option>
+               <option value="mercantile">Mercantile</option>
+               <option value="residential">Residential</option>
+               <option value="storage">Storage</option>
+               <option value="utilityAndMisc">Utility and Misc</option>
+               <option value="vehicular">Vehicular</option>
+               <option value="outdoor">Outdoor</option>
+               </select>
+            </td>
+            </tr>
+
+            <tr id="ven_type" class="notSupported">
+            <td class="label2"> Venue Type </td>
+            <td>
+                         <div name="optionForUnspecified" id="optionForUnspecified" style="display: inline;">
+                               <select name="typeForGrpUnspecified" size="1" disabled>
+                 <option value="unspfdGrp" selected="">Unspecified</option>
+                               </select>
+                         </div>
+                         <div name="optionForAssembly" id="optionForAssembly" style="display:none">
+                               <select name="typeForGrpAssembly" size="1">
+                               <option value="asmGrpUnspfdAssembly">Unspecified Assembly</option>
+                               <option value="asmGrpArena">Arena</option>
+                               <option value="asmGrpStadium">Stadium</option>
+                               <option value="asmGrpPassenger">Passenger Terminal</option>
+                               <option value="asmGrpAmphiTheater">Amphi Theater</option>
+                               <option value="asmGrpAmusePark">Amusement Park</option>
+                               <option value="asmGrpWorship">Place of Worship</option>
+                               <option value="asmGrpConvention">Convention Center</option>
+                               <option value="asmGrpLibrary">Library</option>
+                               <option value="asmGrpMuseum">Museum</option>
+                               <option value="asmGrpRestaurant">Restaurant</option>
+                               <option value="asmGrpTheater">Theater</option>
+                               <option value="asmGrpBar">Bar</option>
+                               <option value="asmGrpCoffee">Coffee Shop</option>
+                               <option value="asmGrpZoo">Zoo or Aquarium</option>
+                               <option value="asmGrpECC">Emergency Coordination Center</option>
+                               </select>
+                         </div>
+                         <div name="optionForBusiness" id="optionForBusiness" style="display:none">
+                               <select name="typeForGrpBusiness" size="1">
+                               <option value="busiGrpUnspfd">Unspecified Business</option>
+                               <option value="busiGrpDoctor">Doctor or Dentist Office</option>
+                               <option value="busiGrpBank">Bank</option>
+                 <option value="busiGrpFire">FireStation</option>
+                 <option value="busiGrpPolice">Police Station</option>
+                 <option value="busiGrpPost">Post Office</option>
+                 <option value="busiGrpOffice">Professional Office</option>
+                 <option value="busiGrpRandD">Research and Development Facility</option>
+                 <option value="busiGrpAttorney">Attorney Office</option>
+                               </select>
+                         </div>
+                         <div name="optionForEdu" id="optionForEdu" style="display:none">
+                               <select name="typeForGrpEdu" size="1">
+                 <option value="eduGrpUnspfd">Unspecified Educational</option>
+                 <option value="eduGrpPrimary">Primary School</option>
+                 <option value="eduGrpSecondary">Secondary School</option>
+                 <option value="eduGrpUniv">University or College</option>
+                               </select>
+                         </div>
+                         <div name="optionForFactory" id="optionForFactory" style="display:none">
+                               <select name="typeForGrpFactory" size="1">
+                 <option value="factGrpUnspfd">Unspecified Factory or Industrial</option>
+                 <option value="factGrpFactory">Factory</option>
+                               </select>
+                         </div>
+                         <div name="optionForInstitution" id="optionForInstitution" style="display:none">
+                               <select name="typeForGrpInstitution" size="1">
+                 <option value="instGrpUnspfd">Unspecified Institution</option>
+                 <option value="instGrpHospital">Hospital</option>
+                 <option value="instGrpLongTerm">Long Term Care Facility</option>
+                 <option value="instGrpRehab">Alcohol and Drug Re-habilitation Center</option>
+                 <option value="instGrpHome">Group Home</option>
+                 <option value="instGrpPrison">Prison or Jail</option>
+                               </select>
+                         </div>
+                         <div name="optionForMercantile" id="optionForMercantile" style="display:none">
+                               <select name="typeForGrpMercantile" size="1">
+                 <option value="mercGrpUnspfd">Unspecified</option>
+                 <option value="mercGrpRetail">Retail Store</option>
+                 <option value="mercGrpGrocery">Grocery</option>
+                 <option value="mercGrpAuto">Automotive Service Station</option>
+                 <option value="mercGrpMall">Shopping Mall</option>
+                 <option value="mercGrpgas">Gas Station</option>
+                               </select>
+                         </div>
+                         <div name="optionForResidential" id="optionForResidential" style="display:none">
+                              <select name="typeForResidential" size="1">
+                   <option value="resGrpUnspfd">Unspecified Residential</option>
+                 <option value="resGrpPrivate">Private Residence</option>
+                 <option value="resGrpHotel">Hotel or Motel</option>
+                 <option value="resGrpDorm">Dormitory</option>
+                 <option value="resGrpBoarding">Boarding House</option>
+                               </select>
+                         </div>
+                         <div name="optionForStorage" id="optionForStorage" style="display:none">
+                               <select name="typeForStorage" size="1">
+                 <option value="strGrpUnspfd">Unspecified Storage</option>
+                               </select>
+                         </div>
+                         <div name="optionForMisc" id="optionForMisc" style="display:none">
+                               <select name="typeForMisc" size="1">
+                 <option value="miscGrpUnspfd">Unspecified Utility and Miscellaneous</option>
+                               </select>
+                         </div>
+                         <div name="optionForVehicular" id="optionForVehicular" style="display:none">
+                               <select name="typeForVehicular" size="1">
+                 <option value="vehiGrpUnspfd">Unspecified Vehicular</option>
+                 <option value="vehiGrpAuto">Automobile or Truck</option>
+                 <option value="vehiGrpPlane">Airplane</option>
+                 <option value="vehiGrpBus">Bus</option>
+                 <option value="vehiGrpFerry">Ferry</option>
+                 <option value="vehiGrpShip">Ship or Boat</option>
+                 <option value="vehiGrpTrain">Train</option>
+                 <option value="vehiGrpBike">Motor Bike</option>
+                               </select>
+                         </div>
+                         <div name="optionForOutdoor" id="optionForOutdoor" style="display:none">
+                               <select name="typeForOutdoor" size="1">
+                 <option value="outGrpUnspfd">Unspecified Outdoor</option>
+                 <option value="outGrpNetwork">Muni-Mesh Network</option>
+                 <option value="outGrpPark">City Park</option>
+                 <option value="outGrpRest">Rest Area</option>
+                 <option value="outGrpTraffic">Traffic Control</option>
+                 <option value="outGrpBus">Bus Stop</option>
+                 <option value="outGrpKiosk">Kiosk</option>
+                               </select>
+                         </div>
+                       </td>
+            </tr>
+            <tr>
+            <td>
+            &nbsp;
+            </td>
+            </tr>
+            </tbody></table>
+            <table border="0" cellspacing="0" cellpadding="0" style="display:<?=NON-DEFAULT-GROUP-DISPLAY=?>">
+            <tbody><tr id="ven_name">
+            <td>
+            
+            <div id="addnewbutton_ven">
+            <input type="button" name="addnewven" value=" Add New Venue" class="buttonstretch" onclick="showAddSectionVen()" disabled>    
+ 
+            </div>
+
+            <div id="add_new_ven">
+            <table border="0" cellspacing="1" cellpadding="0" width="400">
+            <tbody class="notSupported"><tr>
+            <td colspan="2" class="label1">Add New Venue</td>
+            </tr>
+            <tr>
+            <td colspan="2" class="horizLine"></td>                             
+            </tr>
+            <tr>
+            <td class="label2" align="left">Language</td>
+            <td>
+            <input type="TEXT" name="new_language" size="4" maxlength="3" value="">
+            </td>
+            </tr>
+            <tr>
+            <td class="label2" align="left">Venue Name</td>
+            <td>
+            <input type="TEXT" name="new_venue_name" size="29" maxlength="252" value="">
+            </td>
+            </tr>
+            <tr>
+            <td>
+            &nbsp;
+            </td>
+            <td class="label2">
+            <input type="button" name="newvenue" value=" Add " class="buttonstretch" onclick="createNewVenue()">    
+
+            <input type="button" name="cancelAdd" value="Cancel" class="buttonstretch" onclick="hideVenueSection()">    
+
+            </td>
+            </tr>
+           </tbody></table>
+           </div>
+
+            <table cellspacing="0" cellpadding="0" border="0">
+
+            <tbody><tr class="notSupported">
+                  <th align="left">Language</th>
+                  <th align="left">Venue Name</th>
+                  <th>&nbsp;</th>
+            </tr>
+
+            
+            </tbody></table>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            &nbsp;
+            </td>
+            </tr>
+            </tbody></table>
+            <table cellspacing="0" cellpadding="0" border="0" class="notSupported">
+             <tbody><tr>
+                <td class="label2" width="150" valign="left" align="left">Operating Classes</td>
+                <td>
+                    <table cellspacing="0" cellpadding="0" border="0">
+                        <tbody><tr class="notSupported">
+                            <th align="left" scope="col">81</th>
+                            <th align="left" scope="col">83</th>                             
+                            <th align="left" scope="col">84</th>
+                            <th align="left" scope="col">112</th>
+                            <th align="left" scope="col">113</th>
+                            <th align="left" scope="col">115</th>
+                            <th align="left" scope="col">116</th>
+                            <th align="left" scope="col">117</th>
+                            <th align="left" scope="col">118</th>
+                            <th align="left" scope="col">119</th>
+                            <th align="left" scope="col">120</th>
+                            <th align="left" scope="col">121</th>
+                            <th align="left" scope="col">122</th>
+                            <th align="left" scope="col">123</th>
+                            <th align="left" scope="col">124</th>
+                            <th align="left" scope="col">125</th>
+                            <th align="left" scope="col">126</th>
+                            <th align="left" scope="col">127</th>
+                        </tr>
+                         <tr>
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.0.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.0.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =0;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.1.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.1.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =1;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.2.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.2.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =2;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.3.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.3.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =3;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.4.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.4.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =4;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.5.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.5.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =5;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.6.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.6.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =6;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.7.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.7.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =7;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.8.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.8.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =8;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.9.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.9.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =9;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.10.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.10.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =10;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.11.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.11.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =11;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.12.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.12.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =12;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.13.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.13.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =13;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.14.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.14.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =14;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.15.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.15.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =15;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.16.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.16.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =16;
+</script>
+
+
+                            <td>&nbsp;
+                                <input type="checkbox" class="statictextboxDojo" name="5.17.18.op_class" disabled>
+                            </td>
+                         <input type="hidden" name="5.17.18.index" size="16" maxlength="15" value="">
+<script>
+ var indexVal =17;
+</script>
+
+
+                        </tr>
+                    </tbody></table>
+                 </td>
+             </tr>
+            </tbody></table>
+          </div>
+     </div> <!-- End of 11u Tab -->
+ 
+ <!-- Location Tab -->
+         <div id="tab6" dojotype="ContentPane" label="Location" style="top: 0px; left: 0px; width: 100%; height: 535px; display: none;" class="dojoTabPane">
+            <div class="tabcontent">
+ 
+              <div id="applybutton">
+                   <input type="button" name="apply" value="Apply" class="button" onclick="javascript:submitAction()">	
+
+              </div>
+        <table border="0" cellspacing="1" cellpadding="0" style="margin-top: 10px">
+
+ 
+                 <tbody class="notSupported"><tr>
+         <td class="Label1">HyperLocation Config Parameters<sup title="See foot note below" onclick="alert('See foot note below');"></sup></td>
+               </tr>
+ 
+                 <tr>
+         <td colspan="2" class="horizLine"></td>
+           </tr>
+          <tr>
+        <td class="propertyLabel2" align="left" width="300">Enable Hyperlocation</td>
+          <td>
+           <input type="checkbox" name="pak_rssi_enable_grp" disabled>
+          </td>
+         </tr>
+         <tr>
+         <td class="propertyLabel2" align="left" width="300">Packet Detection RSSI Minimum (dBm)</td>
+         <td>
+           <input name="pak_rssi_threshold_grp" type="text" size="5" maxlength="4" value="-100" disabled>
+         </td>
+       </tr>
+       <tr>
+         <td class="propertyLabel2" align="left" width="300">Scan Count Threshold for Idle Client Detection</td>
+         <td>
+           <input name="pak_rssi_threshold_trig_grp" type="text" size="5" maxlength="3" value="10" disabled>
+         </td>
+       </tr>
+       <tr>
+         <td class="propertyLabel2" align="left" width="300">NTP Server</td>
+         <td>
+           <input name="pak_rssi_ntp_grp" type="text" size="16" maxlength="15" value="" disabled>
+         </td>
+       </tr>
+         </tbody></table>
+           </div>
+       </div>
+<!-- End of HyperLocation Tab -->
+
+<!-- Port Tab -->
+         <div id="tab7" dojotype="ContentPane" label="Ports/Module" style="display: none; top: 0px; left: 0px;" class="dojoTabPane">
+            <div class="tabcontent">
+
+              <div id="applybutton">
+                   <input type="button" name="apply" value="Apply" class="button" onclick="javascript:submitAction()">	
+
+              </div>
+        <table border="0" cellspacing="1" cellpadding="0" style="margin-top: 10px">
+            </table><table>
+            <tbody><tr><td class="Label1"> LAN Ports </td></tr>
+            <tr>
+               <td colspan="2" class="horizLine"></td>
+            </tr>
+
+                <tr>
+                    <td class="propertyLabel2" align="left">
+                        <div>
+                            <table class="notSupported">
+                                <tbody><tr>
+                                    <th align="left">LAN <sup title="See foot note below" onclick="alert('See foot note below');">(4)(5) </sup></th>
+                                    <th align="left">ENABLE</th>
+                                    <th align="left">POE</th>
+                                    <th align="left">RLAN</th>
+                                </tr>
+                                <tr>
+                                    <td>LAN1 <sup title="See foot note below" onclick="alert('See foot note below');">7 </sup></td>
+                                    <td align="center"><input name="lan1status" align="middle" type="checkbox" disabled></td>
+                                    <td align="center"><input name="poestatus" type="checkbox" disabled></td>
+                                    <td align="left"><select name="lan1vap" id="lan1vap" maxlistlength="16" style="width:90px" disabled>
+<option value="0" selected="">None</option></select></td>
+                                </tr>
+                                <tr>
+                                    <td>LAN2</td>
+                                    <td align="center"><input name="lan2status" type="checkbox" disabled></td>
+                                    <td></td>
+                                    <td><select name="lan2vap" id="lan2vap" maxlistlength="16" style="width:90px" disabled>
+<option value="0" selected="">None</option></select></td>
+                                </tr>
+                                <tr>
+                                    <td>LAN3</td>
+                                    <td align="center"><input name="lan3status" type="checkbox" disabled></td>
+                                    <td></td>
+                                    <td><select name="lan3vap" id="lan3vap" maxlistlength="16" style="width:90px" disabled>
+<option value="0" selected="">None</option></select></td>
+                                </tr>
+                        </tbody></table>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="Label1"> External module 3G/4G </td>
+                </tr>
+                <tr>
+				  <td colspan="2" class="horizLine">
+                  </td>
+				</tr>
+                <tr>
+                <td class="propertyLabel2">
+                        <div>
+                        <table class="notSupported">
+                            <tbody><tr>
+                                <th align="left">LAN</th>
+                                <th align="left">ENABLE</th>
+                                <th align="left">RLAN</th>
+                            </tr>
+                            <tr>
+                                <td>Module</td>
+                                <td align="center"><input type="checkbox" name="modulestatus" disabled></td>
+                                <td>
+                                    <select name="modulevap" id="modulevap" maxlistlength="16" style="width:90px" disabled>
+<option value="0" selected="">None</option></select>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody></table>
+         
+           </div>
+       </div>
+<!-- End of Port Tab -->
+
+
+</div>
+</div>
+
+<table cellpadding="0" cellspacing="0" border="0">
+	<tbody><tr>
+		<td colspan="2" width="100%" class="propertyLabel">Foot Notes</td>
+	</tr>
+	<tr> 
+		<td colspan="2"> <em>1  Changing the WLAN interface mapping in an AP Group will remove the local VLAN mapping for FlexConnect AP in this group.</em></td>
+	</tr>                                 
+	<tr> 
+		<td colspan="2"> <em>2  AP3600 with 802.11ac Module will only advertise first 8 WLANs on 5GHz radios.</em></td>
+	</tr>                                 
+	<tr> 
+		<td colspan="2"> <em>3 Client Traffic QinQ should be enabled, to set the DHCPV4 QinQ </em></td>
+	</tr>                                 
+        <tr>
+                <td colspan="2"> <em>4 AP1810W has 3 LAN ports, which are configured through "Ports/Module" </em></td>
+        </tr>
+        <tr>
+                <td colspan="2"> <em>5 OEAP1810 LAN1/LAN2 are configured through "Ports/Module," with RLAN "None" represents local port. LAN3 is always a local port </em></td>
+        </tr>
+        <tr>
+                <td colspan="2"> <em>6 OEAP1810 will only advertise first 8 WLANs </em></td>
+        </tr>
+        <tr>
+                <td colspan="2"> <em>7 AP2700 Aux port is configured through LAN1 </em></td>
+        </tr>
+
+</tbody></table>
+
+ <input type="hidden" name="indexClicked" size="16" maxlength="15" value="0">
+ <input type="hidden" name="buttonClicked" size="16" maxlength="15" value="0">
+ <input type="hidden" name="err_flag" size="16" maxlength="15" value="0">
+ <input type="hidden" name="err_msg" size="512" maxlength="511" value="">
+ <input type="hidden" name="info_flag" size="16" maxlength="15" value="0">
+ <input type="hidden" name="info_msg" size="512" maxlength="511" value="">
+ <input type="hidden" name="interface_mappings_wlanid" size="16" maxlength="15" value="0">
+ <input type="hidden" name="sel_aps" size="1024" maxlength="1023" value="">
+ <input type="hidden" name="sel_class" size="50" maxlength="49" value="">
+ <input type="hidden" name="act_language" size="4" maxlength="3" value="">
+ <input type="hidden" name="act_venue_name" size="253" maxlength="252" value="">
+ <input type="hidden" name="prefer_status" size="253" maxlength="252" value="false">
+ <input type="hidden" name="preferredModeGet" size="253" maxlength="252" value="">
+</form>
+
+
+
+<?=PAGE-FOOTER=?>

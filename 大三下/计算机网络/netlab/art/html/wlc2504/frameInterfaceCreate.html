@@ -1,0 +1,102 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Switch';
+
+function ptOnload() {
+}
+
+function submitTheDataForm() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("interface_name", document.forms[0].interface_name.value);
+		top.CHttpFormExtractor.addKeyValue("interface_vlan", document.forms[0].interface_vlan.value);
+		document.forms[0].submit();
+	}
+	
+	return false;   
+}
+</script>
+
+<script>
+var textAttrs = new Array();
+//var notAllowedChars = new Array("'");
+var notAllowedChars = new Array();
+notAllowedChars[0] = "'";
+var notAllowedValues = new Array();
+notAllowedValues[0] = "Interface Configurations";
+notAllowedValues[1] = "Ethernet Multi-Segment Topology operation";
+notAllowedValues[2] = "Failed to configure Ethernet Multi-Segment Topology operation";
+notAllowedValues[3] = "License";
+textAttrs[0] = new textAttr("interface_name","Interface Name",32,notAllowedChars,notAllowedValues,true);
+
+var numAttrs = new Array();
+// Maximum value of vlanid can be 4094. Bug-12898
+//for SMB vlan 0 and 1 is not allowed for dynamic interface, issue is with ce500 express 
+//switch where 1 is untagged and in WLC 0 is untagged, so this is creating confusion
+
+numAttrs[0] = new numberAttr("interface_vlan","VLAN Id",0,4094,null,true);
+
+thisFormAttrs = new formAttrs(numAttrs,textAttrs,null,null);
+function init(){
+
+}
+
+</script>
+
+<FORM method="post" ACTION="frameInterfaceCreate.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+
+  <table CELLSPACING=0  WIDTH="100%" nowrap cellpadding="0" border="0">
+
+    <!-- the header as part of the table -->
+    <tr>
+      <td nowrap class="pageTitle">
+        <h1>Interfaces &gt; New</h1>
+      </td>
+      <td align="right" class="pageTitle">
+        <input type="button" name="back" value="&lt; BACK" class="button" onclick="javascript:window.location='frameInterfaceList.html';">
+        &nbsp;&nbsp;&nbsp;
+        <script> document.writeln('\
+	<input type="button" name="apply" value="',top.APPLY,'" class="button" onClick="javascript:submitTheDataForm()">\
+	')</script>
+      </td>
+    </tr>
+    <tr> 
+      <td colspan="2"> 
+        <table border="0" cellspacing="0" cellpadding="0">
+          <tr> 
+            <td class="label2">Interface Name</td>
+            <td class="label2"> 
+              <INPUT type=TEXT name="interface_name" SIZE="33" MAXLENGTH="32" VALUE="">
+            </td>
+          </tr>
+
+          <tr> 
+            <td class="label2">VLAN Id</td>
+            <td class="label2">
+              <INPUT type=TEXT name="interface_vlan" SIZE="33" MAXLENGTH="32" VALUE="0">
+            </td>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+  <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+
+  <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+  <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="0"> 
+</FORM>
+
+<?=PAGE-FOOTER=?>

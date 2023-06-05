@@ -1,0 +1,315 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Wlans';
+
+function ptOnload() {
+}
+
+var url = 'wlan_list.html';
+var list_size = 75;
+//button mapping.
+var ENABLE_SELECTED_CLICKED = CUSTOM3_CLICKED;
+var DISABLE_SELCTED_CLICKED = CUSTOM4_CLICKED;
+var REMOVE_SELECTED_CLICKED = CUSTOM5_CLICKED;
+
+
+var GUEST_WLAN_START = 17;
+
+
+
+  var confirm_msg1 = "Are you sure you want to Disable selected WLAN(s)/Guest Lan(s)/Remote Lan(s)?";
+  var confirm_msg2 = "Are you sure you want to Enable selected WLAN(s)/Guest Lan(s)/Remote Lan(s)?";
+  var confirm_msg3 = "Are you sure you want to Remove selected WLAN(s)/Guest Lan(s)/Remote Lan(s)?\n These entries will be removed from AP Groups also.";
+  var confirm_msg4 = "No Entry is selected. Please select WLAN/Guest Lan/Remote Lan from the table and try";
+
+
+
+createNewBusinessLogicImplemented = true;
+function validateCreateNewBusinessLogic(){
+// check if total entries is == 21 (wireless-16 and wired-5) then don't allow
+// any more create
+  var totalEntries =  document.forms[0].total_entries.value;
+  if(totalEntries < 517)
+  { 
+       return true;
+   }
+   else {
+    alert("Cannot create more than 517 WLANs");
+    return false;
+  }
+}
+
+function handleWlanAction()
+{
+	var selctrl = document.forms["fwlanlist"].wlanaction;	
+	switch(selctrl.options[selctrl.selectedIndex].value)
+	{
+	  
+	  case "create":
+//	         if(document.forms["fwlanlist"].isGuest.value == 1)	         
+//	              createNewAction("wlan_create.html?gpage=1");	              
+//	         else
+	              createNewAction("frameWlanCreate.html");
+	         break;
+	         	         
+	  case "disableall":
+	         if(!confirm(confirm_msg1))	         
+	           break;
+	         var itms =  getSelectedWlans();
+	         if(errorNoWlanSelected(itms))
+	         {
+	            document.forms["fwlanlist"].sel_wlans.value = itms;
+                document.forms["fwlanlist"].buttonClicked.value = DISABLE_SELCTED_CLICKED;
+             }
+             submitTheDataForm();
+	         break;
+	         	         
+	   case "enableall":
+	        var itms =  getSelectedWlans();
+	        if(!errorNoWlanSelected(itms))
+	           break;
+	        if(!confirm(confirm_msg2))
+	           break;	         
+	         document.forms["fwlanlist"].sel_wlans.value = itms;
+             document.forms["fwlanlist"].buttonClicked.value = ENABLE_SELECTED_CLICKED;
+             submitTheDataForm(); 
+	         break;
+	         
+	    case "removeall":
+	        var itms =  getSelectedWlans();
+	        if(!errorNoWlanSelected(itms))
+	           break;	 
+	        if(!confirm(confirm_msg3))
+	           break;
+	         document.forms["fwlanlist"].sel_wlans.value = itms;
+             document.forms["fwlanlist"].buttonClicked.value = DELETE_CLICKED;
+             submitTheDataForm();            
+	         break;      
+	}    
+}
+
+function getSelectedWlans()
+{
+  var value = "";
+  var form1 = document.forms[0];
+  var typ="";
+  for(var loop=0; loop < form1.elements.length;loop++)
+  { 
+    var elmN = form1.elements[loop].name;
+    if(elmN && elmN.indexOf(".wlan_sel") > -1)
+    {
+          if(form1.elements[loop].checked == true)
+          {
+            var clicindex = elmN.substring(0,elmN.indexOf("wlan_sel"));           
+            var apId = getListPageElementValue(form1,clicindex + "wlan_id"); //get the wlan id based on the check box 
+            typ = getListPageElementValue(form1,clicindex + "lan_type");
+			if(typ == "Guest LAN")
+                 apId = parseInt(apId) + GUEST_WLAN_START;
+
+      if(value == "")
+                value = "" + apId;
+            else
+                value += ("," + apId);
+          }
+    }
+  }
+  return value;  
+}
+
+function errorNoWlanSelected(sItems)
+{
+    if(sItems == null || sItems.length <= 0)
+	{
+	    alert(confirm_msg4);
+	    return false;
+	}
+	return true;
+}
+
+function submitTheDataForm()
+{
+  document.forms["wlanSubmitform"].sel_wlans.value = document.forms["fwlanlist"].sel_wlans.value;
+  document.forms["wlanSubmitform"].buttonClicked.value = document.forms["fwlanlist"].buttonClicked.value ;
+  document.forms["wlanSubmitform"].query_str.value = document.forms["fwlanlist"].query_str.value;
+  document.forms["wlanSubmitform"].isGuest.value = document.forms["fwlanlist"].isGuest.value;         
+
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms["wlanSubmitform"].buttonClicked.value);
+  top.CHttpFormExtractor.addKeyValue("sel_wlans", document.forms["wlanSubmitform"].sel_wlans.value);
+  top.CHttpFormExtractor.addKeyValue("query_str", document.forms["wlanSubmitform"].query_str.value);
+  top.CHttpFormExtractor.addKeyValue("isGuest", document.forms["wlanSubmitform"].isGuest.value);
+
+  document.forms["wlanSubmitform"].submit();
+  return false;   
+}
+
+function deleteAction(idxval)
+{
+    //get the wlan id based on index.
+   var selWlan =  getEmRowElmValue(document.forms[0], "wlan_id", idxval);
+   var typ = getEmRowElmValue(document.forms[0],"lan_type",idxval);
+   if(typ == "Guest LAN")
+        selWlan = parseInt(selWlan) + GUEST_WLAN_START;
+   document.forms["fwlanlist"].sel_wlans.value = selWlan;
+   document.forms["fwlanlist"].buttonClicked.value = DELETE_CLICKED;
+   if(!confirm(confirm_msg3))
+	    return;
+   submitTheDataForm();
+}
+
+function editThisWlan(selWlan,elmN){
+   var form1 = document.forms[0];
+   var clicindex = elmN.substring(0,elmN.indexOf("wlan_id"));           
+   var typ = getListPageElementValue(form1,clicindex + "lan_type");
+   if(typ == "Guest LAN")
+        selWlan = parseInt(selWlan) + GUEST_WLAN_START;
+   document.forms["fwlanlist"].sel_wlans.value = selWlan;
+   document.forms["fwlanlist"].buttonClicked.value = EDIT_CLICKED;
+   submitTheDataForm();
+}
+
+function setTitleBg()
+{
+   if(document.forms["fwlanlist"].isGuest.value == 1)
+   {
+      var getElmId = document.getElementById("headertext");
+      getElmId.innerHTML = "Guest LANs";
+      document.getElementById('noguestsec').style.visibility ='hidden';
+      document.getElementById('noguestsec1').style.visibility ='hidden';
+   }
+}
+
+</script>
+<FORM method="post" name="fwlanlist" ACTION="/screens/apf/wlan_list.html">
+<INPUT type="hidden" name="page_index" VALUE="1">
+<INPUT type="hidden" name="query_str" size="512" maxlength="512" VALUE="">
+<INPUT type="hidden" name="total_entries" VALUE="3">
+
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+      <td class="pageTitle">       
+       <h1 id="headertext">WLANs</h1>
+      </td>
+      <td align="right" valign="top" >
+         <table border="0" cellspacing="0" cellpadding="0">
+         <tr>
+            <td>
+              <!-- To display paging in top right corner-->
+<div id=pagingStr>
+ <table cellSpacing=0 cellPadding=0 border=0 >
+	<tr align="left" valign=top>
+		<td colspan="25" class="headerNoBorder" style="COLOR: #666666; " align="center" noWrap>
+			Entries <?=ENTRIES=?>
+	    </td>
+	</tr> 
+ </table>
+</div>
+ 
+             </td>             
+         </tr>
+         </table>               
+	 </td>
+   </tr>
+  </table>
+  <table   width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tbody><tr>
+      <TD width=150 id="noguestsec" >
+    	<table cellSpacing=0 cellPadding=0  border=0 width=100%>
+    		<tr>
+    			<td class=headerNoBorder vAlign=top nowrap>Current Filter:</td>
+				<td class=label2PadBottom id='filter' nowrap vAlign=top></td>
+    		</tr>
+    	</table>    	
+      </TD>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top" align="left" width="35%" id="noguestsec1" >
+         [<a href="javascript:notSupported();" id="change" disabled="true">Change Filter</a>]
+		 [<a href="javascript:notSupported();" id="clear" disabled="true">Clear Filter</a>]	  
+      </td>	
+      <td nowrap>
+         &nbsp; &nbsp;
+          <SELECT name="wlanaction">      	    
+		    <OPTION value="create" >Create New</option>
+<!-- 		    <OPTION value="disableall" >Disable Selected</option>
+		    <OPTION value="enableall" >Enable Selected</option>
+		    <OPTION value="removeall" >Remove Selected</option> -->
+           </SELECT>       
+	      <INPUT type=button class="buttonstretch" onclick="handleWlanAction()" value=" Go ">
+      </td>  
+    </tr>	
+    <tr>
+      <td colspan="4">&nbsp;</td>
+    </tr>
+	<tr>
+      <td colspan="4">&nbsp;</td>
+    </tr>
+  </table>
+
+
+ <table border="0" cellspacing="1" cellpadding="0">
+ <tr>
+		      <TD class="listNoPad">
+		        <INPUT type=checkbox name="sel_all" id="sel_all" class="statictextboxlist" readonly SIZE="10" MAXLENGTH="10" onclick="selectAllChkBox('wlan_sel',this.checked)" >
+		      </td>
+		      <th align="left">WLAN ID</th>
+		      <th align="left">Type</th>
+		      <th align="left">Profile Name</th>		                     
+              <th align="left">WLAN SSID</Th><!-- SSID -->
+              
+                    <th align="left">Admin Status</Th><!-- Admin Status -->
+                    <th align="left">Security Policies</Th>
+              
+            <th>&nbsp;</th>
+ </tr>
+
+
+<?=WLAN-ENTRY-begin=?>
+<tr>
+<TD class="listNoPad">
+<INPUT type=checkbox name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.wlan_sel" id="wlan_sel" class="statictextboxlist" readonly SIZE="10" MAXLENGTH="10" >
+</TD>
+<TD class="listNoPad">  
+<INPUT type=TEXT name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.wlan_id" class="statictextboxlink" onclick="editThisWlan(this.value,this.name)" readonly SIZE="7" VALUE="<?=WLAN-ID=?>">
+</TD>
+<TD class="listNoPad"><INPUT type=TEXT name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.lan_type" class="statictextboxlist" readonly onFocus="select()" SIZE="10" MAXLENGTH="10" VALUE="WLAN"></TD>
+<TD class="listNoPad">
+<INPUT TYPE="hidden" NAME="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.index" SIZE="16" MAXLENGTH="15" VALUE="<?=WLAN-ID=?>">
+<INPUT type=TEXT name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.vap_profile" class="statictextboxlist" readonly SIZE="32" MAXLENGTH="32" VALUE="<?=WLAN-NAME=?>">
+</TD>
+<TD class="listNoPad"><INPUT type=TEXT name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.vap_ssid" class="statictextboxlist" readonly onFocus="select()" SIZE="32" MAXLENGTH="32" VALUE="<?=WLAN-SSID=?>"></TD>
+<TD class="listNoPad"><INPUT type=TEXT name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.vap_admin_status" class="statictextboxlist" readonly onFocus="select()" SIZE="8" MAXLENGTH="8" VALUE="<?=WLAN-STATUS=?>"></TD>
+<TD class="listNoPad"><INPUT type=TEXT name="1.<?=WLAN-INDEX=?>.<?=WLAN-COUNT=?>.vap_security_types" class="statictextboxlist" readonly onFocus="select()" SIZE="32" MAXLENGTH="45" VALUE="<?=WLAN-AUTHEN=?>"></TD>
+<TD class=listNoPad><a href="javascript:deleteAction(<?=WLAN-INDEX=?>);">Remove</a></TD>
+</tr>
+<?=WLAN-ENTRY-end=?>
+
+
+        </table>
+      </td>
+    </tr>
+</table>
+ <INPUT TYPE="hidden" NAME="indexClicked" SIZE="16" MAXLENGTH="15" VALUE="">
+ <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="">
+ <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="">
+ <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+ <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="">
+ <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+ <INPUT TYPE="hidden" NAME="sel_wlans" SIZE="1024" MAXLENGTH="1023" VALUE="">
+ <INPUT TYPE="hidden" NAME="isGuest" SIZE="16" MAXLENGTH="15" VALUE="0">
+</FORM>
+
+
+<script>
+document.writeln('<FORM name="wlanSubmitform" method="post" ACTION="frameWlan.html">');
+document.writeln('<INPUT TYPE="hidden" NAME="sel_wlans" VALUE="">');
+document.writeln('<INPUT TYPE="hidden" NAME="buttonClicked" VALUE="">');
+document.writeln('<INPUT TYPE="hidden" NAME="query_str" VALUE="">');
+document.writeln('<INPUT TYPE="hidden" NAME="isGuest" VALUE="">');
+document.writeln('</FORM>');
+</script>
+
+<?=PAGE-FOOTER=?>

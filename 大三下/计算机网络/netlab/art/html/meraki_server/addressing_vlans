@@ -1,0 +1,90 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<?=MESSAGE=?>
+
+<h2 style="font-family: sans-serif;">Addressing & VLANs</h2>
+
+
+<table style="width:auto; font-size: 95%;">
+<tr>
+<td><b>Network wide</b><br/><br/></td>
+<td colspan="2"></td>
+</tr>
+<tr>
+<td valign="top">Mode</td>
+<td valign="top"><input id="nat_or_passthrough_passthrough" name="nat_or_passthrough" type="radio" value="passthrough" disabled /></td>
+<td>
+<font color="#CCCCCC">
+<b>Passthrough or VPN concentrator</b><br/>
+The security appliance acts as a Layer 2 bridge, and does not modify client traffic.<br/>
+Configure VPN to enable communication with remote peers.<br/>
+Only one WAN uplink can be used in this mode.<br/><br/>
+</font>
+</td></tr>
+
+<tr>
+<td></td>
+<td valign="top"><input checked="checked" id="nat_or_passthrough_nat" name="nat_or_passthrough" type="radio" value="nat" /></td>
+<td>
+<b> Network Address Translation (NAT)</b><br/>
+Client traffic to the Internet is modified so that it appears
+to have the security appliance as its source.<br/>
+Configure DHCP on the <a href="dhcp">DHCP settings</a> page.<br/><br/>
+</td>
+</tr>
+
+<tr>
+<td><br/><br/><b>Routing</b><br/><br/></td>
+<td colspan="2"></td>
+</tr>
+
+<tr>
+<td valign="top">VLANs</td>
+<td colspan="2">
+<select id="wired_config_vlans_enabled" name="wired_config[vlans_enabled]">
+<option value="false" selected="selected">Disabled: use a single LAN</option>
+</select>
+<br/><br/>
+</td>
+</tr>
+
+<tr>
+<td valign="top">Routes</td>
+<td colspan="2">
+
+	<table id="meraki_table" border="1" style="font-size: 90%;">
+	<?=BEGIN-VLAN-ROUTE=?>
+	<tr>
+	  <th>Subnet</th>
+	  <th>Type</th>
+	  <th>Details</th>
+	</tr>
+	<tr>
+	  <td><?=NETWORK-IP=?></td>
+	  <td>Local LAN</td>
+	  <td><b>Name</b> Default<br/><b>MX IP</b> <?=LAN-IP=?></td>
+	</tr>
+	<?=END-VLAN-ROUTE=?>
+	</table>
+
+	</td>
+	</tr>
+	</table>
+
+<br/><br/>
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

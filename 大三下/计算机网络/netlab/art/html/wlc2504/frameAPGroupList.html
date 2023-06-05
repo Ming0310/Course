@@ -1,0 +1,292 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Wlans';
+
+function ptOnload() {
+}
+
+var url = 'site_list.html';
+var list_size = 25;
+
+var textAttrs = new Array();
+var notAllowedChars1 = new Array();
+var notAllowedChars2 = new Array();
+notAllowedChars1[0]=notAllowedChars2[0]="+";
+notAllowedChars1[1]=notAllowedChars2[1]="#";
+notAllowedChars1[2]=notAllowedChars2[2]="?"
+notAllowedChars1[3]=notAllowedChars2[3]="%";
+notAllowedChars1[4]=notAllowedChars2[4]="'";
+notAllowedChars1[5]=" ";
+notAllowedChars1[6]=notAllowedChars2[6]="*";
+notAllowedChars1[7]=notAllowedChars2[7]="@";
+notAllowedChars1[8]=notAllowedChars2[8]="$";
+notAllowedChars1[9]=notAllowedChars2[9]="^";
+notAllowedChars1[10]=notAllowedChars2[10]="&";
+
+textAttrs[0] = new textAttr("new_loc_str","AP Group Name",32,notAllowedChars1,null,true);
+thisFormAttrs = new formAttrs(null,textAttrs,null,null);
+
+function validateString(string,notAllowedChar,displayName)
+{
+   debugMsg("<validateString> In validateString ");
+   if((notAllowedChar == null)||(notAllowedChar.length == 0))
+   {
+      debugMsg("<validateString> returning true because notAllowedChar[] is empty");
+      return true;
+   }
+
+   if((string == null)||(string.length == 0))
+   {
+      debugMsg("<validateString> Returning false as source string is empty");
+      return false;
+   }
+   
+   var temp = "";
+   var alertMsg = "";
+   for(var j = 0 ; j < notAllowedChar.length ; ++j)
+   {
+      temp = notAllowedChar[j];
+      if(string.indexOf(temp) >= 0)
+      {
+         if(temp == " ")
+         {
+            alertMsg += displayName+" : "+string+" : "+"space "+top.ATTRIB_SPACE+"\n\n";
+         }
+         else
+         {
+            alertMsg += displayName+" : "+string+" : "+temp+" : "+top.CHAR_NOT_ALLOWED+"\n\n";
+         }
+      }
+   }
+   if(alertMsg != "")
+   {
+      alertMsg = "___________________________"+ top.ERRORS+" ____________________________"+"\n\n\n"+ alertMsg;
+      alertMsg += "\n"+top.MAKE_NECCESSARY_CORRECTION+ "\n"
+      alert(alertMsg);
+      return false;
+   }else 
+   {
+      debugMsg("<validateString>alert msg is empty");
+      return true;
+   }
+   
+}
+
+function createNewLocation(){
+	if (document.forms[0].new_loc_str.value == "" ) {
+		alert ("Cannot create new AP Group out of empty string");
+		return false;
+	}
+	if (document.forms[0].new_loc_str.value == "default-group" ) {
+		alert ("Cannot create new AP Group with name \'default-group\'");
+		return false;
+	}
+	var noerror = true;
+    var string=document.forms["site_list"].new_loc_descr.value;
+    if(thisFormAttrs != null)
+       noerror = validateForm(document.forms[0],thisFormAttrs);
+    if(noerror)
+    {
+       if((string != null)&&(string.length != 0))
+       {
+         noerror = validateString(string,notAllowedChars2,"Description");
+       }
+    }
+    
+	var totalEntries = 0;
+    for(var loop=0; loop < document.forms[0].elements.length;loop++)
+    {
+      if(document.forms[0].elements[loop].name && (document.forms[0].elements[loop].name.indexOf("loc_str") > -1))
+      {
+         totalEntries++;
+      }
+    }    
+    totalEntries--; //reduce one for create field.
+    if(totalEntries >= document.forms[0].max_entries_allowed.value) 
+    {
+       alert("Can't create more than " + document.forms[0].max_entries_allowed.value + " entries");
+       return false;
+       
+    }
+    if(noerror){
+   	document.forms[0].buttonClicked.value = CREATE_CLICKED;	
+
+    top.CHttpFormExtractor.clearKeyValues();
+    top.CHttpFormExtractor.addKeyValue("new_loc_str", document.forms[0].new_loc_str.value);
+    top.CHttpFormExtractor.addKeyValue("new_loc_descr", document.forms[0].new_loc_descr.value);
+    top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+
+    document.forms[0].submit();
+    }
+}
+
+//show or hide add new section.
+function showAddGroup()
+{
+  document.getElementById('add_new').style.display = 'inline';   
+}
+
+function hideAddGroup()
+{
+  document.getElementById('add_new').style.display = 'none';
+}
+
+
+function deleteAction(indexVal)
+{
+  //find the rule name based on the index.
+  var delGrpName = getEmRowElmValue(document.forms["site_list"], "loc_str", indexVal); 
+  
+  if(delGrpName == 'default-group')
+  {
+  	alert("The default-group cannot be removed");
+	return;
+  }  
+  if(!confirm(top.ARE_YOU_SURE_DELETE))
+     return;
+  document.forms[0].indexClicked.value = indexVal;
+  document.forms[0].buttonClicked.value = DELETE_CLICKED;
+
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("indexClicked", document.forms[0].indexClicked.value);
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+
+  document.forms[0].submit();
+}
+
+</script>
+<FORM name="site_list" method="post" ACTION="/frameAPGroupList.html">
+
+<INPUT type="hidden" name="page_index" VALUE="1">
+<INPUT type="hidden" name="query_str" size="512" maxlength="512" VALUE="">
+<INPUT type="hidden" name="total_entries" VALUE="3">
+
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+   
+   <table width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td class="pageTitle">
+        <h1>AP Groups</h1>
+      </td>
+      <td align="right" valign="top" >
+        <table border="0" cellspacing="0" cellpadding="0">
+           <tr>
+            <td>
+              <!-- To display paging in top right corner-->
+<div id=pagingStr>
+ <table cellSpacing=0 cellPadding=0 border=0 >
+	<tr align="left" valign=top>
+		<td colspan="25" class="headerNoBorder" style="COLOR: #666666; " align="center" noWrap>
+			Entries <?=ENTRIES=?>
+	    </td>
+	</tr> 
+ </table>
+</div>
+ 
+             </td>
+             <td>
+                &nbsp;<script>getHtmlForButton("addGroup", "Add Group", "buttonstretch","showAddGroup()");</script>	
+             </td>
+         </tr>
+         </table>	      
+        </td>
+     </tr>     
+   </table>  
+   
+   <!-- Hidden Add Rule Begin -->
+   <div id=add_new style="display:none">
+      <table border="0" cellpadding="0" cellspacing="0">
+           <tr>
+               <td class="label1" colspan=2>Add New AP Group</td>
+               </tr> 
+               <tr>
+                    <td class="horizLine" colspan=2></td>
+               </tr>                      
+               <tr>
+                 <td class="label2"><label for="new_loc_str">AP Group Name</label></td>              
+                 <td><INPUT type="text" name="new_loc_str" id="new_loc_str" SIZE="33" MAXLENGTH="32" VALUE=""></td>                 
+               </tr>               
+               <tr>
+                 <td class="label2"><label for="new_loc_descr">Description</label></td>                
+                 <td> 
+                    <INPUT type="text" name="new_loc_descr" SIZE="38" MAXLENGTH="32" VALUE="">
+                 </td>
+               </tr>              
+               <tr>
+               <td> &nbsp; </td>               
+               <td>
+                    <script>getHtmlForButton("new","Add","buttonstretch","createNewLocation()"); </script>
+                    &nbsp;<script>getHtmlForButton("cancel","Cancel","buttonstretch","hideAddGroup()"); </script>                    
+                </td>
+               </tr>         
+               <tr>
+                    <td colspan=2>&nbsp;</td>
+               </tr>
+          </table>
+   </div>
+  
+  <table border="0" cellspacing="1" cellpadding="0" width="600" style="margin-top: 10px">
+    <tr>
+      <th align="left">AP Group Name</th>
+      <th align="left">AP Group Description</th>
+      <th>&nbsp;</th>
+    </tr>
+
+<?=AP-GROUP-ENTRY-begin=?>
+    <tr>
+      <td class="listNoPad">
+<INPUT TYPE="hidden" NAME="1.<?=AP-GROUP-INDEX=?>.<?=AP-GROUP-COUNT=?>.index" SIZE="16" MAXLENGTH="15" VALUE="">
+       <SCRIPT>getHtmlForEdit(<?=AP-GROUP-INDEX=?>);</SCRIPT>
+        <INPUT type="text" name="1.<?=AP-GROUP-INDEX=?>.<?=AP-GROUP-COUNT=?>.loc_str" class="statictextboxlink" SIZE="45" MAXLENGTH="32" VALUE="<?=AP-GROUP-NAME=?>">
+	<SCRIPT>endHtmlEdit();</SCRIPT>
+      </td>
+      <td class="listNoPad">
+        <INPUT type="text" name="1.<?=AP-GROUP-INDEX=?>.<?=AP-GROUP-COUNT=?>.loc_descr" class="statictextboxlist" SIZE="45" MAXLENGTH="32" VALUE="<?=AP-GROUP-DESCRIPTION=?>">
+      </td>
+      <TD class=listNoPad><a href="javascript:deleteAction(<?=AP-GROUP-INDEX=?>);" style="display:<?=AP-GROUP-REMOVE=?>">Remove</a></TD>
+    </tr>
+<?=AP-GROUP-ENTRY-end=?>
+
+  </table>
+  
+  
+  <table class ="basictableproperties"  CELLSPACING=4  WIDTH =" 100%" nowrap>
+    <tr>
+      <td ALIGN=left>
+        <INPUT TYPE="hidden" NAME="indexClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+
+      <td ALIGN=left>
+        <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+    </tr>
+    <tr>
+      <td ALIGN=left>
+        <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+    </tr>
+    <tr>
+      <td ALIGN=left>
+        <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+      </td>
+    </tr>
+    <tr>
+      <td ALIGN=left>
+        <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+    </tr>
+    <tr>
+      <td ALIGN=left>
+        <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+      </td>
+    </tr>
+    <tr>
+      <td ALIGN=left><INPUT TYPE="hidden" NAME="max_entries_allowed" SIZE="16" VALUE="25"></td>
+    </tr>
+    <tr>
+  </table>
+</FORM>
+
+<?=PAGE-FOOTER=?>

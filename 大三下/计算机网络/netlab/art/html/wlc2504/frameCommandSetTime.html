@@ -1,0 +1,379 @@
+<?=PAGE-HEADER=?>
+
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Commands';
+
+function ptOnload() {
+	document.forms[0].month.value = monthSelected;
+	document.forms[0].date.value = daySelected;
+	document.forms[0].hour.value = hourSelected;
+	document.forms[0].locationZone.value = timezoneSelected;
+}
+
+var monthSelected = <?=MONTH-SELECTED=?>;
+var daySelected = <?=DAY-SELECTED=?>;
+var hourSelected = <?=HOUR-SELECTED=?>;
+var timezoneSelected = <?=TIMEZONE-SELECTED=?>;
+
+function submitForm() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("month", document.forms[0].month.value);
+		top.CHttpFormExtractor.addKeyValue("date", document.forms[0].date.value);
+		top.CHttpFormExtractor.addKeyValue("year", document.forms[0].year.value);
+		top.CHttpFormExtractor.addKeyValue("hour", document.forms[0].hour.value);
+		top.CHttpFormExtractor.addKeyValue("minutes", document.forms[0].minutes.value);
+		top.CHttpFormExtractor.addKeyValue("secs", document.forms[0].secs.value);
+		document.forms[0].submit();
+	}
+
+	return false;
+}
+
+</script>
+
+<script>
+
+var numAttrs = new Array();
+numAttrs[0] = new numberAttr("minutes","Minutes",0,59,null,true);
+numAttrs[1] = new numberAttr("secs","Seconds",0,59,null,true);
+numAttrs[2] = new numberAttr("year","Year",2000,99999,null,true);
+thisFormAttrs = new formAttrs(numAttrs,null,null,null);
+businessLogicImplemented = true;
+var checkscheduledreset_flag = false;
+
+function checksystemScheduledreset() {
+ if (document.forms[0].resettime.value == "\r\nNo system reset is scheduled.") {
+     checkscheduledreset_flag = false;
+ } else {
+     checkscheduledreset_flag = true;
+ }
+}
+
+function validateBusinessLogic(attrs){
+ if ( !confirm("Are you sure you want to change the system time?") ){
+      return false;
+ } else {
+      if ( checkscheduledreset_flag == true) {
+           if ( !confirm("The scheduled system reset will be cancelled. Are you sure you want to continue")){
+                return false;
+           } else {
+                return true;
+           }
+      }
+      return true;
+ }
+ return true;
+}
+
+function timeZoneAction() {
+
+        var noerror = checkMsg();
+        if(noerror){
+                document.forms[0].buttonClicked.value = CUSTOM1_CLICKED;
+				top.CHttpFormExtractor.clearKeyValues();
+				top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+				top.CHttpFormExtractor.addKeyValue("timezone_delta", document.forms[0].timezone_delta.value);
+				top.CHttpFormExtractor.addKeyValue("timezone_delta_mins", document.forms[0].timezone_delta_mins.value);
+				top.CHttpFormExtractor.addKeyValue("locationZone", document.forms[0].locationZone.value);
+                document.forms[0].submit();
+        }
+}
+
+function checkMsg() {
+      if ( checkscheduledreset_flag == true) {
+           if ( !confirm("The scheduled system reset will be cancelled. Are you sure you want to continue")){
+                return false;
+           } else {
+                return true;
+           }
+      }
+      return true;
+}
+
+</script>
+
+<FORM method="post" ACTION="frameCommandSetTime.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="v1LF21O3LZg6osDYwvJeEFWz2n0W8y7">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td class="pageTitle">
+        <h1>Set Time</h1>
+      </td>
+
+      <td align="right" class="pageTitle">
+        <script>getHtmlForButton("apply","Set Date and Time","buttonStretch","submitForm()"); </script>
+        <script>getHtmlForButton("timezone","Set Timezone","buttonStretch","timeZoneAction()"); </script>
+        <!-- <script>getHtmlForHelpButton("Set_Time","/helppages/wwhelp.htm");</script> -->
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+          <table border="0" cellspacing="0" cellpadding="0" width="75%">
+            <TR>
+            <TD  class = "label1" width="120" nowrap >Current Time</TD>
+            <TD class="label1" colspan="2"><INPUT type="text" name="currenttime" class="statictextbox" readonly SIZE="30" MAXLENGTH="40" VALUE="<?=CURRENT-TIME=?>"></TD>
+            </TR>
+
+          <tr>
+            <td class="label1" >Date</td>
+
+            <td class="label1" width="30%">&nbsp;</td>
+            <td class="label1">&nbsp; </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="horizLine"></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td class="label2" >Month</td>
+            <td class="label2">
+              <SELECT name="month" SIZE="1">
+                 <OPTION value="1">January</option>
+                 <OPTION value="2">February</option>
+                 <OPTION value="3">March</option>
+                 <OPTION value="4">April</option>
+                 <OPTION value="5">May</option>
+                 <OPTION value="6">June</option>
+                 <OPTION value="7">July</option>
+                 <OPTION value="8">August</option>
+                 <OPTION value="9">September</option>
+                 <OPTION value="10">October</option>
+                 <OPTION value="11">November</option>
+                 <OPTION value="12">December</option>
+              </SELECT>
+            </td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td class="label2">Day</td>
+            <td class="label2">
+              <SELECT name="date" SIZE="1">
+                 <OPTION value="1">1</option>
+                 <OPTION value="2">2</option>
+                 <OPTION value="3">3</option>
+                 <OPTION value="4">4</option>
+                 <OPTION value="5">5</option>
+                 <OPTION value="6">6</option>
+                 <OPTION value="7">7</option>
+                 <OPTION value="8">8</option>
+                 <OPTION value="9">9</option>
+                 <OPTION value="10">10</option>
+                 <OPTION value="11">11</option>
+                 <OPTION value="12">12</option>
+                 <OPTION value="13">13</option>
+                 <OPTION value="14">14</option>
+                 <OPTION value="15">15</option>
+                 <OPTION value="16">16</option>
+                 <OPTION value="17">17</option>
+                 <OPTION value="18">18</option>
+                 <OPTION value="19">19</option>
+                 <OPTION value="20">20</option>
+                 <OPTION value="21">21</option>
+                 <OPTION value="22">22</option>
+                 <OPTION value="23">23</option>
+                 <OPTION value="24">24</option>
+                 <OPTION value="25">25</option>
+                 <OPTION value="26">26</option>
+                 <OPTION value="27">27</option>
+                 <OPTION value="28">28</option>
+                 <OPTION value="29">29</option>
+                 <OPTION value="30">30</option>
+                 <OPTION value="31">31</option>
+              </SELECT>
+            </td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td class="label2">Year</td>
+            <td class="label2">
+              <INPUT type="text" name="year" SIZE="6" MAXLENGTH="6" VALUE="<?=CURRENT-YEAR=?>">
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">&nbsp; </td>
+          </tr>
+          <tr>
+            <td class="label1">Time</td>
+            <td class="label1">&nbsp;</td>
+            <td class="label1">&nbsp; </td>
+
+          </tr>
+          <tr>
+            <td colspan="3" class="horizLine"></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td class="label2">Hour</td>
+            <td class="label2">
+                <SELECT name="hour">
+                   <OPTION value="1">1</option>
+                   <OPTION value="2">2</option>
+                   <OPTION value="3">3</option>
+                   <OPTION value="4">4</option>
+                   <OPTION value="5">5</option>
+                   <OPTION value="6">6</option>
+                   <OPTION value="7">7</option>
+                   <OPTION value="8">8</option>
+                   <OPTION value="9">9</option>
+                   <OPTION value="10">10</option>
+                   <OPTION value="11">11</option>
+                   <OPTION value="12">12</option>
+                   <OPTION value="13">13</option>
+                   <OPTION value="14">14</option>
+                   <OPTION value="15">15</option>
+                   <OPTION value="16">16</option>
+                   <OPTION value="17">17</option>
+                   <OPTION value="18">18</option>
+                   <OPTION value="19">19</option>
+                   <OPTION value="20">20</option>
+                   <OPTION value="21">21</option>
+                   <OPTION value="22">22</option>
+                   <OPTION value="23">23</option>
+                   <OPTION value="24">00</option>
+                </SELECT>
+            </td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td class="label2">Minutes </td>
+            <td class="label2">
+              <INPUT type="text" name="minutes" SIZE="4" MAXLENGTH="2" VALUE="<?=CURRENT-MIN=?>">
+            </td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td class="label2">Seconds</td>
+            <td class="label2">
+              <INPUT type="text" name="secs" SIZE="4" MAXLENGTH="2" VALUE="<?=CURRENT-SEC=?>">
+            </td>
+          </tr>
+          <tr>
+            <td class="label1">Timezone</td>
+            <td class="label1">&nbsp;</td>
+            <td class="label1">&nbsp; </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="horizLine"></td>
+          </tr>
+          <tr>
+              <td>&nbsp;</td>
+              <td colspan="2">
+                  <table cellSpacing=0 cellPadding=0 width="100%" border=0>
+                     <tr>
+                        <td class="label2" width="36%">Delta </td>
+                        <td class="label2" width="10%" align="right">hours </td>
+                        <td width="10%">
+                            <INPUT type="text" name="timezone_delta" SIZE="4" MAXLENGTH="4" VALUE="<?=HOUR-OFFSET=?>">
+                        </td>
+                        <td class="label2" width="10%">mins </td>
+                        <td>
+                            <INPUT type="text" name="timezone_delta_mins" SIZE="4" MAXLENGTH="4" VALUE="<?=MIN-OFFSET=?>">
+                        </td>
+                     </tr>
+                  </table>
+              </td>
+          </tr>
+          <tr>
+              <td>&nbsp;</td>
+              <td colspan="2">
+                  <table cellSpacing=0 cellPadding=0 width="100%" border=0>
+                     <tr>
+                         <td class="label2" width="36%">Location<sup>1</sup></td>
+                         <td class="label2">
+                            <SELECT name="locationZone">
+<OPTION value="0">-Select Location-
+<OPTION value="IDL">(GMT-12:00) International Date Line West
+<OPTION value="SST">(GMT-11:00) Samoa
+<OPTION value="HST">(GMT-10:00) Hawaii
+<OPTION value="AKST">(GMT -9:00) Alaska
+<OPTION value="PST">(GMT -8:00) Pacific Time (US and Canada)
+<OPTION value="MST">(GMT -7:00) Mountain Time (US and Canada)
+<OPTION value="CST">(GMT -6:00) Central Time (US and Canada)
+<OPTION value="EST">(GMT -5:00) Eastern Time (US and Canada)
+<OPTION value="AT">(GMT -4:00) Altantic Time (Canada)
+<OPTION value="ART">(GMT -3:00) Buenos Aires (Agentina)
+<OPTION value="MAT">(GMT -2:00) Mid-Atlantic
+<OPTION value="AZOT">(GMT -1:00) Azores
+<OPTION value="BST">(GMT) London, Lisbon, Dublin, Edinburgh
+<OPTION value="CEST">(GMT +1:00) Amsterdam, Berlin, Rome, Vienna
+<OPTION value="IDT">(GMT +2:00) Jerusalem
+<OPTION value="AST">(GMT +3:00) Baghdad
+<OPTION value="GST">(GMT +4:00) Muscat, Abu Dhabi
+<OPTION value="AFT">(GMT +4:30) Kabul
+<OPTION value="PKT">(GMT +5:00) Karachi, Islamabad, Tashkent
+<OPTION value="IST">(GMT +5:30) Colombo, New Delhi, Chennai, Kolkata
+<OPTION value="NPT">(GMT +5:45) Katmandu
+<OPTION value="ALMT">(GMT +6:00) Almaty, Novosibirsk
+<OPTION value="AEDT">(GMT +6:30) Rangoon
+<OPTION value="ICT">(GMT +7:00) Saigon, Hanoi, Bangkok, Jakatar
+<OPTION value="HKT">(GMT +8:00) HongKong, Bejing, Chongquing
+<OPTION value="JST">(GMT +9:00) Tokyo, Osaka, Sapporo
+<OPTION value="ACST">(GMT +9:30) Darwin
+<OPTION value="AEDT">(GMT+10:00) Sydney, Melbourne, Canberra
+<OPTION value="MT">(GMT+11:00) Magadan, Solomon Is., New Caledonia
+<OPTION value="VLAT">(GMT+12:00) Kamchatka, Marshall Is., Fiji
+<OPTION value="NZDT">(GMT+12:00) Auckland (New Zealand)
+<OPTION value="ACDT">(GMT+10:30) Adelaide, South Australia</SELECT>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+          </tr>
+              </table><td><tr>
+
+       <tr>
+           <td colspan=2 style="padding-top:10%">
+              <table cellpadding="0" cellspacing="0" border="0" >
+                <tr>
+                    <td class="label1"> <I>Foot Notes </I></td>
+                </tr>
+                <tr>
+                   <td class="horizLine"></td>
+                </tr>
+                <tr>
+                   <td> <em> 1. Automatically sets daylight savings time where used.</em> </td>
+                </tr>
+              </table>
+           </td>
+        <tr>
+      </table>
+
+<table>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0"></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" value "test" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT type="hidden" name="resettime" SIZE="60" MAXLENGTH="40" VALUE="
+No system reset is scheduled."></TD>
+</TR>
+  </table>
+</FORM>
+
+<?=PAGE-FOOTER=?>

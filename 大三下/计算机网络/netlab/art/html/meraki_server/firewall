@@ -1,0 +1,151 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+var CREATE_CLICKED = 0x01;
+var SUBMIT_CLICKED = 0x04;
+var DELETE_CLICKED  = 0x08;
+
+function ptOnload() 
+{
+}
+
+function deleteRow(id) 
+{  
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", DELETE_CLICKED);
+  top.CHttpFormExtractor.addKeyValue("id", id);
+  document.firewall.submit();
+  return false;
+}
+
+function addRow() 
+{  
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", CREATE_CLICKED);
+  top.CHttpFormExtractor.addKeyValue("policy", document.firewall.policy_add.value);
+  top.CHttpFormExtractor.addKeyValue("protocol", document.firewall.protocol_add.value);
+  top.CHttpFormExtractor.addKeyValue("source_ip", document.firewall.source_ip_add.value);
+  top.CHttpFormExtractor.addKeyValue("source_port", document.firewall.source_port_add.value);
+  top.CHttpFormExtractor.addKeyValue("destination_ip", document.firewall.destination_ip_add.value);
+  top.CHttpFormExtractor.addKeyValue("destination_port", document.firewall.destination_port_add.value);
+  top.CHttpFormExtractor.addKeyValue("comment", document.firewall.comment_add.value);
+  document.firewall.submit();
+  return false;
+}
+
+function submitFirewallSettings() 
+{
+  document.firewall.commit.value = SUBMIT_CLICKED;
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.firewall.commit.value);
+  document.firewall.submit();
+
+  return false;
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<?=MESSAGE=?>
+
+<h2 style="font-family: sans-serif;">Firewall</h2>
+ 
+<form accept-charset="UTF-8" name="firewall" action="firewall" id="firewall_form" method="post">
+ 
+
+ <b>Outbound rules</b>
+
+<table id="meraki_table">
+<tr>
+ <th align="center">#</th>
+ <th align="center">Policy</th>
+ <th align="center">Protocol</th>
+ <th align="center">Source</th>
+ <th align="center">Src port</th>
+ <th align="center">Destination</th>
+ <th align="center">Dst port</th>   
+ <th align="center">Comment</th>    
+ <th align="center">Action</th>    
+</tr>
+
+<tr>
+ <td align="center"></td>
+ <td align="center">
+ <select name="policy_add" id="policy">
+  <option value="deny">Deny</option>
+  <option value="allow">Allow</option>
+</select>
+</td>
+ <td align="center">
+ <select name="protocol_add" id="policy">
+   <option value="tcp">TCP</option>
+   <option value="udp">UDP</option>
+   <option value="icmp">ICMP</option>
+   <option value="any">Any</option>   
+</select>
+ </td>
+ <td align="center"><input type="text" name="source_ip_add" value=""></td>
+ <td align="center"><input type="text" name="source_port_add" value=""></td>
+ <td align="center"><input type="text" name="destination_ip_add" value=""></td>
+ <td align="center"><input type="text" name="destination_port_add" value=""></td>   
+ <td align="center"><input type="text" name="comment_add" value=""></td>    
+ <td align="center"><input type="button" name="add_row" value="Add" onClick="addRow();"></td>  
+</tr>  
+
+<?=BEGIN-ACL-LIST=?>
+<tr>
+ <td align="center"><?=ROW-NUM=?></td>
+ <td align="center">
+ <select name="policy" id="policy">
+  <option value="deny" <?=DENY=?> >Deny</option>
+  <option value="allow" <?=ALLOW=?> >Allow</option>
+</select>
+</td>
+ <td align="center">
+ <select name="protocol" id="policy">
+   <option value="tcp" <?=TCP=?> >TCP</option>
+   <option value="udp" <?=UDP=?> >UDP</option>
+   <option value="icmp" <?=ICMP=?> >ICMP</option>
+   <option value="any" <?=ANY=?> >Any</option>   
+</select>
+ </td>
+ <td align="center"><?=SOURCE-IP=?></td>
+ <td align="center"><?=SOURCE-PORT=?></td>
+ <td align="center"><?=DESTINATION-IP=?></td>
+ <td align="center"><?=DESTINATION-PORT=?></td>   
+ <td align="center"><?=COMMENT=?></td>    
+ <td align="center"><input type="button" name="delete_row" value="Delete" onClick="deleteRow('<?=ID=?>');"></td>  
+</tr>  
+<?=END-ACL-LIST=?>
+
+<tr>
+ <td align="center"></td>
+ <td align="center">Allow</td>
+ <td align="center">Any</td>
+ <td align="center">Any</td>
+ <td align="center">Any</td>
+ <td align="center">Any</td>
+ <td align="center">Any</td>   
+ <td align="center">Default rule</td>    
+ <td align="center"></td>  
+</tr>    
+</table>
+
+ <br/><br/>
+ 
+ <!--
+ <center>
+ <input type="button" id="commit" name="commit" class="btn btn-primary update_modal_state next" onClick="submitFirewallSettings();" value="Save Changes" />
+ </center> 
+ -->
+ 
+</form>
+ 
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

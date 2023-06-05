@@ -1,0 +1,240 @@
+a {
+  text-decoration: none;
+  color: #777777; }
+
+a:active,
+a:hover {
+  text-decoration: underline; }
+  
+.alert {
+  padding: 10px;
+  margin-bottom: 18px;
+  border: 1px solid transparent;
+  border-radius: 3px; }
+  .alert h4 {
+    margin-top: 0;
+    color: inherit; }
+  .alert .alert-link {
+    font-weight: bold; }
+  .alert > p,
+  .alert > ul {
+    margin-bottom: 0; }
+  .alert > p + p {
+    margin-top: 5px; }
+
+.alert-dismissable,
+.alert-dismissible {
+  padding-right: 30px; }
+  .alert-dismissable .close,
+  .alert-dismissible .close {
+    position: relative;
+    top: -2px;
+    right: -21px;
+    color: inherit; }
+
+.alert-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d; }
+  .alert-success hr {
+    border-top-color: #c9e2b3; }
+  .alert-success .alert-link {
+    color: #2b542c; }
+
+.alert-info {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #31708f; }
+  .alert-info hr {
+    border-top-color: #a6e1ec; }
+  .alert-info .alert-link {
+    color: #245269; }
+
+.alert-warning {
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  color: #8a6d3b; }
+  .alert-warning hr {
+    border-top-color: #f7e1b5; }
+  .alert-warning .alert-link {
+    color: #66512c; }
+
+.alert-danger {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442; }
+  .alert-danger hr {
+    border-top-color: #e4b9c0; }
+  .alert-danger .alert-link {
+    color: #843534; }  
+
+body {
+  margin: 0;
+  font-family: "proxima-nova-1","proxima-nova-2", "Helvetica Neue", Helvetica, verdana, sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  color: #666;
+  -webkit-font-smoothing: antialiased;
+  background: #eee; }
+
+#commit {
+  display: block;
+  float: left;
+  width: 45%;
+  height: 35px;
+  margin-right: 5%;
+  margin-top: 0;
+  border: 0;
+  border-radius: 2px;
+  color: #fff;
+  background: #7ac043; }
+
+#commit:hover {
+  background: #71b41d; }
+  
+#container {
+  min-width: 960px; }
+  
+#content {
+  width: 960px;
+  height: 341px;
+  margin: 60px auto; }  
+  
+#footer {
+  width: 960px;
+  margin: 40px auto;
+  border-bottom: none;
+  clear: both; }
+
+#footer-content {
+  width: 960px;
+  height: 100%;
+  margin: 0 auto;
+  position: relative; }
+
+#footer-content ul, #formarea-bottom ul {
+  margin: 0;
+  padding: 0; }
+
+#footer-content li, #formarea-bottom li {
+  display: inline;
+  list-style: none;
+  margin-right: 10px; }
+
+#formarea-bottom li {
+  margin-right: 0; }
+
+#footer-content li:last-of-type {
+  margin-right: 0; }
+
+#footer-bottom {
+  margin: 0 0 -30px;
+  padding: 10px 0 0;
+  width: 100%; }  
+  
+h1 {
+  color: #444;
+  font-size: 2em;
+  font-weight: 200;
+  margin: 0 0 .5em; }  
+  
+#login-box {
+  float: left;
+  width: 336px;
+  min-height: 100%;
+  background-color: white;
+  margin-bottom: 40px;
+  padding: 40px 40px 10px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border-radius: 2px;
+  border-color: #E3E3E3;
+  display: block; }
+  
+#login-box .formarea select {
+  width: 100%; }  
+
+#masthead {
+  height: 125px;
+  width: 100%;
+  position: relative;
+  background: #fafafa;
+  border-top: 4px solid #78be20;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2); }
+
+#masthead-content {
+  margin: 0 auto;
+  position: relative;
+  width: 960px; }
+
+#masthead-content img {
+  float: left;
+  margin: 32px 0 0; }
+  
+ 	
+.shortform label, .shortform fieldset {
+  display: inline-block;
+  width: 100%;
+  min-height: 30px;
+  margin: 0 0 10px;
+  padding: 0 0 15px; }
+
+.shortform input[type='text'], .shortform input[type='password'], .shortform input[type='email'], .shortform textarea {
+  width: 240px;
+  float: none;
+  padding: 7px;
+  background: #ededed;
+  color: #666;
+  border: solid 1px #ccc;
+  font-size: 1em;
+  display: block; }
+
+.shortform input:hover, .shortform input:focus {
+  border-color: #aaa;
+  box-shadow: none; }
+
+.shortform select {
+  float: right;
+  font-size: 1em;
+  width: 318px; }
+
+.shortform textarea {
+  font-size: 1em; }
+
+.shortform input:invalid, textarea:invalid {
+  border-radius: 1px;
+  box-shadow: 0px 0px 0px red; }
+
+.shortform label.error {
+  border: none;
+  color: red;
+  min-height: inherit;
+  padding: 5px 0 0;
+  margin: 0; }
+
+.shortform fieldset > span {
+  float: left;
+  display: inline;
+  margin: 0;
+  width: 10em; }
+
+.shortform fieldset > label {
+  border-bottom: none;
+  float: right;
+  display: inline-block;
+  width: 68%;
+  min-height: 1em;
+  margin: 0;
+  padding: .5em 0 0; }
+
+.shortform fieldset > label:first-of-type {
+  padding: 0; }
+
+.shortform fieldset > label input {
+  display: inline-block;
+  float: left;
+  width: 10%; }
+
+.shortform form .button {
+  margin: 15px 0 0; }  	
+

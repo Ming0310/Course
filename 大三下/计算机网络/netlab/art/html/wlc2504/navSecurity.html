@@ -1,0 +1,557 @@
+
+<!-- <link rel="stylesheet" href="styles/navBar41.css" type="text/css"> -->
+<script language="JavaScript" type="text/javascript">
+//	dojo.require("dojo.fx.*");
+</script>
+<script language="JavaScript">
+<!--
+// a and b are arrays that store the status of the links
+var selectedRow = null;
+
+function highlightOn(row) {
+//	REMOVE HIGHLIGHT
+	if (selectedRow != null) {
+		var obj = eval("document.all.r" + selectedRow + ".style");
+		obj.backgroundColor = "#404d94";
+		obj.color = "#000099";
+	}
+//	HIGHLIGHT TABLE ROW
+	var obj = eval("document.all.r" + row + ".style");
+	selectedRow = row;
+	obj.backgroundColor = "#B2B2D1";
+}
+//-->
+</script>
+<!----  This file contains only javascript code used for Navigation sidemenu. (Could not put this in a seperate javascript file since this javascript code contains EMWEB tags)----->
+<script language="javascript">
+function wipe(tdiv){
+	if(document.getElementById(tdiv).style.display == 'none')
+	{
+		wipeIn(tdiv);
+		document.getElementById(tdiv+'minus').style.display = 'inline';
+		document.getElementById(tdiv+'plus').style.display = 'none';
+		
+	}
+	else
+	{
+		wipeOut(tdiv);
+		document.getElementById(tdiv+'minus').style.display = 'none';
+		document.getElementById(tdiv+'plus').style.display = 'inline';
+		
+	}
+							
+}
+function selectLink(link){
+	removeLinkSelection();
+	
+	if(link.className == 'navBar1')
+		link.className = "selected1";
+	if(link.className == 'navBar2')
+		link.className = "selected2";
+}
+function removeLinkSelection(){
+	var lnks = document.getElementsByTagName('A');
+	for(i=0;i<lnks.length;i++)
+	{
+		if(lnks[i].className == 'selected1')
+		lnks[i].className = "navBar1";
+	if(lnks[i].className == 'selected2')
+		lnks[i].className = "navBar2";
+	}
+}
+function wipeOut(elId){
+	//dojo.fx.wipeOut(dojo.byId(elId), 200);
+document.getElementById(elId).style.display = 'none';
+}
+function wipeIn(elId) {
+	//dojo.fx.wipeIn(dojo.byId(elId), 200);	
+document.getElementById(elId).style.display = 'inline';		
+}
+function getHtmlforImg(divId,defaultExpand,innerImg){
+	var displayMinus = ' ';
+	var displayPlus = ' ';
+	var htmlCd;
+        
+        var imgSrcDown ='data:image/gif;base64,R0lGODlhDQANAHAAACwAAAAADQANAITw8PDp7Ozm6urs7e2nwsKGra3H1ta90NCNsrJmmZl1oqKhvr7T3t7D1NR6paVrnJxxoKCWt7fn6uro6+vS3d2BqqqkwcHf5ubu7+/r7e2/0dGOsrKkwMDf5eUAAAAAAAAFNiAgjmRpniiJrZiwuizGFQ5tOw61HkXi/44Ig0Vx/HyR2Kr4I8CUh0iCo1OyosqRlWWynryiEAA7';
+        var imgSrcDown2='data:image/gif;base64,R0lGODlhCgAKAPcAAO3t7eTk5Obm5srKyqOjo7y8vOXl5cPDw319fX5+fru7u3V1dVhYWLq6uk9PT2ZmZqSkpOHh4VxcXIaGhsHBwefn54GBgYWFhb6+vs7Ozqqqqtzc3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACgAKAAAIKwABCBxIsKDBgwgLDiiwsKHADQ8iSnwwsMDEBwUGbrAYMWNBiwU2HBRJMCAAOw==';
+        var imgSrcRight='data:image/gif;base64,R0lGODlhDQANAHAAACH5BAEAAAwALAAAAAANAA0Ag/Dw8O7v79Ld3dPe3nqlpZa3t+bq6oatrWaZmafCwqTAwL3Q0AAAAAAAAAAAAAAAAAQ2EMhAq7xzjEoxJQUXYEBAgOJYHQiiCFz5tW680kjYyXixWDIWgvADlghDWCx4UC5LiuIzBYwAADs=';
+        var imgSrcRight2='data:image/gif;base64,R0lGODlhCgAKAPcAAO3t7eTk5Obm5srKyqOjo7y8vOXl5cPDw319fX5+fru7u3V1dVhYWLq6uk9PT2ZmZqSkpOHh4VxcXIaGhsHBwefn54GBgYWFhb6+vs7Ozqqqqtzc3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACgAKAAAIKwABCBxIsKDBgQMeKDio4IHCDQUTOlxIsKHDBxARXqQ40CJHjQoyFhQJICAAOw==';
+        
+        
+
+	if(!defaultExpand)
+	{
+		displayMinus = ' style="display:none" ';
+	}else{
+		displayPlus = ' style="display:none" ';
+        }
+	if(innerImg)
+	{
+		htmlCd = '<TD width="11%" align="right" valign="middle"><img valign="top" id="'+divId+'minus" src="'+imgSrcDown2+'" alt="Expand Menu" onClick="javascript:wipe(\''+divId+'\');" '+displayMinus+' ></img><img align="center" valign="bottom" id="'+divId+'plus" src="'+imgSrcRight2+'" alt="Collapse Menu" '+displayPlus+'  onClick="javascript:wipe(\''+divId+'\');"></img></TD>';
+	}
+	else{
+		htmlCd = '<TD width="11%" align="left" class="level1"><img id="'+divId+'minus" src="'+imgSrcDown+'" alt="Expand Menu" onClick="javascript:wipe(\''+divId+'\');" '+displayMinus+' ></img><img align="center" id="'+divId+'plus" src="'+imgSrcRight+'" alt="Collapse Menu" '+displayPlus+'  onClick="javascript:wipe(\''+divId+'\');"></img></TD>';
+	}
+	
+	document.write(htmlCd);
+}
+</script>
+
+<table border="0" cellspacing="0" cellpadding="1" width="100%">
+  <tr>
+    <td colspan="4">
+      <h1>Security</h1>
+    </td>
+
+  </tr>
+  <tr>
+	 <script>getHtmlforImg('aaa',true);</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('aaa')" >AAA</A></td>
+  </tr>
+  <TR><TD colSpan=4>
+	<div id="aaa" >
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr class="notSupported">
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/aaa_general.html" id="lngnrl"
+      onclick="selectLink(this);" class="navBar2">General</a></td>
+  </tr>
+  <tr>
+    <script>getHtmlforImg('radius',true,true);</script>
+    <td class="level2" colspan="3"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('radius')">RADIUS</a></td>
+  </tr>
+  <tr><td colspan="3">
+   <div id="radius" >
+	 <table border="0" cellpadding="1" cellspacing="0" width="100%">
+  <tr>
+    <td class="space" style="width:25%">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="frameRadiusList.html" id="lnauth"
+      onclick="selectLink(this);" class="navBar2">Authentication</a></td>
+  </tr>
+
+  <tr class="notSupported">
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/accserver_list.html" id="lnacc"
+      onclick="selectLink(this);"  class="navBar2">Accounting</a></td>
+  </tr>
+   <tr class="notSupported">
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/radserverfall_list.html" id="lnradfall"
+      onclick="selectLink(this);"  class="navBar2">Fallback</a></td>
+  </tr>
+   <tr class="notSupported">
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/radius_dns.html" id="lnrdns"
+      onclick="selectLink(this);"  class="navBar2">DNS</a></td>
+  </tr>
+  <tr class="notSupported">  
+       <td class="space"  style="width:25%">&nbsp;</td>    
+       <td class="level2" colspan="2"><a href="aaa/radius_avp.html" id="lntacavp"
+         onclick="selectLink(this);"  class="navBar2">Downloaded AVP</a></td>  
+  </tr>
+
+  </table>
+	</div>
+	</td>
+	</tr>
+
+  <tr>
+    <script>getHtmlforImg('tac',false,true);</script>
+    <td class="level2" colspan="3"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('tac')">TACACS+</a></td>
+  </tr>
+  <tr class="notSupported"><td colspan="3">
+   <div id="tac" style="display:none">
+	 <table border="0" cellpadding="1" cellspacing="0" width="100%">
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/tacacs_authserver_list.html" id="lntacauth"
+      onclick="selectLink(this);" class="navBar2">Authentication</a></td>  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/tacacs_accserver_list.html" id="lntacacc"
+      onclick="selectLink(this);"  class="navBar2">Accounting</a></td>
+  </tr>
+  <tr>
+    <td class="space"  style="width:25%">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/tacacs_athrserver_list.html" id="lntacathr"
+      onclick="selectLink(this);"  class="navBar2">Authorization</a></td>
+  </tr>
+  <tr>
+    <td class="space"  style="width:25%">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/tacacs_fall_list.html" id="lntacfall"
+      onclick="selectLink(this);"  class="navBar2">Fallback</a></td>
+  </tr>
+  <tr>
+    <td class="space"  style="width:25%">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/tacacs_dns.html" id="lntacadns"
+      onclick="selectLink(this);"  class="navBar2">DNS</a></td>
+  </tr>
+	</table>
+	</div>
+	</td>
+	</tr>
+ <tr class="notSupported">
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/ldap_list.html" id="lnldap"
+      onclick="selectLink(this);"  class="navBar2">LDAP</a></td>
+  </tr>
+
+ 
+  <tr class="notSupported">
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/netuser_list.html" id="lnnetuser"
+      onclick="selectLink(this);"  class="navBar2">Local Net Users</a></td>
+  </tr>
+  <tr class="notSupported">
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/macfilter_list.html" id="lnmacflt"
+      onclick="selectLink(this);"  class="navBar2">MAC Filtering</a></td>
+  </tr>
+
+  <tr>
+   <script>getHtmlforImg('disclients',false,true);</script>
+    <td class="level2" colspan="3"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('disclients')">Disabled Clients</a></td>
+  </tr>
+  <tr class="notSupported"><td colspan="3">
+   <div id="disclients" style="display:none">
+	 <table border="0" cellpadding="1" cellspacing="0" width="100%">
+  <tr>
+    <td class="space" style="width:25%">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/blacklistclient_list.html" id="lnblack" onclick="selectLink(this);" class="navBar2">Manual Disable</a></td>
+  </tr>
+
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/blacklistclientdynamic_list.html" id="lndblack" onclick="selectLink(this);"  class="navBar2">Dynamic Disable</a></td>
+  </tr>
+  </table>
+	</div>
+	</td>
+  </tr>
+  
+  <tr class="notSupported">
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="apf/user_policies.html" id="lnusrpol"
+      onclick="selectLink(this);" class="navBar2">User Login Policies</td>
+  </tr>
+  <tr class="notSupported">
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="apf/ap_policies.html" id="lnpolicy"
+      onclick="selectLink(this);" class="navBar2">AP Policies</td>
+  </tr>
+  
+    <tr class="notSupported">
+		<td class="space">&nbsp;</td>
+		<td class="level2" colspan="2"><a href="aaa/psb.html" id="lnpasspolicy" onclick="selectLink(this);" class="navBar2">Password Policies</td>
+	</tr>
+  
+   </table>
+	</div></td></tr>
+
+  <tr>
+	 <script>getHtmlforImg('eap');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('eap')" >Local EAP</A></td>
+  </tr>
+  <TR><TD colSpan=4>
+	<div id="eap" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0 class="notSupported">
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/local_auth_general.html" id="lneapgen"       onclick="selectLink(this);" class="navBar2">General</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/profile_list.html" id="lnprf"
+      onclick="selectLink(this);" class="navBar2">Profiles</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/eap_fast_params.html" id="lnfast"
+      onclick="selectLink(this);" class="navBar2">EAP-FAST Parameters</a></td>
+  </tr>
+  
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/prty_order_local_auth.html" id="lnathprty"
+      onclick="selectLink(this);" class="navBar2">Authentication Priority</a></td>
+  </tr>
+  
+  </table>
+  </div></td></tr>
+  <tr class="notSupported">
+     <td class="space">&nbsp;</td>
+     <td class="level1" colspan="3"><a class="navBar1" href="aaa/advanced_eap.html" id="adveap" onclick="selectLink(this);" >Advanced EAP</a></td>
+  </tr>
+
+  <tr>
+	 <script>getHtmlforImg('prty');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('prty')" >Priority Order</A></td>
+  </tr>
+  <TR class="notSupported"><TD colSpan=4>
+	<div id="prty" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/prty_order_mgmt.html" id="lnmgmt"
+      onclick="selectLink(this);" class="navBar2">Management User</a></td>
+  </tr>
+  <!-- it was decided to remove the priority order CSCsg76359 -->
+  <!--tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/prty_order_net.html" id="lnnet"
+      onclick="selectLink(this);" class="navBar2">Net User</a></td>
+  </tr-->
+  </table>
+	  </div></td></tr>
+  <tr>
+      <SCRIPT>getHtmlforImg('cert');</SCRIPT>
+      <TD class=level1 colSpan=3>
+      <A class=navBar1 onclick="javascript:wipe('cert')" href="javascript:void(0);">Certificate </A>
+      </TD>
+   </tr>
+   <TR class="notSupported">
+      <TD colSpan=4>
+      <DIV id=cert style="DISPLAY: none">
+      <TABLE cellSpacing=0 cellPadding=1 width="100%" border=0>
+      <TR>
+         <TD class=space>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+         <TD class=level2 colSpan=2><A class=navBar2 id=lncert
+                    onclick=selectLink(this);
+                    href="aaa/lsc.html">LSC
+                    </A></TD>
+      </TR>
+      <TR>
+         <TD class=space>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+         <TD class=level2 colSpan=2><A class=navBar2 id=lnSsccert
+                    onclick=selectLink(this);
+                    href="aaa/ssc.html">SSC
+                    </A></TD>
+      </TR>
+      <TR>
+         <TD class=space>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+         <TD class=level2 colSpan=2><A class=navBar2 id=lnCsrcert
+                    onclick=selectLink(this);
+                    href="aaa/csr.html">CSR
+                    </A></TD>
+      </TR>
+
+      </TABLE></DIV></TD>
+   </TR>
+
+<tr>
+         <script>getHtmlforImg('acl');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('acl')" >Access Control Lists</A></td>
+  </tr>
+  <TR class="notSupported"><TD colSpan=4>
+        <div id="acl" style="display:none">
+        <table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/acl_list.html" id="lnaccess"
+      onclick="selectLink(this);" class="navBar2">Access Control Lists</a></td>
+  </tr>
+  
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/acl_cpu.html" id="lncpu"
+      onclick="selectLink(this);" class="navBar2">CPU Access Control Lists </a></td>
+</tr>
+   <!-- if not smb -->
+
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/hreap_acl_list.html" id="lnaccess"
+      onclick="selectLink(this);" class="navBar2">FlexConnect ACLs</a></td>
+  </tr>
+
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/l2acl_list.html" id="lnaccess"
+      onclick="selectLink(this);" class="navBar2">Layer2 ACLs</a></td>
+  </tr>
+
+
+	</table>
+	 </div></td></tr>
+
+
+
+  <tr>
+	<script>getHtmlforImg('wpp');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('wpp')" >
+    Wireless Protection Policies</td>
+  </tr>
+  <TR class="notSupported"><TD colSpan=4>
+	<div id="wpp" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr>
+  <tr>
+    <script>getHtmlforImg('rplcs',true,true);</script>
+    <td class="level2" colspan="2"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('rplcs')">Rogue Policies</a></td>
+  </tr>
+  <tr> 
+     <td colspan="3">
+   <div id="rplcs" >
+  <table border="0" cellpadding="1" cellspacing="0" width="100%">
+  <tr>
+    <td class="space" style="width:25%">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="apf/rldp.html" id="lnrldp"
+      onclick="selectLink(this);" class="navBar2">General</a></td>
+  </tr>
+
+
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="apf/rogue_rule_list.html" id="lnrrules"
+      onclick="selectLink(this);" class="navBar2">Rogue Rules</td>
+  </tr>
+
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="apf/known_rogue_ap_create.html" id="lnrap"
+      onclick="selectLink(this);" class="navBar2">Friendly Rogue</td>
+  </tr>
+  </table>
+  </div>
+  </td>    
+  </tr>   
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/standard_signature_list.html" id="lnsign"
+      onclick="selectLink(this);" class="navBar2">Standard Signatures</td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/custom_signature_list.html" id="lncustom"
+      onclick="selectLink(this);" class="navBar2">Custom Signatures</td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/signature_events_list.html" id="lnevnt"
+      onclick="selectLink(this);"  class="navBar2">Signature Events Summary</td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="apf/client_exclusion_policy.html" id="lnexpol"
+      onclick="selectLink(this);" class="navBar2">Client Exclusion Policies</td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="apf/ap_auth_policy.html" id="lnauthpol"
+      onclick="selectLink(this);" class="navBar2">AP Authentication</td>
+  </tr>  
+  <tr>
+    <script>getHtmlforImg('mfp',false,true);</script>
+    <td class="level2" colspan="2"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('mfp')">Management Frame Protection</a></td>
+  </tr>
+  <tr>
+  <td colspan="3">
+  <div id="mfp" style="display:none">
+  <table border="0" cellpadding="1" cellspacing="0" width="100%">
+  <tr>
+    <td class="space" style="width:25%">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="aaa/mfp_settings.html" id="lnmfp"
+      onclick="selectLink(this);" class="navBar2">General</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="3"><a href="aaa/mfp_wlans.html" id="lnmfpwl"
+      onclick="selectLink(this);" class="navBar2">WLANs</td>
+  </tr>  
+  </table>
+  </div>
+  </td>
+  </tr>
+  
+  </table>
+	  </div></td></tr>
+
+  <tr>
+	<script>getHtmlforImg('webauth');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('webauth')" >Web Auth</A></td>
+  </tr>
+  <TR class="notSupported"><TD colSpan=4>
+	<div id="webauth" style="display:none">
+	  <table cellSpacing=0 cellPadding=1 width="100%" border=0>
+       <tr>
+         <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+         <td class="level2" colspan="3"><a href="base/web_auth_custom.html" id="lnwebauthPage" onclick="selectLink(this);" class="navBar2">Web Login Page</a></td>
+       </tr>
+
+       <tr>
+	     <td class="space">&nbsp;</td>
+		 <td class="level2" colspan="3"><a href="base/webauth_cert.html" id="lnwebauthcert" onclick="selectLink(this);" class="navBar2">Certificate</a></td>
+       </tr>
+
+       <tr>
+	     <td class="space">&nbsp;</td>
+	     <td class="level2" colspan="3"><a href="base/webauth_secWeb.html" id="lnwebauthSecure" onclick="selectLink(this);" class="navBar2">Secure Web</a></td>
+       </tr>
+      </table>
+	</div></td></tr>
+
+<tr class="notSupported">
+     <td class="space">&nbsp;</td>
+     <td class="level1" colspan="3"><a class="navBar1" href="base/sxp_conn_list.html" id="lnsxp" onclick="selectLink(this);" >TrustSec SXP</a></td>
+  </tr>
+
+<tr class="notSupported">
+     <td class="space">&nbsp;</td>
+     <td class="level1" colspan="3"><a class="navBar1" href="aaa/policy_list.html" id="lnsxp" onclick="selectLink(this);" >Local Policies</a></td>
+  </tr>
+
+
+  <tr>
+	<script>getHtmlforImg('advanced');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('advanced')" >
+    Advanced</A></td>
+  </tr>
+  <TR class="notSupported"><TD colSpan=4>
+	<div id="advanced" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr>
+    <script>getHtmlforImg('cids',true,true);</script>
+    <td class="level2" colspan="2"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('cids')">CIDS</a></td>
+  </tr>
+  <tr><td colspan="3">
+   <div id="cids" >
+	 <table border="0" cellpadding="1" cellspacing="0" width="100%">
+     <tr>
+		<td class="space" style="width:25%">&nbsp;</td>
+		<td class="level2" colspan="2"><a href="aaa/cids_sensors_list.html" id="lncsensor"
+      onclick="selectLink(this);" class="navBar2">Sensors</a></td>
+	 </tr>
+	 <tr>
+		<td class="space" style="width:25%">&nbsp;</td>
+		<td class="level2" colspan="2"><a href="aaa/cids_shun_list.html" id="lncshun"
+      onclick="selectLink(this);" class="navBar2">Shunned Clients</a></td>
+	 </tr>
+	 </table>
+	</div>
+	</td>
+   </tr>
+   <tr>
+    <script>getHtmlforImg('certi',true,true);</script>
+    <td class="level2" colspan="2"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('certi')">Vendor Certs</a></td>
+  </tr>
+  <tr><td colspan="3">
+   <div id="certi" >
+	 <table border="0" cellpadding="1" cellspacing="0" width="100%">
+     <tr>
+		<td class="space" style="width:25%">&nbsp;</td>
+		<td class="level2" colspan="2"><a href="apf/ca_cert.html" id="lncacert"
+      onclick="selectLink(this);" class="navBar2">CA Certificate</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+		<td class="level2" colspan="2"><a href="apf/cert_list.html" id="lncertlist"
+      onclick="selectLink(this);" class="navBar2">ID Certificate</a></td>
+	</tr>
+   </table>
+  </div>
+  </td>
+  </tr>
+  </table>
+	  </div></td></tr>
+
+</table>

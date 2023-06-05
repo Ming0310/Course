@@ -1,0 +1,73 @@
+<html>
+<head>
+
+<title><?=TITTLE?></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="Cisco Systems, Inc." />
+<meta name="MSSmartTagsPreventParsing" content="true" />
+<meta name="Copyright" content="Copyright (c) 2018 Cisco Systems, Inc." />
+<meta http-equiv="Content-Language" content="en-us" />
+<meta http-equiv="imagetoolbar" content="false" />
+
+<link href="stylesheets/manage.css" media="all" rel="stylesheet" type="text/css" />
+
+<style>
+#meraki_table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 90%;
+    border: 1;
+}
+
+#meraki_table  td, #meraki_table  th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#meraki_table  tr:nth-child(even){ background-color: #f2f2f2; }
+
+#meraki_table  tr:hover { background-color: #ddd; }
+
+#meraki_table  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #666666;
+    color: white;
+}
+
+</style>
+
+</head>
+
+<body onload="ptOnload();">
+
+<div class="react-layout  " id="sidetabs_container">
+<?=NAVIGATION=?>
+</div>
+
+  <div id="content" class=&#x27;no_tabs&#x27;>
+    
+<header class="" id="masthead-react">
+  
+  
+<div id="magic-search-react"></div>
+
+<div id="profile-bar-react">
+  <table width="80%">
+  <tr>
+  <td width="75%">&nbsp;</td>
+  <td>
+  <font size="1">
+  &nbsp;&nbsp;&nbsp;<?=EMAIL=?><br>
+  &nbsp;&nbsp;&nbsp;<a href="user_edit">My profile</a> | <a href="sign_out">Sign out
+  </font>
+  </td>
+  </tr>
+  </table>
+<hr>
+</div>
+
+</header>

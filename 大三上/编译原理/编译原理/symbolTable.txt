@@ -1,0 +1,12 @@
+name: a
+type: 5
+value: 1
+name: b
+type: 5
+value: 1
+name: c
+type: 5
+value: 1
+name: result
+type: 5
+value: 1

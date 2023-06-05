@@ -1,0 +1,136 @@
+<!-- Connection -->
+<li>
+	<div>
+		<blockquote>
+		<h1 align="left">Your client connection</h1>
+		<table>
+			<tr>
+				<th scope="row" align="left">Client IP</th><td><?=CLIENT-IP=?></td>
+			</tr>
+			<tr>
+				<th scope="row" align="left">Client MAC</th><td><?=CLIENT-MAC=?></td>
+			</tr>
+			<!--
+			<tr id="your_vlan_line" class="your_hideable_connection_info" style="display: none;">
+				<th scope="row">VLAN</th><td id="your_vlan"></td>
+			</tr>
+				<tr id="your_port_line" class="your_hideable_connection_info" style="display: none;">
+				<th scope="row">Port</th><td id="your_port"></td>
+			</tr>
+				<tr id="your_radio_line" style="display: none;">
+				<th scope="row">AP radio</th><td id="your_radio"></td>
+			</tr>
+				<tr id="your_channel_line" style="display: none;">
+				<th scope="row">Channel</th><td id="your_channel"></td>
+			</tr>
+				<tr id="your_mode_line" style="display: none;">
+				<th scope="row">Mode</th><td id="wireless_mode"></td>
+			</tr>
+				<tr id="your_max_bitrate_line" style="display: none;">
+				<th scope="row">Max bitrate</th><td id="max_device_bitrate"></td>
+			</tr>
+				<tr id="your_signal_line" style="display: none;">
+				<th scope="row">Signal</th>
+				<td><span id="signal_strength"></span>
+					<div class="meter" id="rssi_graph">
+						<div class="meter-bar" id="rssi_graph_bar"></div>
+					</div>
+				</td>
+			</tr>
+			-->
+		</table>
+		</blockquote>
+	</div>
+
+
+	<div>
+		<blockquote>
+		<h1 align="left">Speed test</h1>
+		<p align="left">Run a browser-based speed test to check your connection to this security appliance.</p>
+		<button class="button button_speed_test" onclick="alert('Not supported');" style="float: left;">Run speed test</button>
+		</blockquote>
+	</div>
+
+	<br><br><br><br>
+
+	<div>
+		<blockquote>
+		<h1 align="left">Security Appliance details</h1>
+			<table>
+			<!-- <tr id="device_name_row_container" style="display: none;">
+				<th align="left">Name</th><td id='device_name'></td>
+			</tr> -->
+			<tr>
+				<th align="left">Network name</th><td><?=NETWORK-NAME=?></td>
+			</tr>
+			<tr>
+				<th align="left">Hardware address</th><td><?=HARDWARE-ADDRESS=?></td>
+			</tr>
+			<!-- <tr id="product_model_details" style="display: none;">
+				<th>Product model</th><td id='product_model_text'></td>
+			</tr>
+			<tr id="radio_1_util" style="display: none;">
+				<th id="radio_1_text"></th>
+				<td>
+					<span>
+						<div id="radio_1_wifi_text"></div>
+					</span>
+					<div class="meter">
+						<div class="meter-bar" id="radio_1_wifi_bar" style="background:#880000; float:left;"></div>
+						<div class="meter-bar" id="radio_1_non_wifi_bar" style="float:left;"></div>
+					</div>
+					<div id="radio_1_non_wifi_text"></div>
+				</td>
+			</tr>
+			<tr id="radio_2_util" style="display: none;">
+				<th id="radio_2_text"></th>
+				<td>
+					<span>
+						<div id="radio_2_wifi_text"></div>
+					</span>
+					<div class="meter">
+						<div class="meter-bar" id="radio_2_wifi_bar" style="background:#880000; float:left;"></div>
+						<div class="meter-bar" id="radio_2_non_wifi_bar" style="float:left;"></div>
+					</div>
+					<div id="radio_2_non_wifi_text"></div>
+				</td>
+			</tr>  -->
+			<tr>
+				<th align="left">Ethernet</th>
+				<td><?=ETHERNET-MSG=?></td>
+			</tr>
+			<tr>
+				<th align="left">Internet</th>
+				<td><?=INTERNET-MSG=?></td>
+			</tr>
+			<tr>
+				<th align="left">Cisco Meraki cloud</th>
+				<td><?=MERAKI-CLOUD=?></td>
+			</tr>
+			<!-- <tr id="firmware_check_text" style="display:none;">
+				<th>Firmware</th>
+				<td>
+					<div id="firmware_check_text_updating" style="display:none;"></div>
+				</td>
+			</tr> -->
+		</table>
+		</blockquote>
+	</div>
+
+	<!--
+	<div id="stacking_status" class="sub-section" style="display:none;">
+	  <h1>Stacking Status</h1>
+	  <table id="stack_info" class="flip-table">
+		<thead>
+		  <tr>
+			<th> Hardware Addresss </th>
+			<th> Product Model </th>
+			<th> Current </th>
+		  </tr>
+		</thead>
+		<tbody></tbody>
+	  </table>
+	</div>
+	-->
+
+</li>

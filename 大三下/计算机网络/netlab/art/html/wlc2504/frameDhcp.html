@@ -1,0 +1,153 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Switch';
+
+function ptOnload() {
+}
+
+function submitFormApply() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("dhcp_proxy", document.forms[0].dhcp_proxy.value);
+		document.forms[0].submit();
+	}
+
+	return false;
+}
+
+</script>
+
+   <!-- <LINK REL=stylesheet HREF="../../styles/content41.css" TYPE="text/css"> -->
+<style>
+<!--
+A{text-decoration: none}
+-->
+</style>
+<script language="javascript" src="../../servicescript41.js"></script>
+<script language="javascript">
+
+var numAttrs = new Array();
+numAttrs[0] = new numberAttr ("dhcp_timeout", "DHCP Timeout", 5, 120, null, true);
+thisFormAttrs = new formAttrs(numAttrs,null,null,null);
+
+</script>
+
+<FORM method="post" ACTION="frameDhcp.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="kQ4hBaiS2W5uOYeMUJkJk3LxOO5OzdQ">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td class="pageTitle">
+        <h1>DHCP Parameters</h1>
+      </td>
+      <td align="right" class="pageTitle">
+       <!-- <script>getHtmlForApplyButton();</script> -->
+       <script>getHtmlForButton("apply", "Apply", "buttonStretch", "submitFormApply()"); </script>
+       <script>getHtmlForHelpButton("Master_Switch_Configuration","/helppages/wwhelp.htm");</script>
+      </td>
+    </tr>
+    <tr>
+  </table>
+  <table width="700" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+      <td colspan="2"> &nbsp; </td>
+  </tr>
+  <tr>
+   <td  class = "label2" width="40%">Enable DHCP Proxy </td>
+   <td><INPUT type="checkbox" name="dhcp_proxy" <?=DHCP-ENABLE=?>></td>
+  </tr>
+  <tr>
+      <td class="label2" width="40%">DHCP Option 82 Format</td>
+      <td>
+        <SELECT name="dhcp_ipv4_format" class="notSupported" SIZE="1">
+          <OPTION value="dhcp_ipv4_binary" SELECTED>binary</option>
+          <OPTION value="dhcp_ipv4_ascii" >ascii</option>
+        </SELECT>
+      </td>
+    </tr>
+    <tr>
+      <td class="label2" width="40%">DHCP Option 82 Remote Id field format</td>
+      <td>
+        <SELECT name="dhcp_remId" class="notSupported" SIZE="1">
+          <OPTION value="dhcp_rid_apmac" SELECTED>AP-MAC</option>
+          <OPTION value="dhcp_rid_apmac_ssid" >AP-MAC-SSID</option>
+          <OPTION value="dhcp_rid_apEthmac" >AP-ETHMAC</option>
+          <OPTION value="dhcp_rid_apname_ssid" >AP-NAME-SSID</option>
+          <OPTION value="dhcp_rid_apGrpName" >AP-GROUP-NAME</option>
+          <OPTION value="dhcp_rid_flexGrpName" >FLEX-GROUP-NAME</option>
+          <OPTION value="dhcp_rid_apLocation" >AP-LOCATION</option>
+          <OPTION value="dhcp_rid_apmac_vlan" >AP-MAC-VLAN-ID</option>
+          <OPTION value="dhcp_rid_apname_vlan" >AP-NAME-VLAN-ID</option>
+          <OPTION value="dhcp_rid_apEthmac_ssid" >AP-ETHMAC-SSID</option>
+        </SELECT>
+      </td>
+    </tr>
+
+    <!-- commented for 8.0 release later to be introduced
+    <tr>
+      <td class="label2" width="40%">DHCP Option 37 Format</td>
+      <td>
+        <SELECT name="dhcp_ipv6_format" SIZE="1">
+          <OPTION value="dhcp_ipv6_binary" SELECTED>binary</option>
+          <OPTION value="dhcp_ipv6_ascii" >ascii</option>
+        </SELECT>
+      </td>
+    </tr>
+    <tr>
+      <td class="label2" width="40%">DHCP Option 37 Remote Id field format</td>
+      <td>
+        <SELECT name="dhcp_ipv6_remId" SIZE="1">
+          <OPTION value="dhcp_ipv6_rid_apmac" SELECTED>AP-MAC</option>
+          <OPTION value="dhcp_ipv6_rid_apmac_ssid" >AP-MAC-SSID</option>
+          <OPTION value="dhcp_ipv6_rid_apEthmac" >AP-ETHMAC</option>
+          <OPTION value="dhcp_ipv6_rid_apname_ssid" >AP-NAME-SSID</option>
+          <OPTION value="dhcp_ipv6_rid_apGrpName" >AP-GROUP-NAME</option>
+          <OPTION value="dhcp_ipv6_rid_flexGrpName" >FLEX-GROUP-NAME</option>
+          <OPTION value="dhcp_ipv6_rid_apLocation" >AP-LOCATION</option>
+          <OPTION value="dhcp_ipv6_rid_apmac_vlan" >AP-MAC-VLAN-ID</option>
+          <OPTION value="dhcp_ipv6_rid_apname_vlan" >AP-NAME-VLAN-ID</option>
+          <OPTION value="dhcp_ipv6_rid_apEthmac_ssid" >AP-ETHMAC-SSID</option>
+        </SELECT>
+      </td>
+    </tr>
+    -->
+
+    <tr>
+     <td class="label2">DHCP Timeout (5 - 120 seconds) </td>
+     <td><INPUT type="TEXT" name="dhcp_timeout" class="notSupported" SIZE="4" MAXLENGTH="4" VALUE="120"></td>
+    </tr>
+
+  </table>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0"></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+
+</TABLE>
+
+</FORM>
+
+<?=PAGE-FOOTER=?>

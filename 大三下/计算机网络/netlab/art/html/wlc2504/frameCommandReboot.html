@@ -1,0 +1,132 @@
+<?=PAGE-HEADER=?>
+
+<style>
+<!--
+A{text-decoration:none}
+-->
+</style>
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Commands';
+
+function ptOnload() {
+}
+
+
+function submitFormSaveReboot() {
+     debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+        if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+        document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		document.forms[0].submit();
+	}
+
+	return false;
+}
+
+function submitFormReboot() {
+     debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+        if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+        document.forms[0].buttonClicked.value = CUSTOM1_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		document.forms[0].submit();
+	}
+
+	return false;
+}
+
+</script>
+
+<script>
+function showContent() {
+    if (document.forms[0].save_config.value == 1) {
+        document.getElementById("save_button").style.display = 'none';
+        document.getElementById("unsave_button").style.display = 'inline';
+        document.getElementById("saved").style.display = 'none';
+        document.getElementById("not_saved").style.display = 'inline';
+    } else {
+        document.getElementById("save_button").style.display = 'inline';
+        document.getElementById("unsave_button").style.display = 'none';
+        document.getElementById("saved").style.display = 'inline';
+        document.getElementById("not_saved").style.display = 'none';
+    }
+
+}
+
+
+</script>
+
+<script>
+drawPeerTabs("frameCommandReboot.html");
+</script>
+
+<FORM method="post" ACTION="frameCommandReboot.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="v1LF21O3LZg6osDYwvJeEFWz2n0W8y7">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td class="pageTitle">
+        <h1>System Reboot</h1>
+      </td>
+      <td align="right" class="pageTitle">
+       <!-- <div id="save_button">
+         <script>getHtmlForRebootButton();</script>
+       </div> -->
+       <div id="save_button">
+            <script>getHtmlForButton("apply", "Save and Reboot", "buttonStretch", "submitFormSaveReboot()"); </script>
+            <script>getHtmlForButton("apply", "Reboot Without Save", "buttonStretch", "submitFormReboot()"); </script>
+       </div>
+       <!-- <div id="unsave_button" style="display:none;">
+         <script>getHtmlForSaveAndRebootButton();</script>
+         <script>getHtmlForRebootWithoutSaveButton();</script>
+       </div> -->
+       <script>getHtmlForHelpButton("System_Reboot","/helppages/wwhelp.htm");</script>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div id="saved">
+          <p class="caption">Warning: Please be aware that after rebooting the controller, all the connections will be lost. To regain the connection, please log in again after the controller is rebooted.</p>
+        </div>
+        <div id="not_saved" style="display:none;">
+          <p class="caption">Warning: The configuration of the controller is changed and not saved yet. Click on "Save and Reboot" to save the changes before the controller is rebooted, or click on "Reboot without Save" to reboot the controller without saving the changes. Please be aware that in either case, all the connections will be lost. To regain the connection, please log in again after the controller is rebooted.</p>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <TABLE class = "basictableproperties" CELLSPACING=4  WIDTH = "100%" nowrap>
+    <TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="save_config" SIZE="1" MAXLENGTH="1" VALUE="1"></TD>
+</TR>
+</TABLE>
+</FORM>
+
+<?=PAGE-FOOTER=?>

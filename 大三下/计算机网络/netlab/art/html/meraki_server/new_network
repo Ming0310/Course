@@ -1,0 +1,140 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+var CUSTOM1_CLICKED = 0x20;
+var CUSTOM2_CLICKED = 0x40;
+
+function submitAddDevice() 
+{
+  document.new_network.commit.value = CUSTOM1_CLICKED;
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.new_network.commit.value);
+  top.CHttpFormExtractor.addKeyValue("device_sn", document.new_network.device_sn.value);
+  top.CHttpFormExtractor.addKeyValue("device_model", document.new_network.device_model.value); 
+  top.CHttpFormExtractor.addKeyValue("device_mac", document.new_network.device_mac.value); 
+  top.CHttpFormExtractor.addKeyValue("device_nw", document.new_network.device_nw.value); 
+  document.new_network.submit();
+
+  return false;
+}
+
+function submitCreateNetwork() 
+{
+  document.new_network.commit.value = CUSTOM2_CLICKED;
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.new_network.commit.value);
+  top.CHttpFormExtractor.addKeyValue("network_name", document.new_network.network_name.value);
+  top.CHttpFormExtractor.addKeyValue("network_type", "Security appliance");
+  top.CHttpFormExtractor.addKeyValue("network_configuration", "Default Meraki");
+  document.new_network.submit();
+
+  return false;
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<h2 style="font-family: sans-serif;">Create Network</h2>
+
+<form accept-charset="UTF-8" name="new_network" action="new_network" id="new_network_form" method="post">
+<input id="commit" name="commit" type="hidden" />
+
+<b>Setup network</b><br>
+<div style="clear: both; height: 10px;"></div>
+<table class="cfg cfg_first" style="width:auto;">
+<tr>
+<td class="cfgq">Network name</td>
+<td class="cfgo"><input id="network_name" name="network_name" style="font-size: 80%;" size="30" value="Scranton Branch Office" /></td>
+</tr>
+<tr>
+<td class="cfgq">
+<div style="clear: both; height: 10px;"></div>
+Network type</td>
+<td class="cfgo">
+<div style="clear: both; height: 10px;"></div>
+<select>
+<option value="sa">Security appliance</a>
+</select>
+</td>
+</tr>
+<tr>
+<td class="cfgq">
+<div style="clear: both; height: 10px;"></div>
+Network configuration</td>
+<td class="cfgq">
+<div style="clear: both; height: 10px;"></div>
+<input type="radio" checked />
+&nbsp;Default Meraki configuration
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+<div style="clear: both; height: 20px;"></div>
+<a id="next" class="btn btn-primary update_modal_state next" onClick="submitCreateNetwork();">Create network</a>
+</td>
+</tr>
+</table>
+
+
+<hr>
+<b>Select devices from inventory</b><br>
+<div style="clear: both; height: 10px;"></div>
+<table class="cfg cfg_first" bgcolor="#f6f4f4" style="font-size: 90%;">
+<tr>
+<td class="cfgq" align="center" valign="middle" cellpading="10">
+<div style="clear: both; height: 10px;"></div>
+<img class="add_devices_img" src="/images/add_inventory.png" width="90" height="75" />
+</td>
+<td class="cfgo">
+<div style="clear: both; height: 20px;"></div>
+<b>You have no unused devices</b><br>
+Add new devices or go to the inventory page to select devices<br />that are already in networks
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+<br>
+<b>Add devices to inventory</b><br />
+
+<div style="clear: both; height: 10px;"></div>
+Enter the individual device serial number:<br />
+<input id="device_sn" name="device_sn" size="30" value="" />
+
+<div style="clear: both; height: 10px;"></div>
+Enter the device's model:<br />
+<input id="device_model" name="device_model" size="30" value="MX65W" />
+
+<div style="clear: both; height: 10px;"></div>
+Enter the device's mac address:<br />
+<input id="device_mac" name="device_mac" size="30" value="" />
+
+<div style="clear: both; height: 10px;"></div>
+Enter the network the device belongs to:<br />
+<input id="device_nw" name="device_nw" size="30" value="" />
+
+<div style="clear: both; height: 10px;"></div>
+<a id="next" name="commit_device" class="btn btn-primary update_modal_state next" onClick="submitAddDevice();">Add devices</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="inventory">Go to inventory</a><br />
+<div style="clear: both; height: 20px;"></div>
+</td>
+</tr>
+</table>
+
+</form>
+
+</div>
+
+<?=FOOTER=?>
+
+</div>
+
+</body>
+</html>

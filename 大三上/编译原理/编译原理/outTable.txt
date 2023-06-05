@@ -1,0 +1,11 @@
+t0 = 1
+a = t0
+t1 = 1
+b = t1
+t2 = 1
+c = t2
+t3 = a + b
+t4 = a * c
+t5 = t4 / b
+t6 = t3 - t5
+result = t6

@@ -1,0 +1,51 @@
+<html>
+<head>
+  
+<title>Meraki Dashboard</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="Cisco Systems, Inc." />
+<meta name="robots" content="all" />
+<meta name="MSSmartTagsPreventParsing" content="true" />
+<meta name="Copyright" content="Copyright (c) 2017 Cisco Systems, Inc." />
+<meta http-equiv="Content-Language" content="en-us" />
+<meta http-equiv="imagetoolbar" content="false" />
+<link href="stylesheets/style.css" media="all" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+  <div style='min-width:450px;max-width:750px;margin:auto;'>
+    <div id="login_header">
+      <a href="https://meraki.cisco.com/">
+          <img alt="Cisco Systems, Inc." border="0" src="images/cisco-meraki.png" style="width: 165px;margin-bottom:10px" />
+      </a>
+      <div id="m_nav">
+      </div>
+    </div>
+
+    <div id="login_main">
+      <div style="margin-bottom: 10px; clear: both;"></div>
+      <style type="text/css">
+  #cntr {
+    text-align: center;
+    padding: 20px 0;
+  }
+</style>
+
+<div id='cntr'>
+    Your email has  been confirmed. Thanks for using Cisco Meraki!
+  <br/><br/>Please click
+  <a href="overview">here</a> to go to your organization.
+</div>
+
+    </div>
+
+<?=FOOTER=?>
+
+  </div>
+
+</body>
+</html>

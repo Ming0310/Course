@@ -1,0 +1,23 @@
+A -> B C
+B -> INT
+B -> CHAR
+C -> ID
+E -> E + T
+E -> E - T
+E -> T
+T -> T * F
+T -> T / F
+T -> T % F
+T -> F
+F -> ( E )
+F -> ID
+F -> INT_CONST
+Assign -> ID = G
+G -> E
+block -> { Daima }
+Y -> Assign endl
+Y -> A endl
+Daima -> Y Daima
+Daima -> Y
+S' -> S
+S -> INT main ( ) block

@@ -1,0 +1,161 @@
+<html>
+<head>
+
+<title>Create Meraki Dashboard account - Meraki Dashboard</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="Cisco Systems, Inc." />
+<meta name="robots" content="all" />
+<meta name="MSSmartTagsPreventParsing" content="true" />
+<meta name="Copyright" content="Copyright (c) 2017 Cisco Systems, Inc." />
+<meta http-equiv="Content-Language" content="en-us" />
+<meta http-equiv="imagetoolbar" content="false" />
+
+<link href="stylesheets/style.css" media="all" rel="stylesheet" type="text/css" />
+<link href="stylesheets/signup_form.css" media="all" rel="stylesheet" type="text/css" />
+
+
+<style type="text/css">
+.alert {
+  padding: 10px;
+  margin-bottom: 18px;
+  border: 1px solid transparent;
+  border-radius: 3px; }
+  .alert h4 {
+    margin-top: 0;
+    color: inherit; }
+  .alert .alert-link {
+    font-weight: bold; }
+  .alert > p,
+  .alert > ul {
+    margin-bottom: 0; }
+  .alert > p + p {
+    margin-top: 5px; }
+    
+.alert-danger {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442; }
+  .alert-danger hr {
+    border-top-color: #e4b9c0; }
+  .alert-danger .alert-link {
+    color: #843534; }
+    
+</style>
+
+<script type="text/javascript">
+
+var SUBMIT_CLICKED = 0x04;
+
+function submitForm() 
+{
+  document.forms[0].commit.value = SUBMIT_CLICKED;
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].commit.value);
+  top.CHttpFormExtractor.addKeyValue("email", document.forms[0].email.value);
+  top.CHttpFormExtractor.addKeyValue("full_name", document.forms[0].name.value);
+  top.CHttpFormExtractor.addKeyValue("password", document.forms[0].password.value);
+  top.CHttpFormExtractor.addKeyValue("confirm_password", document.forms[0].password_confirmation.value);
+  top.CHttpFormExtractor.addKeyValue("company", document.forms[0].company_name.value);
+  top.CHttpFormExtractor.addKeyValue("address", document.forms[0].signup_address.value);
+  document.forms[0].submit();
+
+  return false;
+}
+</script>
+
+</head>
+
+
+<body>
+
+<div style='min-width:450px;max-width:750px;margin:auto;'>
+  <div id="login_header">
+  <a href="https://meraki.cisco.com/">
+    <img alt="Cisco Systems, Inc." border="0" src="images/cisco-meraki.png" style="width: 165px;margin-bottom:10px" />
+  </a>
+  <div id="m_nav">
+    <a href="dashboard_login">Have an account? Log in</a>
+  </div>
+</div>
+
+<div id="login_main">
+<div style="margin-bottom: 10px; clear: both;"></div>
+
+<h3>Create a new Meraki Dashboard account</h3>
+
+<div id='signup_form_div'>
+
+<?=MESSAGE=?>
+
+<form accept-charset="UTF-8" action="new_account" class="dashboard_new_update_account_form" id="dashboard_signup_form" method="post">
+<div style="margin:0;padding:0;display:inline">
+
+<div style="width: 470px">
+  <div class="signup-form formarea">
+
+    <label>
+      <span class="required">Email</span>
+      <input class="required" id="signup_email" name="email" type="text" value="" />
+    </label>
+
+    <label class="name-field">
+      <span class="required">Full Name</span>
+      <input class="required" id="signup_name" name="name" type="text" value="" />
+    </label>
+
+    <label>
+      <span class="required">Password</span>
+      <input class="required jsAnalyticsExclude" id="signup_password" name="password" type="password" value="" />
+    </label>
+
+    <label class="confirm-password-field">
+      <span class="required">Confirm password</span>
+      <input class="required jsAnalyticsExclude" id="signup_password_confirm" name="password_confirmation" type="password" value="" />
+    </label>
+
+    <label>
+      <span class="required">Company</span>
+      <input class="required" id="signup_company" name="company_name" type="text" value="" />
+    </label>
+
+    <label class="address">
+      <span class="required">Address</span>
+      <textarea class=" has_hint hint_text" id="signup_address" rows="4" name="address">
+500 Terry A Francois Blvd 
+San Francisco, CA 94158 
+USA
+      </textarea>
+      <br style="clear: both" />
+    </label>
+
+    <div class="submit_button_area default_css">
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <input class="btn btn-primary submit_button" type="submit" name="commit" value="Create account" onClick="submitForm();" />
+  </div>
+
+  </div> <!-- signup-form formarea -->
+
+<br style="clear: both" />
+<br style="clear: both" />
+
+  <div  id="customer-agreement">
+    Your use of this account is subject to the Cisco Meraki End Customer Agreement
+  </div>
+<br style="clear: both" />
+<br style="clear: both" />
+
+</div> <!-- width -->
+</div> <!-- margin -->
+</form>
+</div> <!-- signup_form_div -->
+
+</div> <!-- margin-bottom -->
+
+</div> <!-- login-main -->
+
+<?=FOOTER=?>
+
+</body>
+</html>

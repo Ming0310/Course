@@ -1,0 +1,93 @@
+<html>
+<head>
+<title>WLC Frameset</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<!-- <script src="javascript/angular-kendo/jquery.min.js"></script>
+<script src="javascript/angular-kendo/kendo.custom.min.js"></script>
+ -->
+<script>
+
+// variables for servicescript41.js file
+var ARE_YOU_SURE_TO_SAVE_CFG="Are you sure you want to save configuration to flash so that on a reboot the controller retains the configuration?";
+var ENTER_IP_ADDR="Enter an IPv4/IPv6 Address to Ping :";
+var IP_ADDR="IP Address";
+var RE_ENTER_IP_ADDR="Re-Enter an IPv4/IPv6 Address to Ping :";
+var MAC_ADDR_HAS_SPACES="MAC Address has spaces in it. Please remove unnecessary spaces.";
+var MAC_ADDR_IS_MANDATORY="MAC Address is MANDATORY. Please Specify it.";
+var MAC_ADDR_IS_INVALID="is an invalid MAC Address.";
+var MAC_ADDR_FORMAT="Needs to have exactly 5 colons(:)(format aa:bb:cc:dd:ee:ff).";
+var MAC_ADDR_BYTE="The Byte which is not a 2 digit hex number is";
+var MAC_ADDR_BYTESPACE="The Byte which has spaces in it is ";
+var IP_ADDR_SPACES="IP Address has spaces in it. Please remove unnecessary spaces.";
+var IP_ADDR_MANDATORY="IP Address is MANDATORY. Please Specify it.";
+var IP_ADDR_INVALID="is an invalid IP Address.";
+var IP_ADDR_DOTS="Needs to have exactly 3 dots";
+var IP_ADDR_NOT_NUMBER="Byte which is  not a number between 0 and 255 is";
+var IP_ADDR_SPACE_NUMBER="Byte which has spaces in it is";
+var ARE_YOU_SURE_DELETE="Are you sure you want to delete ?";
+var REGEN_CERT="Regenerate Certificate";
+var DELETE_CERT="Delete Certificate";
+var SAVE_REBOOT="Save and Reboot";
+var REBOOT_WITHOUT_SAVE="Reboot without Save";
+var FAC_DEF="Factory Default";
+var SET_ALL_802_11a_PARMS="Set all Auto RF 802.11a parameters to Factory Default.";
+var SET_ALL_802_11b_PARMS="Set all Auto RF 802.11b parameters to Factory Default.";
+var SET_TO_FAC_DEF="Set to Factory Default";
+var ARE_YOU_SURE_RESET_802_11a="Are you sure you want to reset to factory default 802.11a Auto RF Parameters?";
+var ARE_YOU_SURE_RESET_802_11b="Are you sure you want to reset to factory default 802.11b Auto RF Parameters?";
+var CFG_SAVE_REBOOT="Configuration will be saved and the controller will be rebooted. Click ok to confirm..";
+var CFG_NOT_SAVE_REBOOT="Configuration will not be saved and the controller will be rebooted. Click ok to confirm..";
+var NEXT="Next";
+var BACK_TO_START="Back To Start";
+var SAVE_CFG="To permanently save the configuration into non-volatile memory, select 'Apply' on this page, followed by 'Save Configuration' from the side navigation.";
+var EDIT="Edit";
+var DETAIL="Detail";
+var REMOVE="Remove";
+var APPLY="Apply";
+var REFRESH="Refresh";
+var CL_COUNTERS="Clear Counters";
+var BACK="Back";
+var HELP="Help...";
+var bNEW="New...";
+var CREATE="Create";
+var ATTRIB_SPACE="Attribute has spaces in it. Please remove unnecessary spaces.";
+var ATTRIB_MANDATORY="Attribute is Mandatory. Please specify it.";
+var ATTRIB_DECIMAL_POINT="is an invalid value. Please specify a number without a decimal point.";
+var ATTRIB_NO_SPACES="is an invalid value. Please specify a number with no spaces in between.";
+var ATTRIB_NO_VALUE="is an invalid value. Please specify a number.";
+var VALID_RANGE="is an invalid value. Valid range is";
+var VALUE_NOT_ALLOWED="is an invalid value.";
+var VALUE_TOO_LONG="Value is too long. Maximum Characters Allowed is";
+var MAKE_NECCESSARY_CORRECTION="Make the necessary corrections and try again";
+var ERRORS="ERRORS";
+var INFO="INFO";
+var PREVIOUS="Previous";
+var CHAR_NOT_ALLOWED="character is not allowed in this field";
+var INVALID_CHARACTERS="contains invalid characters";
+// this variable is used for refreshing screen
+var subFormImplemented=false;
+
+</script>
+
+<script language="JavaScript" src="javascript/servicescript41.js">
+</script>
+
+</head>
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="ptOnload(); updatePage(); setNotSupporteds(); DisplayMsgIfAny();">
+
+<div class="bannerbody" style="overflow:hidden; width:100%;height:53px;float:left;left:0;top:0;padding:0px;margin:0px">
+<?=BANNER-BODY=?>
+</div>
+
+<div style="overflow:auto;width:180px;height:calc(100% - 53px);float:left;left:0;top:53px;padding:0px;;margin:0px;background-color:#f0f0f0">
+<div class="navbody">
+<link rel="stylesheet" href="../styles/navBar41.css" type="text/css">
+<?=NAV-BODY=?>
+</div>
+</div>
+
+<div style="overflow:auto;width:calc(100% - 180px);height:calc(100% - 53px);float:left;left:180px;top:53px;padding:0px;;margin:0px">
+<div class="contentbody">
+<link rel="stylesheet" href="styles/content41.css" type="text/css">

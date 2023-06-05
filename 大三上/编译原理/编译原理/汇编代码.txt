@@ -1,0 +1,17 @@
+Mov R0,1
+Mov a,R0
+Mov R1,1
+Mov b,R1
+Mov R2,1
+Mov c,R2
+Mov R3,a
+Add R3,b
+Mov R4,R3
+Mov R3,a
+Mul R3,c
+Mov R5,R3
+DIV R5,b
+Mov R6,R5
+Sub R4,R6
+Mov R7,R4
+Mov result,R7

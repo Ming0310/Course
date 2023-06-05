@@ -1,0 +1,68 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Commands';
+
+function ptOnload() {
+}
+
+</script>
+
+
+<script>
+businessLogicImplemented = true;
+function validateBusinessLogic(formAttrs){
+return confirm("Are you sure you want to reset Configuration to Factory Default? ")
+}
+</script>
+
+<FORM method="post" ACTION="frameCommandResetFactory.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="v1LF21O3LZg6osDYwvJeEFWz2n0W8y7">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td class="pageTitle">
+        <h1>Reset to Factory Default</h1>
+      </td>
+      <td align="right" class="pageTitle">
+        <script>getHtmlForApplyButton("Reset");</script>
+        <script>getHtmlForHelpButton("Reset_to_Factory_Default","/helppages/wwhelp.htm");</script>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+       <p class="caption">Reset all configuration parameters to their factory default values. For factory default values to take effect, you need to reboot Controller without saving the configuration. Once the Controller comes up, have a serial session available to complete the installation wizard to set up your Controller for network connectivity.</p> </td>
+    </tr>
+  </table>
+  <TABLE class = "basictableproperties" CELLSPACING=4  WIDTH = "100%" nowrap>
+    <TR>
+      <TD ALIGN=left>
+       <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="">
+      </TD>
+    </TR>
+    <TR>
+      <TD ALIGN=left>
+        <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="">
+      </TD>
+    </TR>
+    <TR>
+      <TD ALIGN=left>
+        <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+      </TD>
+    </TR>
+    <TR>
+      <TD ALIGN=left>
+        <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="">
+      </TD>
+    </TR>
+    <TR>
+      <TD ALIGN=left>
+        <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+      </TD>
+    </TR>
+  </TABLE>
+</FORM>
+
+<?=PAGE-FOOTER=?>

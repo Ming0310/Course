@@ -1,0 +1,202 @@
+<STYLE type="text/css">
+A {
+    TEXT-DECORATION: none
+}
+#home_icon { height: 12px; }
+A:link {
+    COLOR: #ffffff; TEXT-DECORATION: none
+}
+A:hover {
+    COLOR: #ffffff; TEXT-DECORATION: none
+}
+A:active {
+    COLOR: #000000; TEXT-DECORATION: none
+}
+A:visited {
+    COLOR: #ffffff; TEXT-DECORATION: none
+}
+A.command {
+    COLOR: #ffffff; TEXT-DECORATION: none
+}
+A.command:hover {
+    COLOR: #ff9100; TEXT-DECORATION: underline
+}
+
+P {
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+TD {
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+P {
+    FONT-SIZE: 11px; MARGIN: 0px; COLOR: #333366
+}
+TD {
+    FONT-SIZE: 12px
+}
+TD.menuItem {
+    PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 4px; PADDING-TOP: 5px; BORDER-BOTTOM: #000000 5px solid; width: 1%; white-space: nowrap;
+}
+TD.selected {
+    PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 4px; COLOR: #000000; PADDING-TOP: 5px; BORDER-BOTTOM: #ff9100 5px solid; width: 1%; white-space: nowrap;
+}
+TD.space {
+    WIDTH: 50%;
+}
+.style2 {
+    COLOR: #ffffff
+}
+
+.bgimage {
+	background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAZABkAAD/7AARRHVja3kAAQAEAAAAPAAA/+4ADkFkb2JlAGTAAAAAAf/bAIQABgQEBAUEBgUFBgkGBQYJCwgGBggLDAoKCwoKDBAMDAwMDAwQDA4PEA8ODBMTFBQTExwbGxscHx8fHx8fHx8fHwEHBwcNDA0YEBAYGhURFRofHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8f/8AAEQgANQAgAwERAAIRAQMRAf/EAaIAAAAHAQEBAQEAAAAAAAAAAAQFAwIGAQAHCAkKCwEAAgIDAQEBAQEAAAAAAAAAAQACAwQFBgcICQoLEAACAQMDAgQCBgcDBAIGAnMBAgMRBAAFIRIxQVEGE2EicYEUMpGhBxWxQiPBUtHhMxZi8CRygvElQzRTkqKyY3PCNUQnk6OzNhdUZHTD0uIIJoMJChgZhJRFRqS0VtNVKBry4/PE1OT0ZXWFlaW1xdXl9WZ2hpamtsbW5vY3R1dnd4eXp7fH1+f3OEhYaHiImKi4yNjo+Ck5SVlpeYmZqbnJ2en5KjpKWmp6ipqqusra6voRAAICAQIDBQUEBQYECAMDbQEAAhEDBCESMUEFURNhIgZxgZEyobHwFMHR4SNCFVJicvEzJDRDghaSUyWiY7LCB3PSNeJEgxdUkwgJChgZJjZFGidkdFU38qOzwygp0+PzhJSktMTU5PRldYWVpbXF1eX1RlZmdoaWprbG1ub2R1dnd4eXp7fH1+f3OEhYaHiImKi4yNjo+DlJWWl5iZmpucnZ6fkqOkpaanqKmqq6ytrq+v/aAAwDAQACEQMRAD8AdzzevNO54q7nirueKof1MCXepih3qYpd6mKoT1cVd6uKu9XFXeriqD9XAl3q4q71cVd6uKoT1MVd6mKu9TFXepiqG54Eu54q7nirueKvBc0r0TsVdirsVf/Z');
+}
+
+.notSupported, .notSupported a:not([href^='javascript:void(']), .notSupported table {
+	color: lightgray !important;
+}
+</STYLE>
+<script language="JavaScript">
+function helpAction(pageId,startpage) {
+	notSupported();
+}
+
+
+function feedbackAction() {
+	notSupported();
+}
+
+function selectTab(tabName) {
+	// All this function does is update the value of the hidden field and call the updatePage() function
+	// Obtain object reference to hidden field
+//	var fieldObj = document.getElementById("hSelectedTab");
+	// Store the new tab selection in the hidden field
+//	fieldObj.value = tabName;
+	updatePage();
+}
+
+function highlight(tabName) {
+	//remove highlight for all the tabs
+	removeHighlightAll();
+	var highlightObj = document.getElementById("t" + tabName);
+	// Only highlight if srcElement is a tab object.
+
+	highlightObj.style.backgroundColor = "#25546B";
+
+
+}
+
+function removeHighlight(tabName) {
+	var highlightObj = document.getElementById("t" + tabName);
+	highlightObj.style.backgroundColor = "";
+}
+
+function removeHighlightAll(){
+	document.getElementById("tMonitor").style.backgroundColor = "";
+	document.getElementById("tWlans").style.backgroundColor = "";
+	document.getElementById("tSwitch").style.backgroundColor = "";
+	document.getElementById("tWireless").style.backgroundColor = "";
+	document.getElementById("tSecurity").style.backgroundColor = "";
+	document.getElementById("tManagement").style.backgroundColor = "";
+	document.getElementById("tDashboard").style.backgroundColor = "";
+	document.getElementById("tCommands").style.backgroundColor = "";
+	document.getElementById("tHelp").style.backgroundColor = "";
+        document.getElementById("tFeedback").style.backgroundColor = "";
+}
+
+function updatePage() {
+	// Clear the current tab selection
+	removeSelection();
+	// Obtain object reference to hidden field
+	// var fieldObj = document.getElementById("hSelectedTab");
+
+	// Retrieve the selected tab
+	//var selectedTab = fieldObj.value;
+
+	// PT71: get it from global var selectedTab
+	var selectedTab = top.selectedTab;
+
+	// Highlight the selected tab
+	cellObj = document.getElementById("t" + selectedTab);
+	cellObj.className = "selected";
+}
+
+function removeSelection() {
+	removeHighlightAll();
+	// Brute force method to clear the tab selection
+	document.getElementById("tMonitor").className = "menuItem";
+	document.getElementById("tWlans").className = "menuItem";
+	document.getElementById("tSwitch").className = "menuItem";
+	document.getElementById("tWireless").className = "menuItem";
+	document.getElementById("tSecurity").className = "menuItem";
+	document.getElementById("tManagement").className = "menuItem";
+	document.getElementById("tCommands").className = "menuItem";
+	document.getElementById("tDashboard").className = "menuItem";
+	document.getElementById("tHelp").className = "menuItem";
+        document.getElementById("tFeedback").className = "menuItem";
+}
+
+// PT71: error msg injected by the server
+var err_msg = "<?=ERROR-MSG=?>";
+function DisplayMsgIfAny(){
+	if (err_msg.length > 0)
+		alert(err_msg);
+/*   if (document.forms[0].err_flag.value == 1) {
+     alert(document.forms[0].err_msg.value);
+   }else if(document.forms[0].result_flag.value == 1){
+     alert(document.forms[0].cmd_result.value);
+   }
+   document.forms[0].err_flag.value = 0;
+   document.forms[0].result_flag.value = 0;
+   document.forms[0].buttonClicked.value = 0;*/
+}
+//need to get image for the OEMS and change the logo image.
+function getLogoImage()
+{
+}
+
+</script>
+<table width="100%" height="53" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+
+		<td style="PADDING-BOTTOM: 4px" align="middle" class='bgimage' width="180">
+
+
+                 <img src="data:image/gif;base64,R0lGODlhQwAoALMPAFt6imB/jnSPnNDZ3TlfcuXq7E9xgtzj5vX3+EhrfTBYbChRZpSps7fFzP///////yH5BAEAAA8ALAAAAABDACgAAAT/8MlJq704681raEEnSl84no3TnF26sqIjw5vs0J2NZ/qu9b4KMGgZEh/GoyQZZLJKwhklMDBtoBQjVuSK3ihdTnhiHOekZPRSzWMbnZi3m/0wFOffdN4D8vqzbFtre0h4fAFyhIl/eoyDXouAioaSjoWTNpiWkY2Vnnqcj5+inaWkg2YPqWUqFamrbK8qgg+0WlWHuaO1fVN9dhbAu3UXwhTGpxLIyiypRM5KtETSSsTVE8vX2tvc3d7fFQDiACPj5Bjm6OMsAg0FMgUMFAwy8tju8A0EFe3vCPHhGhxwgGAAg2wX6GVyMGBevQkJBi5MMA/BwgH7JAh4t/CAlQwK8OENbDhBob0HIRswaICxZKYCIzMCWGgRHsIJEh0cTCBAgEOdE1IwzJjxAQGJCHb2VCBB6KwPNk5eEBAV5MMHC1IKoDhBQE2pEG28aCrjgIaQZ68+mJnpgE8JChEUpcDWwTmN8NLS+SmVysK3cZlaqPuRqoMCGgw7eJtQ7T2xGmsyppCgatCyGhJwLCCAAIEEd1E6pjBAxgvN8Dp/BrDggYLSMlQzqDkWQ0iGAknCVduOgW/Iu20MyJ0RkXDYBENfIOBUOF+XCwvcZb5wKHSakzMQYJCzFfSTt1Vk3969gWCNyBE0yM4hXXv36sTFV04hAgA7" width="67" height="40" alt="logo"></td>
+
+
+		<td valign="bottom" class='bgimage'>
+
+
+            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+				<tr>
+					<td class="selected" id="tMonitor"><a href="frameMonitor.html" id="cMonitor" accesskey="M" onmouseover="highlight('Monitor')" onmouseout="removeHighlight('Monitor')" onclick="selectTab('Monitor')" onfocus="highlight('Monitor')" onblur="removeHighlight('Monitor')" target="mainFrame"><U>M</U>ONITOR</a></td>
+					<td class="menuItem" id="tWlans"><a href="frameWlan.html" id="cWlans" accesskey="W" onmouseover="highlight('Wlans')" onmouseout="removeHighlight('Wlans')" onclick="selectTab('Wlans')" onfocus="highlight('Wlans')" onblur="removeHighlight('Wlans')" target="mainFrame"><U>W</U>LANs</a></td>
+					<td class="menuItem" id="tSwitch"><a href="frameSwitching.html" id="cSwitch" accesskey="C" onmouseover="highlight('Switch')" onmouseout="removeHighlight('Switch')" onClick="selectTab('Switch')" onfocus="highlight('Switch')" onblur="removeHighlight('Switch')" target="mainFrame"><U>C</U>ONTROLLER</a></td>
+					<td class="menuItem" id="tWireless"><a href="frameWireless.html" id="cWireless" accesskey="I" onmouseover="highlight('Wireless')" onmouseout="removeHighlight('Wireless')" onClick="selectTab('Wireless')" onfocus="highlight('Wireless')" onblur="removeHighlight('Wireless')"  target="mainFrame">W<U>I</U>RELESS</a></td>
+                    <td class="menuItem" id="tSecurity"><a href="frameRadiusList.html" id="cSecurity" accesskey="S" onmouseover="highlight('Security')" onmouseout="removeHighlight('Security')" onClick="selectTab('Security')" onfocus="highlight('Security')" onblur="removeHighlight('Security')" target="mainFrame"><U>S</U>ECURITY</a></td>
+                    <td class="menuItem" id="tManagement"><a href="frameManagementLocalUsers.html" id="cManagement" accesskey="A" onmouseover="highlight('Management')" onmouseout="removeHighlight('Management')" onClick="selectTab('Management')" onfocus="highlight('Management')" onblur="removeHighlight('Management')" target="mainFrame">M<U>A</U>NAGEMENT</a></td>
+					<td class="menuItem" id="tCommands"><a href="frameCommandSetTime.html" id="cCommands" accesskey="O" onmouseover="highlight('Commands')" onmouseout="removeHighlight('Commands')" onClick="selectTab('Commands')" onfocus="highlight('Commands')" onblur="removeHighlight('Commands')" target="mainFrame">C<U>O</U>MMANDS</a></td>
+					<td class="menuItem" id="tHelp"><a href="javascript:helpAction()" id="cHelp" accesskey="L" onmouseover="highlight('Help')" onmouseout="removeHighlight('Help')" onfocus="highlight('Help')" onblur="removeHighlight('Help')">HE<U>L</U>P</a></td>
+					<td class="menuItem" id="tFeedback"><a href="javascript:feedbackAction()" accessKey="F" onmouseover="highlight('Feedback')" onmouseout="removeHighlight('Feedback')" onfocus="highlight('Feedback')" onblur="removeHighlight('Feedback')"><U>F</U>EEDBACK</a></td>
+					<td class='space'>&nbsp;</td>
+						<td class="menuItem notSupported" id="tDashboard"><a href="javascript:notSupported()" id="cDashboard" accesskey="H" onmouseover="highlight('Dashboard')" onmouseout="removeHighlight('Dashboard')" onfocus="highlight('Dashboard')" onblur="removeHighlight('Dashboard')" target="_top"><img id='home_icon' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAN1JREFUeNpi/P//P8NAAhZyNP0+wmgMpFYBsRJU6D0QV7Da/J9FqlmMpIYA1PLdQCyIRTqdVEcwUdFyEJgJVJNGEwcQYTlZjmCisuUkO4KJBpaT5AgmGllOtCOYaGg5siNmkuQAKloOA2m4HMFEB8vxOoKJTpbjdARKSQiUfEdDy+EAWFoy4ooCmltOUVE86oBRBwyWFtEeYDZyxVGCgsoQl9EoGHXAqANGHTCkHXCPDnbew+eACmhHk1bgPdQO3J1TYHmuhNTrxWoIsC44i6c1ja9VdQ+oFyUEAAIMAINxYHGUZKBNAAAAAElFTkSuQmCC'/>&nbsp;<U>H</U>ome</a></td>
+				</tr>
+			</table>
+          </td>
+	</tr>
+</table>
+<div style="position:absolute; right:0px; top:0px; margin: 3px 10px 0px 0px"><p><a href="#" onClick="javascript:saveConfigAction(); return false;" accesskey="v" class="command">Sa<U>v</U>e Configuration</a> &nbsp;|&nbsp; <a href="#" onClick="javascript:pingAction();" accesskey="p" class="command"><U>P</U>ing</a> &nbsp;|&nbsp; <a class="command" href="#" accesskey="g" onClick="javascript:logoutAction();">Lo<U>g</U>out</a>&nbsp;|&nbsp;<a href="#" onClick="javascript:contentframe_screen_refresh()"  accesskey="r" class="command"><U>R</U>efresh</a></p></div>
+
+<!-- PT71: commented out so other embedded pages can still use document.forms[0]
+<FORM method="post" ACTION="/screens/banner.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<input name='hSelectedTab' type='hidden' id='hSelectedTab' value='Monitor'>
+  <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+  <INPUT TYPE="hidden" NAME="result_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="cmd_result" SIZE="512" MAXLENGTH="511" VALUE="Config Saved">
+  <INPUT TYPE="hidden" NAME="ping_address" SIZE="50" MAXLENGTH="50" VALUE="">
+  <INPUT TYPE="hidden" NAME="interfaceType" SIZE="11" MAXLENGTH="11" VALUE="">
+  <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="">
+ -->
+</FORM>

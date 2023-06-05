@@ -1,0 +1,178 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+
+<script type="text/javascript">
+
+var CUSTOM1_CLICKED  = 0x20;
+var CUSTOM2_CLICKED  = 0x40;
+
+function submitNetworkChangeForm()
+{
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", CUSTOM1_CLICKED);
+  top.CHttpFormExtractor.addKeyValue("network_name", document.edit_general_nw.network_name.value);
+  top.CHttpFormExtractor.addKeyValue("old_network_name", document.edit_general_nw.old_network_name.value);
+  top.CHttpFormExtractor.addKeyValue("network_note", document.edit_general_nw.network_note.value);
+  
+  document.edit_general_nw.submit();
+
+  return false;
+}
+
+function submitNewUserForm()
+{
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", CUSTOM2_CLICKED);
+  top.CHttpFormExtractor.addKeyValue("user_description", document.edit_general_user.user_description.value);
+  top.CHttpFormExtractor.addKeyValue("user_email", document.edit_general_user.user_email.value);
+  top.CHttpFormExtractor.addKeyValue("user_password", document.edit_general_user.user_password.value);
+  
+  document.edit_general_user.submit();
+
+  return false;
+}
+
+</script>
+
+<?=MESSAGE=?>
+
+<h2 style="font-family: sans-serif;">General</h2>
+ 
+<form accept-charset="UTF-8" name="edit_general_nw" action="general" id="edit_general_form" method="post">
+
+<b>Network administration</b><br><br>
+<input id="old_network_name" name="old_network_name" type="hidden" value="<?=NW-NAME=?>" />
+
+<table class="cfg cfg_first" style="width:auto;">
+<tr>
+<td class="cfgq">Network name</td>
+<td class="cfgo">
+  <input id="network_name" name="network_name" style="font-size: 80%;" size="20" type="text" value="<?=NW-NAME=?>" />
+  <div style="clear: both; height: 20px;"></div>
+  </td>
+</tr>
+
+<tr>
+<td class="cfgq">Network notes</td>
+<td class='cfgo'>
+  <textarea cols="50" id="nw_note" name="network_note" rows="2" style="font-size: 80%;">
+  <?=NW-NOTE=?>
+  </textarea>
+  <div style="clear: both; height: 20px;"></div>
+</td>
+</tr>
+
+<tr>
+<td class="cfgq"></td>
+<td class="cfgo">
+  <input class="button" id="submit_nw" name="commit" type="button" value="Save Network" onClick="submitNetworkChangeForm();" />
+  <div style="clear: both; height: 20px;"></div>
+</td>
+</tr>
+
+</form>
+
+<tr>
+<td class="cfgq"><div style="clear: both; height: 20px;"></div>Organization admins</td>
+<td class="cfgo">
+  <div style="clear: both; height: 20px;"></div>
+  <table id="meraki_table">
+  <tr>
+    <th>User</th>
+    <th>Account status</th>
+    <th>Privileges</th>
+  </tr>
+ <?=BEGIN-ORG-ADMIN=?>
+<tr>
+  <td align="center"><?=ADMIN-NAME=?> (<?=ADMIN-EMAIL=?>)</td>
+  <td align="center">Active</td>
+  <td align="center">Full</td>
+</tr>
+<?=END-ORG-ADMIN=?> 
+  </table>
+  
+</tr>
+
+
+<tr>
+<td class="cfgq"><div style="clear: both; height: 40px;"></div>Network admins</td>
+<td class="cfgo">
+  <div style="clear: both; height: 40px;"></div>
+  <table id="meraki_table">
+  <tr>
+    <th>User</th>
+    <th>Account status</th>
+    <th>Privileges</th>
+  </tr>
+ <?=BEGIN-NW-ADMIN=?>
+<tr>
+  <td align="center"><?=ADMIN-NAME=?> (<?=ADMIN-EMAIL=?>)</td>
+  <td align="center">Active</td>
+  <td align="center">Full</td>
+</tr>
+<?=END-NW-ADMIN=?> 
+  </table>
+  
+  <br/><br/>
+  
+ <form accept-charset="UTF-8" name="edit_general_user" action="general" id="edit_general_form" method="post">
+ 
+  	<b style="font-size: 80%;">Create User</b>
+	<table>
+	<tr>
+	<td class="cfgq">Description:</td>
+	<td class="cfgo">
+	  <input id="user_description" name="user_description" style="font-size: 80%;" size="20" type="text" value="" />
+	  <div style="clear: both; height: 20px;"></div>
+	  </td>
+	</tr>
+
+	<tr>
+	<td class="cfgq">Email (Username):</td>
+	<td class='cfgo'>
+	  <input id="user_email" name="user_email" style="font-size: 80%;" size="20" type="text" value="" />
+	  <div style="clear: both; height: 20px;"></div>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="cfgq">Password:</td>
+	<td class='cfgo'>
+	  <input id="user_password" name="user_password" style="font-size: 80%;" size="20" type="password" value="" />
+	  <div style="clear: both; height: 20px;"></div>
+	</td>
+	</tr>	
+
+	<tr>
+	<td class="cfgq"></td>
+	<td class="cfgo">
+	  <input class="button" id="submit_user" name="commit_user" type="button" value="Create user" onClick="submitNewUserForm();" />
+	  <div style="clear: both; height: 20px;"></div>
+	</td>
+	</tr>
+	</table>
+
+</tr>
+
+
+</table>
+
+ 
+</form>
+
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<style type="text/css">
+
+/* Dropdown Button */
+.dropbtn {
+    background-color: #353538;
+    color: #d7d7d9;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: relative;
+    min-width: 160px;
+    color: #d7d7d9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: #d7d7d9;
+    padding: 4px 30px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #4f4f52;
+    color: white;
+    text-decoration: underline;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    color: white;
+    background-color: #4f4f52;
+}
+
+</style>
+
+
+<script type="text/javascript">
+
+var CUSTOM3_CLICKED  = 0x80;
+
+function submitNetworkSelectForm()
+{
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", CUSTOM3_CLICKED);
+  top.CHttpFormExtractor.addKeyValue("select_network", document.select_network.nw_name.value);
+  document.select_network.submit();
+
+  return false;
+}
+
+
+</script>
+
+
+<div id="main-nav">
+    
+<div id='logo_react' class=''>
+  <div id='logoContainer'>
+    <a href='overview' class='logo-link'>
+      <img alt="Dashboard Home" id="logoImg" src="images/cisco-meraki-white.png" />
+    </a>
+  </div>
+</div>
+
+<br>
+
+<div id='nav-controls'>
+  &nbsp;&nbsp;&nbsp;&nbsp;<font color="#d7d7d9" size="1"><b>NETWORK</b></font>
+  
+  <form accept-charset="UTF-8" name="select_network" action="select_network" id="select_network_form" method="post">
+  <li><input id="nw_name" name="nw_name" style="font-size: 90%;" size="20" value="<?=NW_NAME=?>" /> &nbsp;
+  <input class="button" id="submit_network" name="submit_network" style="font-size: 60%;" type="submit" value="Select" onClick="submitNetworkSelectForm();" />
+  </form>
+  
+  &nbsp;&nbsp;&nbsp;<?=SIDE-MESSAGE=?>
+  <li><a href="overview"><font color="#d7d7d9">View all networks</font></a>
+  <li><a href="new_network"><font color="#d7d7d9">Create a network</font></a>
+  <br><br><br>
+  
+<?=TEST-CURRENT-NETWORK=?>
+  
+  <div class="dropdown">
+    <button class="dropbtn">Organization</button>
+    <div class="dropdown-content">
+      &nbsp;&nbsp;&nbsp;&nbsp;<font color="#d7d7d9" size="1"><b>MONITOR</b></font><br>
+      <a href="overview">Overview</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;<font color="#d7d7d9" size="1"><b>CONFIGURE</b></font><br>
+      <a href="admins">Administrators</a>
+      <a href="new_network">Create network</a>
+      <a href="inventory">Inventory</a>
+    </div>
+  </div>
+</div>
+
+</div>

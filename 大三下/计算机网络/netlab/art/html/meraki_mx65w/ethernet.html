@@ -1,0 +1,99 @@
+<?=HEADER=?>
+
+<script>
+
+var powerIds = [<?=POWER-IDS=?>];
+var loadPowerValues = [<?=POWER-VALUES=?>];
+
+var negotiateIds = [<?=NEGOTIATE-IDS=?>];
+var negotiateValues = [<?=NEGOTIATE-VALUES=?>];
+
+
+function ptOnload()
+{
+	var length = powerIds.length;
+	for (var i = 0; i < length; i++)
+		selectedOption(powerIds[i], loadPowerValues[i]);
+
+	length = negotiateIds.length;
+	for (var i = 0; i < length; i++)
+		selectedOption(negotiateIds[i], negotiateValues[i]);
+}
+
+function submitAction()
+{
+	//document.forms[0].buttonClicked.value = CUSTOM1_CLICKED;
+	top.CHttpFormExtractor.clearKeyValues();
+	//top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+
+	var length = powerIds.length;
+	for (var i = 0; i < length; i++)
+	{
+		var id = powerIds[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+	}
+
+	length = negotiateIds.length;
+	for (var i = 0; i < length; i++)
+	{
+		var id = negotiateIds[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+	}
+
+	document.forms[0].submit();
+}
+
+</script>
+
+	<div>
+		<ul>
+			<!-- Ethernet Configuration -->
+			<li>
+				<blockquote>
+				<h1 align="left">Ethernet configuration</h1>
+				<p align="left">Use this page to configure physical link settings on the Ethernet ports.</p>
+
+				<form action="ethernet.html" method="post">
+
+				<table id="link_neg_table" class="table table-bordered table-striped">
+				<tbody>
+				<tr>
+					<th align="left"><b>Port&nbsp;Name</b></th>
+					<th align="left"><b>Enabled</b></th>
+					<th align="left"><b>Link&nbsp;Negotiation</b></th>
+				</tr>
+
+				<?=BEGIN-PORT-CONFIG=?>
+				<tr>
+					<td align="left"><br><?=PORT-NAME=?></td>
+					<td align="left">
+						<select name="<?=PORT-SELECT-NAME=?>" id="<?=PORT-SELECT-ID=?>" style="font-size:12px;">
+							<option value="enabled">enabled</option>
+							<option value="disabled">disabled</option>
+						</select></td>
+					<td align="left">
+						<select name="<?=PORT-NEGOTIATE-NAME=?>" id="<?=PORT-NEGOTIATE-ID=?>" style="font-size:12px;">
+							<option value="auto">Auto (10/100/1000Mbps)</option>
+							<option value="100Mfdx">100Mbps full duplex</option>
+							<option value="100Mhdx">100Mbps half duplex</option>
+							<option value="10Mfdx">10Mbps full duplex</option>
+							<option value="10Mhdx">10Mbps half duplex</option>
+						</select>
+					</td>
+				</tr>
+				<?=END-PORT-CONFIG=?>
+
+				</tbody>
+				</table>
+
+				<input type="button" class="button button_speed_test" style="float: left;" onclick="submitAction();" value="Save">
+
+				</form>
+				<blockquote>
+
+			</li>
+		</ul>
+	</div>
+<br><br><br>
+
+<?=FOOTER=?>

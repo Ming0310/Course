@@ -1,0 +1,180 @@
+.dojoTabContainer {
+	position : relative;
+}
+
+.dojoTabPaneWrapper {
+	position : relative;	
+	clear: both;
+	border: 1px solid #999999;
+	background-color: #F0F0F0;    
+}
+
+.dojoTabLabels-top {
+	position : absolute;
+	top : 0px;
+	left : 0px;
+	overflow : visible;
+	margin-bottom : -1px;
+	width : 100%;
+	z-index: 2;	/* so the bottom of the tab label will cover up the border of dojoTabPaneWrapper */
+}
+.dojoTabLabels-top-noLayout {
+	overflow : visible;
+	margin-bottom : -1px;
+	width : 100%;
+	z-index: 2;
+}
+
+
+.dojoTabPaneTab {
+	position : relative;
+	float : left;
+	padding-left : 9px;
+	border-bottom : 1px solid #6290d2;
+	background : url('data:image/gif;base64,R0lGODlhCQAsAdUsAJW//5/G/63O/8Da/7jU/7Kyssje/+np6erq6tfX16CgoGSR09bW1tXV1b+/v8zMzLrT+Xig2Pv8/rnN64607LfT/pS+/ouw5miU1LGxsYGm22aT07jS9pa++c3h/uHq95696+fu+KG85M7i/6O+5ajC5o6v34yw5WKQ0pmZmZS+//Dw8P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAACwALAAAAAAJACwBAAb/QJaQFSppFqjhBAPieEYsiekEMVgNLNFlwO1+FhWCeEyiCM5oQaQTaLsDGwtgTgegVPg8/q7P8/sqf32CeoR+gHuIgYqGiYiNi4+Mk5KVgJCYlJeag5yFnoeWnaKfpKGbpo6oq6Ospa6nrbKvs7G0t7a5qrW7uL26kbC/w8G8xb7HwJmpycTLws3Rz8bTyNXKoM7Z0tvX2sze3ODd5OPm0OHp5ejr1O3W79jn1Cj19vVDCA8FCikpQgwKOEhwYMUKFgwyNDDIEEGBhQwNPnAQkWGBBBUNKiiYMUVGgx4/huz4ccXIiicjpmS4EmTJliZfyhQ5kyTNmzZzoqy5E2dPZJ0qeQb1ORQoS6FHiSY16lJpU6YxnUaFCrMq0qc/sxbVupQr1q1gu4b9KrYs2bNTvaYdu9ZsW7RWpcalevWt3blq8bLV65Yv3Lp+7wIeLJcw3cKIDyvOa5hxYseL9zaW/JhyxiAAOw==') no-repeat left top;
+	cursor: pointer;
+}
+
+.dojoTabPaneTab span {
+	display : block;
+	padding : 4px 15px 4px 6px;
+	background : url('data:image/gif;base64,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') no-repeat right top;
+	font-size : 90%;
+	color : black;
+    font-weight: bold;
+	font-size : 12px;
+    font-family: Verdana, arial, helvetica;
+    
+}
+
+
+.dojoTabPanePaneClose {
+	position : absolute;
+	bottom : 0px;
+	right : 6px;
+	height : 12px;
+	width : 12px;
+	background : url(/images/dojo/tab_close.gif) no-repeat right top;
+}
+
+.dojoTabPanePaneCloseHover {
+	background-image : url(/images/dojo/tab_close_h.gif);
+}
+
+.dojoTabPaneTabClose {
+	display : inline;
+	height : 12px;
+	width : 12px;
+	padding : 0 12px 0 0;
+	margin : 0 -10px 0 10px;
+	background : url(/images/dojo/tab_close.gif) no-repeat right top;
+	cursor : default;
+}
+
+.dojoTabPaneTabCloseHover {
+	background-image : url(/images/dojo/tab_close_h.gif);
+}
+
+.dojoTabPaneTab.current {
+	padding-bottom : 1px;
+	border-bottom : 0;
+	background-position : 0 -150px;
+}
+
+.dojoTabPaneTab.current span {
+	padding-bottom : 5px;
+	margin-bottom : -1px;
+	background-position : 100% -150px;
+}
+
+/* bottom tabs */
+
+.dojoTabLabels-bottom {
+	position : absolute;
+	bottom : 0px;
+	left : 0px;
+	overflow : visible;
+	margin-top : -1px;
+	width : 100%;
+	z-index: 2;
+}
+
+.dojoTabLabels-bottom .dojoTabPaneTab {
+	border-top :  1px solid #6290d2;
+	border-bottom : 0;
+	background : url(/images/dojo/tab_bot_left.gif) no-repeat left bottom;
+}
+
+.dojoTabLabels-bottom .dojoTabPaneTab span {
+	background : url(/images/dojo/tab_bot_right.gif) no-repeat right bottom;
+}
+
+.dojoTabLabels-bottom .dojoTabPaneTab.current {
+	padding-top : 1px;
+	border-top : 0;
+	background : url(/images/dojo/tab_bot_left_curr.gif) no-repeat left bottom;
+}
+
+.dojoTabLabels-bottom .dojoTabPaneTab.current span {
+	padding-top : 5px;
+	margin-top : -1px;
+	background : url(/images/dojo/tab_bot_right_curr.gif) no-repeat right bottom;
+}
+
+/* right-h tabs */
+
+.dojoTabLabels-right-h {
+	position : absolute;
+	top : 0px;
+	right : 0px;
+	overflow : visible;
+	margin-left : -1px;
+	z-index: 2;
+}
+
+.dojoTabLabels-right-h .dojoTabPaneTab {
+	padding-left : 0;
+	border-left :  1px solid #6290d2;
+	border-bottom : 0;
+	background : url(/images/dojo/tab_bot_right.gif) no-repeat right bottom;
+	float : none;
+}
+
+.dojoTabLabels-right-h .dojoTabPaneTab span {
+	padding : 4px 15px 4px 15px;
+}
+
+.dojoTabLabels-right-h .dojoTabPaneTab.current {
+	border-left :  0;
+	border-bottom :  1px solid #6290d2;
+}
+
+/* left-h tabs */
+
+.dojoTabLabels-left-h {
+	position : absolute;
+	top : 0px;
+	left : 0px;
+	overflow : visible;
+	margin-right : -1px;
+	z-index: 2;
+}
+
+.dojoTabLabels-left-h .dojoTabPaneTab {
+	border-right :  1px solid #6290d2;
+	border-bottom : 0;
+	float : none;
+	background : url(/images/dojo/tab_top_left.gif) no-repeat left top;
+}
+
+.dojoTabLabels-left-h .dojoTabPaneTab.current {
+	border-right : 0;
+	border-bottom :  1px solid #6290d2;
+	padding-bottom : 0;
+	background : url(/images/dojo/tab_top_left.gif) no-repeat 0 -150px;
+}
+
+.dojoTabLabels-left-h .dojoTabPaneTab span {
+	background : 0;
+}
+

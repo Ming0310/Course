@@ -1,0 +1,342 @@
+<?=HEADER=?>
+
+<script>
+
+//var onloadVlanTagging = "disabled";
+//var onloadVlanId = "1";
+
+var onloadConnectionTypes = [<?=PORT-CON-TYPE=?>];
+var onloadPppoeAuthens = [<?=PORT-PPPOE-AUTHEN=?>];
+var onloadPppoeIpAssignments = [<?=PORT-PPPOE-IP=?>];
+var onloadIpAssignments = [<?=PORT-IP-ASSIGNMENT=?>];
+
+var portNums = [<?=PORT-NUMS=?>];
+
+function ptOnload()
+{
+	var length = portNums.length;
+	for (var i = 0; i < length; i++)
+	{
+		var portNum = portNums[i];
+		var sel = document.getElementById("connection_type_id_" + portNum);
+		if (onloadConnectionTypes[i] == "direct")
+			sel.selectedIndex = "0";
+		else // pppoe
+			sel.selectedIndex = "1";
+		connectionTypeToggle(portNum);
+
+		sel = document.getElementById("direct_ip_assignment_id_" + portNum);
+		if (onloadIpAssignments[i] == "dhcp")
+			sel.selectedIndex = "0";
+		else // pppoe
+			sel.selectedIndex = "1";
+		ipAssignmentToggle(portNum);
+	} // for
+}
+
+function submitAction()
+{
+	top.CHttpFormExtractor.clearKeyValues();
+
+	var length = portNums.length;
+	for (var i = 0; i < length; i++)
+	{
+		//var id = "vlan_tagging_enabled_id_" + portNums[i];
+		//top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		//id = "vlan_tag_id_" + portNums[i];
+		//top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+
+		var id = "connection_type_id_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		id = "pppoe_authentication_enabled_id_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		id = "pppoe_authentication_username_id_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		id = "pppoe_authentication_password_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		id = "pppoe_assignment_enabled_id_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		//id = "pppoe_static_ip_" + portNums[i];
+		//top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		id = "direct_ip_assignment_id_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		id = "static_wired_ip_id_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		id = "static_wired_netmask_id_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		id = "static_wired_gateway_id_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+		id = "static_wired_dns1_id_" + portNums[i];
+		top.CHttpFormExtractor.addKeyValue(id, document.getElementById(id).value);
+	}
+
+	document.forms[0].submit();
+}
+
+function vlanTaggingToggle(portNum)
+{
+	var sel = document.getElementById("vlan_tagging_enabled_id_" + portNum);
+	if (sel.selectedIndex != -1)
+	{
+		if (sel.options[sel.selectedIndex].value == "disabled")
+			document.getElementById("vlan_tag_li_" + portNum).style.display = "none";
+		else
+			document.getElementById("vlan_tag_li_" + portNum).style.display = "inline";
+	}
+}
+
+function connectionTypeToggle(portNum)
+{
+	var sel = document.getElementById("connection_type_id_" + portNum);
+	if (sel.selectedIndex != -1)
+	{
+		if (sel.options[sel.selectedIndex].value == "direct")
+		{
+			document.getElementById("no_direct_div_" + portNum).style.display = "none";
+			document.getElementById("ip_assignment_div_" + portNum).style.display = "inline";
+			ipAssignmentToggle(portNum);
+		}
+		else // pppoe
+		{
+			document.getElementById("no_direct_div_" + portNum).style.display = "inline";
+			if (onloadPppoeAuthens[portNum] == "false")
+				selectedOption("authentication_li_" + portNum, "false");
+			else
+				selectedOption("authentication_li_" + portNum, "true");
+
+			authenticationToggle(portNum)
+		}
+	}
+}
+
+function authenticationToggle(portNum)
+{
+	var sel = document.getElementById("pppoe_authentication_enabled_id_" + portNum);
+	if (sel.selectedIndex != -1)
+	{
+		if (sel.options[sel.selectedIndex].value == "false")
+		{
+			document.getElementById("use_authentication_div_" + portNum).style.display = "none";
+		}
+		else
+		{
+			document.getElementById("use_authentication_div_"  + portNum).style.display = "inline";
+			document.getElementById("pppoe_username_li_" + portNum).style.display = "inline";
+			document.getElementById("pppoe_password_li_" + portNum).style.display = "inline";
+
+			if (onloadIpAssignments[portNum] == "dynamic")
+				selectedOption("pppoe_ip_assignment_li_" + portNum, "dynamic");
+			else
+				selectedOption("pppoe_ip_assignment_li_" + portNum, "static");
+
+			//pppoeIpAssignmentToggle();
+
+			document.getElementById("ip_assignment_div_" + portNum).style.display = "none";
+
+		}
+	}
+}
+
+function pppoeIpAssignmentToggle(portNum)
+{
+	var sel = document.getElementById("pppoe_assignment_enabled_id_" + portNum);
+	if (sel.selectedIndex != -1)
+	{
+		if (sel.options[sel.selectedIndex].value == "dynamic")
+		{
+
+			document.getElementById("use_pppoe_address_div_" + portNum).style.display = "none";
+		}
+		else
+			document.getElementById("use_pppoe_address_div_" + portNum).style.display = "inline";
+	}
+}
+
+function ipAssignmentToggle(portNum)
+{
+	var sel = document.getElementById("direct_ip_assignment_id_" + portNum);
+	if (sel.selectedIndex != -1)
+	{
+		if (sel.options[sel.selectedIndex].value == "dhcp")
+		{
+			document.getElementById("address_li_" + portNum).style.display = "none";
+			document.getElementById("netmask_li_" + portNum).style.display = "none";
+			document.getElementById("gateway_li_" + portNum).style.display = "none";
+			document.getElementById("dns_server_1_" + portNum).style.display = "none";
+			//document.getElementById("dns_server_2_" + portNum).style.display = "none";
+		}
+		else
+		{
+			document.getElementById("address_li_" + portNum).style.display = "inline";
+			document.getElementById("netmask_li_" + portNum).style.display = "inline";
+			document.getElementById("gateway_li_" + portNum).style.display = "inline";
+			document.getElementById("dns_server_1_" + portNum).style.display = "inline";
+			//document.getElementById("dns_server_2_" + portNum).style.display = "inline";
+		}
+	}
+}
+
+
+</script>
+
+	<div>
+		<ul>
+			<!-- Configure -->
+			<li>
+				<blockquote>
+
+				<form action="configure.html" method="post">
+
+			  	<h3 align="left">Uplink configuration</h3>
+				<p align="left">Configure the uplink Internet connection on this security appliance</a>.</p>
+
+			  	<?=BEGIN-PORT-CONFIG=?>
+			  	<!-- <fieldset id="ip_config_<?=PORT-NUM=?>" class="config" style='height:100%'> -->
+			  	<h2 align="left"><b><?=PORT-NAME=?></b></h2>
+                <ul align="left">
+
+                	<!-------------------------------------------- -->
+                	<!-- <li>
+                    	<label>VLAN tagging</label>
+                        <select id='vlan_tagging_enabled_id_<?=PORT-NUM=?>' style="font-size:12px;" onchange="vlanTaggingToggle(<?=PORT-NUM=?>);">
+                       		<option value='disabled'>Don't use VLAN tagging</option>
+                            <option value='enabled'>Use VLAN tagging</option>
+                        </select>
+                    </li>
+					<li id="vlan_tag_li_<?=PORT-NUM=?>">
+					  	<label>VLAN ID</label>
+					  	<input id='vlan_tag_id_<?=PORT-NUM=?>' type='text' size='5' />
+					</li> -->
+					<!-------------------------------------------- -->
+
+					<li>
+					  	<label>Connection type</label>
+					  	<select id='connection_type_id_<?=PORT-NUM=?>' style="font-size:12px;" onchange="connectionTypeToggle(<?=PORT-NUM=?>);">
+							<option value='direct'>Direct</option>
+							<option value='pppoe'>PPPoE</option>
+					  </select>
+					</li>
+					<div id="no_direct_div_<?=PORT-NUM=?>">
+						<li id="authentication_li_<?=PORT-NUM=?>">
+							<label>Authentication</label>
+							<select id='pppoe_authentication_enabled_id_<?=PORT-NUM=?>' style="font-size:12px;" onchange="authenticationToggle(<?=PORT-NUM=?>);">
+								<!-- <option value='false'>No authentication</option> -->
+								<option value='true'>Use authentication</option>
+							</select>
+						</li>
+						<div id="use_authentication_div_<?=PORT-NUM=?>">
+							<li id="pppoe_username_li_<?=PORT-NUM=?>">
+								<label>Username</label>
+								<input type='text' id='pppoe_authentication_username_id_<?=PORT-NUM=?>' size=15 value='<?=USERNAME=?>'><br>
+							</li>
+							<br>
+							<li id="pppoe_password_li_<?=PORT-NUM=?>">
+								<label>Password</label>
+								<input type='password' id='pppoe_authentication_password_<?=PORT-NUM=?>' size=15 value='<?=PASSWORD=?>'><br>
+							</li>
+							<br>
+							<li id="pppoe_ip_assignment_li_<?=PORT-NUM=?>">
+								<label>IP assignment</label>
+								<select id='pppoe_assignment_enabled_id_<?=PORT-NUM=?>' style="font-size:12px;" onChange="pppoeIpAssignmentToggle(<?=PORT-NUM=?>)">
+									<option value='dynamic'>Dynamic</option>
+									<!-- <option value='static'>Static</option> -->
+								</select>
+							</li>
+							<!-- <br>
+							<div id="use_pppoe_address_div_<?=PORT-NUM=?>">
+								<li id="pppoe_address_li_<?=PORT-NUM=?>">
+									<label>Address</label>
+									<input type='text' id='pppoe_static_ip_<?=PORT-NUM=?>' size=15 value='<?=PPPOE-IP=?>'>
+								</li>
+							</div> <!-- use_pppoe_address_div -->
+						</div> <!-- use_authentication_div -->
+					</div> <!-- no_direct_div -->
+					<!-------------------------------------------- -->
+
+					<div id="ip_assignment_div_<?=PORT-NUM=?>">
+						<li id="ip_assignment_li_<?=PORT-NUM=?>">
+							<label>IP assignment</label>
+							<select id='direct_ip_assignment_id_<?=PORT-NUM=?>' style="font-size:12px;" onChange="ipAssignmentToggle(<?=PORT-NUM=?>);">
+								<option value='dhcp'>DHCP</option>
+								<option value='static'>Static</option>
+							</select>
+						</li>
+						<li id="address_li_<?=PORT-NUM=?>">
+							<label>Address</label>
+							<input type='text' class='direct_op' id='static_wired_ip_id_<?=PORT-NUM=?>' size=15 value='<?=PORT-IP=?>'>
+						</li>
+						<br>
+						<li id="netmask_li_<?=PORT-NUM=?>">
+							<label>Netmask</label>
+							<input type='text' id='static_wired_netmask_id_<?=PORT-NUM=?>' size=15 value='<?=PORT-MASK=?>'>
+						</li>
+						<br>
+						<li id="gateway_li_<?=PORT-NUM=?>">
+							<label>Gateway</label>
+							<input type='text' id='static_wired_gateway_id_<?=PORT-NUM=?>' size=15 value='<?=GATEWAY=?>'>
+						</li>
+						<br>
+						<li id="dns_server_1_<?=PORT-NUM=?>">
+							<label>DNS server 1</label>
+							<input type='text' id='static_wired_dns1_id_<?=PORT-NUM=?>' size=15 value='<?=DNS-SERVER-1=?>'>
+						</li>
+						<!--<br>
+						<li id="dns_server_2_<?=PORT-NUM=?>">
+							<label>DNS server 2</label>
+							<input type='text' id='static_wired_dns2_<?=PORT-NUM=?>' size=15 value='<?=DNS-SERVER-2=?>' placeholder="Not Supported">
+						</li> -->
+					</div> <!-- ip_assignment_div -->
+				</ul>
+                <!-- </fieldset> -->
+				<br>
+      			<?=END-PORT-CONFIG=?>
+
+<!--
+			  	<fieldset>
+				<h2 align="left"><b>Web proxy</b></h2>
+				<p align="left">HTTP will be used for the device to communicate with the Cisco Meraki cloud if UDP communication is blocked</p>
+				<ul align="left">
+				  	<li>
+					<label>Use a proxy?</label>
+					<select id="backend_access_proxy_enabled_select" name="backend_access_proxy_enabled" style="font-size:12px;">
+					  	<option value="false">No</option>
+					  	<option value="true">Yes</option>
+					</select>
+				  </li>
+				  <li>
+						<label>Hostname or IP</label>
+						<input type="text" name="backend_access_proxy_server" placeholder="0.0.0.0">
+				  </li>
+				  <li>
+						<label>Port</label>
+						<input type="text" name="backend_access_proxy_port" onkeypress="return numbersonly(this, event)" placeholder="Port #">
+				  </li>
+				  <li>
+						<label>Authentication</label>
+						<select id="backend_access_proxy_userpwd_enabled_select" name="backend_access_proxy_userpwd_enabled">
+					  		<option value="false">No authentication</option>
+					  		<option value="true">Use authentication</option>
+						</select>
+				  </li>
+				  <li>
+						<label>Username</label>
+						<input type="text" name="backend_access_proxy_user" placeholder="Username">
+				  </li>
+				  <li>
+						<label>Password</label>
+						<input type="password" name="backend_access_proxy_password" placeholder="Password">
+				  </li>
+				</ul>
+			  </fieldset>
+-->
+				<input type="button" class="button button_speed_test" style="float: left;" onclick="submitAction();" value="Save">
+
+
+				</form>
+				</blockquote>
+			</li>
+		</ul>
+	</div>
+<br><br><br>
+
+<?=FOOTER=?>

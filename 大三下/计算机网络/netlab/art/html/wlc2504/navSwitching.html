@@ -1,0 +1,347 @@
+
+<!-- <link rel="stylesheet" href="../styles/navBar41.css" type="text/css"> -->
+<script language="JavaScript" type="text/javascript">
+//	dojo.require("dojo.fx.*");
+</script>
+<!----  This file contains only javascript code used for Navigation sidemenu. (Could not put this in a seperate javascript file since this javascript code contains EMWEB tags)----->
+<script language="javascript">
+function wipe(tdiv){
+	if(document.getElementById(tdiv).style.display == 'none')
+	{
+		wipeIn(tdiv);
+		document.getElementById(tdiv+'minus').style.display = 'inline';
+		document.getElementById(tdiv+'plus').style.display = 'none';
+
+	}
+	else
+	{
+		wipeOut(tdiv);
+		document.getElementById(tdiv+'minus').style.display = 'none';
+		document.getElementById(tdiv+'plus').style.display = 'inline';
+
+	}
+
+}
+function selectLink(link){
+	removeLinkSelection();
+
+	if(link.className == 'navBar1')
+		link.className = "selected1";
+	if(link.className == 'navBar2')
+		link.className = "selected2";
+}
+function removeLinkSelection(){
+	var lnks = document.getElementsByTagName('A');
+	for(i=0;i<lnks.length;i++)
+	{
+		if(lnks[i].className == 'selected1')
+		lnks[i].className = "navBar1";
+	if(lnks[i].className == 'selected2')
+		lnks[i].className = "navBar2";
+	}
+}
+function wipeOut(elId){
+	//dojo.fx.wipeOut(dojo.byId(elId), 200);
+document.getElementById(elId).style.display = 'none';
+}
+function wipeIn(elId) {
+	//dojo.fx.wipeIn(dojo.byId(elId), 200);
+document.getElementById(elId).style.display = 'inline';
+}
+function getHtmlforImg(divId,defaultExpand,innerImg){
+	var displayMinus = ' ';
+	var displayPlus = ' ';
+	var htmlCd;
+
+        var imgSrcDown ='data:image/gif;base64,R0lGODlhDQANAHAAACwAAAAADQANAITw8PDp7Ozm6urs7e2nwsKGra3H1ta90NCNsrJmmZl1oqKhvr7T3t7D1NR6paVrnJxxoKCWt7fn6uro6+vS3d2BqqqkwcHf5ubu7+/r7e2/0dGOsrKkwMDf5eUAAAAAAAAFNiAgjmRpniiJrZiwuizGFQ5tOw61HkXi/44Ig0Vx/HyR2Kr4I8CUh0iCo1OyosqRlWWynryiEAA7';
+        var imgSrcDown2='data:image/gif;base64,R0lGODlhCgAKAPcAAO3t7eTk5Obm5srKyqOjo7y8vOXl5cPDw319fX5+fru7u3V1dVhYWLq6uk9PT2ZmZqSkpOHh4VxcXIaGhsHBwefn54GBgYWFhb6+vs7Ozqqqqtzc3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACgAKAAAIKwABCBxIsKDBgwgLDiiwsKHADQ8iSnwwsMDEBwUGbrAYMWNBiwU2HBRJMCAAOw==';
+        var imgSrcRight='data:image/gif;base64,R0lGODlhDQANAHAAACH5BAEAAAwALAAAAAANAA0Ag/Dw8O7v79Ld3dPe3nqlpZa3t+bq6oatrWaZmafCwqTAwL3Q0AAAAAAAAAAAAAAAAAQ2EMhAq7xzjEoxJQUXYEBAgOJYHQiiCFz5tW680kjYyXixWDIWgvADlghDWCx4UC5LiuIzBYwAADs=';
+        var imgSrcRight2='data:image/gif;base64,R0lGODlhCgAKAPcAAO3t7eTk5Obm5srKyqOjo7y8vOXl5cPDw319fX5+fru7u3V1dVhYWLq6uk9PT2ZmZqSkpOHh4VxcXIaGhsHBwefn54GBgYWFhb6+vs7Ozqqqqtzc3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACgAKAAAIKwABCBxIsKDBgQMeKDio4IHCDQUTOlxIsKHDBxARXqQ40CJHjQoyFhQJICAAOw==';
+
+
+
+	if(!defaultExpand)
+	{
+		displayMinus = ' style="display:none" ';
+	}else{
+		displayPlus = ' style="display:none" ';
+        }
+	if(innerImg)
+	{
+		htmlCd = '<TD width="11%" align="right" valign="middle"><img valign="top" id="'+divId+'minus" src="'+imgSrcDown2+'" alt="Expand Menu" onClick="javascript:wipe(\''+divId+'\');" '+displayMinus+' ></img><img align="center" valign="bottom" id="'+divId+'plus" src="'+imgSrcRight2+'" alt="Collapse Menu" '+displayPlus+'  onClick="javascript:wipe(\''+divId+'\');"></img></TD>';
+	}
+	else{
+		htmlCd = '<TD width="11%" align="left" class="level1"><img id="'+divId+'minus" src="'+imgSrcDown+'" alt="Expand Menu" onClick="javascript:wipe(\''+divId+'\');" '+displayMinus+' ></img><img align="center" id="'+divId+'plus" src="'+imgSrcRight+'" alt="Collapse Menu" '+displayPlus+'  onClick="javascript:wipe(\''+divId+'\');"></img></TD>';
+	}
+
+	document.write(htmlCd);
+}
+</script>
+
+<table border="0" cellspacing="0" cellpadding="1" width="100%">
+  <tr>
+    <td colspan="4">
+      <h1>Controller</h1>
+    </td>
+  </tr>
+  <tr>
+	<td class="space">&nbsp;</td>
+    <td class="level1" colspan="3"><a href="frameSwitching.html" id="Lngn" onclick="selectLink(this);" class="navBar1">General</a></td>
+  </tr>
+  <tr>
+	<td class="space">&nbsp;</td>
+    <td class="level1 notSupported" colspan="3"><a href="base/hw_info.html" id="Lninv" onclick="selectLink(this);" class="navBar1">Inventory</a></td>
+  </tr>
+  <tr>
+	<td class="space">&nbsp;</td>
+    <td class="level1" colspan="3"><a href="frameInterfaceList.html" id="Lnintf" onclick="selectLink(this);"  class="navBar1">Interfaces</a></td>
+  </tr>
+  <tr>
+	<td class="space">&nbsp;</td>
+    <td class="level1 notSupported" colspan="3"><a href="base/interface_groups_list.html" id="Lnintf" onclick="selectLink(this);"  class="navBar1">Interface Groups</a></td>
+  </tr>
+
+  <tr>
+	<td class="space">&nbsp;</td>
+    <td class="level1 notSupported" colspan="3"><a href="base/multicast.html" id="Lnmcast" onclick="selectLink(this);"  class="navBar1">Multicast</a></td>
+  </tr>
+
+
+
+
+
+
+  <tr>
+	<script>getHtmlforImg('dhcp');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('dhcp')" >
+    Internal DHCP Server</a></td>
+  </tr>
+   <TR><TD colSpan=4>
+        <div id="dhcp" style="display:none">
+        <table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr>
+	<td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="1"><a href="frameDhcpScopeList.html" id="Lndhcp" onclick="selectLink(this);"  class="navBar2">DHCP Scope</a></td>
+  </tr>
+
+  <tr>
+        <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="1"><a href="frameDhcpAllocatedLease.html" id="LndhcpLease" onclick="selectLink(this);"  class="navBar2">DHCP Allocated Leases</a></td>
+  </tr>
+</table>
+          </div></td></tr>
+
+
+
+  <tr>
+	<script>getHtmlforImg('mbg');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('mbg')" >
+    Mobility Management</a></td>
+  </tr>
+  <TR><TD colSpan=4>
+	<div id="mbg" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+
+
+      <tr>
+       <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+       <td class="level2 notSupported" colspan="1"><a href="apf/new_mobility_config.html" id="newmbcfg"
+        onclick="selectLink(this);"  class="navBar2">Mobility Configuration</a></td>
+      </tr>
+
+
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="1"><a href="apf/mobility_list.html" id="lnmblist"
+      onclick="selectLink(this);"  class="navBar2">Mobility Groups</a></td>
+  </tr>
+
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2 notSupported" colspan="1"><a accesskey ="N" href="apf/mobility_anchor_config.html"
+      title="Mobility Anchor Configurations" id="lnmbanchcfg" onclick="selectLink(this);"
+      class="navBar2">Mobility Anchor Config </a></td>
+  </tr>
+
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2 notSupported" colspan="1"><a href="apf/mobility_mcast_list.html"
+      title="Multicast Messaging" id="lnmmm" onclick="selectLink(this);"
+      class="navBar2"> Multicast Messaging</a></td>
+  </tr>
+
+
+
+
+  </table>
+	  </div></td></tr>
+
+<!--  <tr>
+    <td class="level1" colspan="3"><a href="lag/lag_list.html" class="navBar1">Link Aggregation</a></td>
+  </tr>-->
+  <tr>
+	<td class="space">&nbsp;</td>
+    <td class="level1 notSupported" colspan="3"><a href="port/port_list.html" id="Lnplist" onclick="selectLink(this);" class="navBar1">Ports</a></td>
+  </tr>
+  <tr>
+	<script>getHtmlforImg('ntp');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('ntp')" >NTP</a></td>
+  </tr>
+   <TR><TD colSpan=4>
+        <div id="ntp" style="display:none">
+        <table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr>
+	<td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td class="level2 notSupported" colspan="1"><a href="base/ntpserver_list.html" id="Lnntp" onclick="selectLink(this);" class="navBar2">Server</a></td>
+  </tr>
+  <tr>
+        <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="1"><a href="base/ntpkeys_list.html" id="LnntpKeys" onclick="selectLink(this);"  class="navBar2">Keys</a></td>
+  </tr>
+</table>
+          </div></td></tr>
+
+  <!-- Added CDP links-->
+  <tr>
+	<script>getHtmlforImg('cdp');</script>
+    <td class="level1 notSupported" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('cdp')" >
+    CDP</a></td>
+  </tr>
+  <TR><TD colSpan=4>
+	<div id="cdp" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="1"><a href="base/cdp_global_config.html"
+      title="Controller Configuration" id="cdpcfg" onclick="selectLink(this);"
+      class="navBar2">Controller Configuration</a></td>
+  </tr>
+  </table>
+	  </div></td></tr>
+
+
+
+   <!-- TUNNELING  -->
+   <tr>
+     <script>getHtmlforImg('tunnel');</script>
+     <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('tunnel')" >
+     Tunneling</a></td>
+   </tr>
+   <TR><TD colSpan=4>
+    <div id="tunnel" style="display:none">
+    <table cellSpacing=0 cellPadding=1 width="100%" border=0>
+<!--
+   <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+     <td class="level2" colspan="1"><a href="base/pmip_general_cfg.html"
+      title="PMIPv6" id="pmip" onclick="selectLink(this);"
+      class="navBar2">PMIPv6</a></td>
+   </tr>
+
+   <tr>
+     <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+     <td class="level2" colspan="1"><a href="base/tunnel_gtpv2_cfg.html"
+       title="GTPv2" id="gtpv" onclick="selectLink(this);"
+       class="navBar2">GTPv2</a></td>
+   </tr>
+-->
+   <tr>
+     <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+     <td class="level2 notSupported" colspan="1"><a href="base/tunnel_eogre_cfg.html"
+       title="EoGRE" id="eogre" onclick="selectLink(this);"
+       class="navBar2">EoGRE</a></td>
+   </tr>
+   <tr>
+     <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+     <td class="level2 notSupported" colspan="1"><a href="base/tunnel_profiles.html"
+       title="Profiles" id="profiles" onclick="selectLink(this);"
+       class="navBar2">Profiles</a></td>
+   </tr>
+   </table>
+      </div></td></tr>
+  <!-- IPv6 links-->
+  <tr>
+	<script>getHtmlforImg('ipv6');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('ipv6')" >
+    IPv6</a></td>
+  </tr>
+  <TR><TD colSpan=4>
+	<div id="ipv6" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr>
+	<td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="1"><a href="base/ipv6_raneighborbinding.html"
+	  title="Neighbor Binding" id="NeighborBind" onclick="selectLink(this);"
+	  class="navBar2">Neighbor Binding</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="1"><a href="base/ipv6_raThrottlePolicy.html"
+      title="RA Throttle Policy" id="raThrottle" onclick="selectLink(this);"
+      class="navBar2">RA Throttle Policy</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="1"><a href="base/ipv6_rafiltering_config.html"
+      title="RA Guard" id="raFilteringcfg" onclick="selectLink(this);"
+      class="navBar2">RA Guard</a></td>
+  </tr>
+  </table>
+	  </div></td></tr>
+
+  <tr>
+	<script>getHtmlforImg('bonjour');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('bonjour')" >
+    mDNS</a></td>
+  </tr>
+  <TR><TD colSpan=4>
+	<div id="bonjour" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+	<tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="3"><a href="base/bonjour_global.html" id="bnjGlobal" onclick="selectLink(this);" class="navBar2">General</a></td>
+  </tr>
+	<tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="3"><a href="base/bonjour_profile_list.html" id="bnjProfiles" onclick="selectLink(this);" class="navBar2">Profiles</a></td>
+  </tr>
+	<tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="3"><a href="base/bonjour_dnip_list.html" id="bnjDnip" onclick="selectLink(this);" class="navBar2">Domain Names</a></td>
+  </tr>
+	<tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="3"><a href="base/bonjour_browser.html" id="bnjDb" onclick="selectLink(this);" class="navBar2">mDNS Browser</a></td>
+  </tr>
+	<tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2  notSupported" colspan="3"><a href="base/mdns_service_groups_list.html" id="bnjDb" onclick="selectLink(this);" class="navBar2">mDNS Policies</a></td>
+  </tr>
+</table>
+	  </div></td></tr>
+
+
+  <tr>
+	<script>getHtmlforImg('advanced');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('advanced')" >
+    Advanced</a></td>
+  </tr>
+  <TR><TD colSpan=4>
+	<div id="advanced" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+	<tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="3"><a href="frameDhcp.html" id="lndhcp" onclick="selectLink(this);" class="navBar2">DHCP</a></td>
+  </tr>
+
+	<tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2 notSupported" colspan="3"><a href="spam/masterbase.html" id="lnmb" onclick="selectLink(this);" class="navBar2">Master Controller Mode</a></td>
+  </tr>
+  <!-- USMWEB_IF_NOT_BRANCH_OFFICE -->
+   <!-- IF_NOT_SMB -->
+
+</table>
+	  </div></td></tr>
+
+</table>

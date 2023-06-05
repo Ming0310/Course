@@ -1,0 +1,318 @@
+.contentbody {
+	MARGIN: 10px; BACKGROUND-COLOR: #ffffff
+}
+.contentbody A {
+	FONT-SIZE: 11px; FONT-FAMILY: Verdana, Helvetica, sans-serif
+}
+.contentbody INPUT {
+	FONT-SIZE: 11px; FONT-FAMILY: Verdana, Helvetica, sans-serif
+}
+.contentbody LI.item {
+	FONT-SIZE: 11px; FONT-FAMILY: Verdana, Helvetica, sans-serif
+}
+.contentbody P {
+	FONT-SIZE: 11px; FONT-FAMILY: Verdana, Helvetica, sans-serif
+}
+.contentbody SELECT {
+	FONT-SIZE: 11px; FONT-FAMILY: Verdana, Helvetica, sans-serif
+}
+.contentbody TD {
+	FONT-SIZE: 11px; FONT-FAMILY: Verdana, Helvetica, sans-serif
+}
+.contentbody TEXTAREA {
+	FONT-SIZE: 11px; FONT-FAMILY: Verdana, Helvetica, sans-serif
+}
+.contentbody TEXTAREA.statictextbox {   
+    BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 3px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #ffffff; overflow: auto;   
+}
+.contentbody TH {
+	FONT-SIZE: 11px; FONT-FAMILY: Verdana, Helvetica, sans-serif
+}
+.contentbody H1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 16px; MARGIN-BOTTOM: 1px; COLOR: #808080; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.contentbody H2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 14px; MARGIN: 16px 5px 3px 0px; COLOR: #787a7f; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.contentbody H3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 13px; MARGIN: 15px 5px 3px 0px; COLOR: #336699; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.contentbody INPUT {
+	MARGIN: 1px 1px 1px 2px
+}
+.contentbody A {
+	COLOR: #0066cc; TEXT-DECORATION: underline
+}
+.contentbody A:link {
+	COLOR: #0066cc; TEXT-DECORATION: underline
+}
+.contentbody A:hover {
+	COLOR: #ff9100; TEXT-DECORATION: underline
+}
+.contentbody A:active {
+	COLOR: #0066cc; TEXT-DECORATION: underline
+}
+.contentbody A.button {
+	FONT-SIZE: 10px; COLOR: #ffffff; FONT-FAMILY: Arial; TEXT-DECORATION: none
+}
+.contentbody A.button:link {
+	COLOR: #ffffff; TEXT-DECORATION: none
+}
+.contentbody A.button:active {
+	COLOR: #ffffff; TEXT-DECORATION: none
+}
+.contentbody A.button:hover {
+	COLOR: #ffcc66; TEXT-DECORATION: none
+}
+.contentbody UNKNOWN {
+	COLOR: #ffffff; TEXT-DECORATION: none
+}
+.contentbody A.sort {
+	FONT-WEIGHT: bold; COLOR: #ffcc66
+}
+.contentbody A.sort:link {
+	COLOR: #ffcc66
+}
+.contentbody A.sort:visited {
+	COLOR: #ffcc66
+}
+.contentbody A.table {
+	COLOR: #cc6600; TEXT-DECORATION: underline
+}
+.contentbody A.table:link {
+	COLOR: #cc6600; TEXT-DECORATION: underline
+}
+.contentbody A.table:visited {
+	COLOR: #cc6600; TEXT-DECORATION: underline
+}
+.contentbody A.highlight:hover {
+	BACKGROUND-COLOR: #ffcc00
+}
+.contentbody INPUT.button {
+	FONT-WEIGHT: bold; WIDTH: 80px; COLOR: #333333; BACKGROUND-COLOR: #c9cbd4
+}
+.contentbody INPUT[type="button"]:disabled {
+	COLOR:GRAY; BACKGROUND-COLOR: #c9cbd4
+}
+.contentbody INPUT.buttonStretch {
+	FONT-WEIGHT: bold; COLOR: #333333; BACKGROUND-COLOR: #c9cbd4
+}
+.contentbody INPUT.statictextbox {
+	BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 3px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #ffffff
+}
+.contentbody INPUT.statictextboxlink {
+	BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 3px; FONT-WEIGHT: normal; BORDER-LEFT: 0px; CURSOR: pointer; COLOR: #0066cc; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #ffffff; TEXT-DECORATION: underline
+}
+.contentbody INPUT.statictextboxlistShaded {
+	BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 3px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #cccccc
+}
+.contentbody INPUT.statictextboxlist {
+	BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 3px; FONT-WEIGHT: normal; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #ffffff
+}
+.contentbody INPUT.statictextboxlist1 {   
+    BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 10px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #ffffff   
+}
+.contentbody INPUT.statictextboxlist2 {   
+    BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 3px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #eee   
+}
+.contentbody INPUT.statictextboxlistDojo {   
+    BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 3px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #F0F0F0   
+}
+.contentbody INPUT.statictextboxDojo { 
+       BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 3px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #F0F0F0; COLOR: #505050; 
+}
+.contentbody INPUT.statictextboxlistright {
+	BORDER-RIGHT: 0px; PADDING-RIGHT: 3px; BORDER-TOP: 0px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #ffffff; TEXT-ALIGN: right
+}
+.contentbody INPUT.statictextboxlistNoPad {   
+    BORDER-RIGHT: 0px; BORDER-TOP: 0px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #eee   
+}
+.contentbody INPUT.statictextboxlinkDojo {
+	BORDER-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 3px; FONT-WEIGHT: normal; BORDER-LEFT: 0px; CURSOR: pointer; COLOR: #0066cc; BORDER-BOTTOM: 0px; BACKGROUND-COLOR: #f0f0f0; TEXT-DECORATION: underline
+}
+.contentbody INPUT.statictextboxlabelDojo {
+	BORDER-LEFT: 0px; BORDER-RIGHT: 0px; BORDER-TOP: 0px; BORDER-BOTTOM: 0px;FONT-WEIGHT: bold; FONT-SIZE: 13px; COLOR: #1a5e80; BACKGROUND-COLOR: #eee 
+}
+.contentbody EM {
+        COLOR: #0000ff; font-style: italic;
+}
+.contentbody P.caption {
+	FONT-SIZE: 13px; MARGIN: 15px 0px 0px; WIDTH: 350px
+}
+.contentbody P.captionSide {
+	MARGIN: 4px 0px 7px 8px; WIDTH: 200px
+}
+.contentbody PRE {
+	FONT-SIZE: 12px; COLOR: #000000
+}
+.contentbody SELECT {
+	MARGIN: 2px 1px 1px 2px; COLOR: #000000
+}
+.contentbody FORM {
+	MARGIN: 0px
+}
+.contentbody TABLE.banner {
+	HEIGHT: 60px; BACKGROUND-COLOR: #0000ff
+}
+.contentbody TD.checkbox {
+	BORDER-BOTTOM: #cccccc 1px solid
+}
+.contentbody TD.content {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; VERTICAL-ALIGN: top; PADDING-TOP: 10px
+}
+.contentbody TD.critical {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; COLOR: #ffffff; PADDING-TOP: 0px; HEIGHT: 21px; BACKGROUND-COLOR: #ff3333
+}
+.contentbody TD.graphLabel {
+	FONT-SIZE: 11px; COLOR: #666666; FONT-FAMILY: Tahoma, Arial, Helvetica
+}
+.contentbody TD.graphLabel_alt {
+	FONT-SIZE: 11px; COLOR: #ff0000; FONT-FAMILY: Tahoma, Arial, Helvetica
+}
+.contentbody TD.grid {
+	BACKGROUND-IMAGE: url(../images/grid20.gif); BORDER-BOTTOM: #999999 1px solid
+}
+.contentbody TD.h2 {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; FONT-SIZE: 14px; PADDING-BOTTOM: 3px; COLOR: #787a7f; PADDING-TOP: 16px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.contentbody TD.horizLine {
+	BORDER-TOP: #999fba 1px solid; HEIGHT: 4px
+}
+.contentbody TD.label1 {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; FONT-SIZE: 13px; PADDING-BOTTOM: 0px; COLOR: #1a5e80; PADDING-TOP: 10px; HEIGHT: 38px
+}
+.contentbody TD.label1PadTop {   
+    PADDING-RIGHT: 5px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; FONT-SIZE: 13px; PADDING-BOTTOM: 0px; COLOR: #1a5e80; PADDING-TOP: 1px; HEIGHT: 38px 
+}
+.contentbody TD.label1B {
+	FONT-WEIGHT: bold; FONT-SIZE: 13px; COLOR: #336699; HEIGHT: 25px
+}
+.contentbody TD.label2 {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 16px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; HEIGHT: 25px
+}
+.contentbody TD.label2Top {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 16px; PADDING-BOTTOM: 0px; VERTICAL-ALIGN: top; PADDING-TOP: 4px
+}
+.contentbody TD.label2PadTop {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 11px; HEIGHT: 38px
+}
+.contentbody TD.label2B {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; COLOR: #1a5e80; PADDING-TOP: 10px; HEIGHT: 38px
+}
+.contentbody TD.listNoPad {
+        PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; COLOR: #336666; PADDING-TOP: 0px; BORDER-BOTTOM: #dddddd 1px solid; HEIGHT: 21px
+}
+.contentbody TD.label2 {
+        PADDING-RIGHT: 5px; PADDING-LEFT: 16px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; HEIGHT: 25px
+}
+.contentbody TD.label2Top {
+        PADDING-RIGHT: 5px; PADDING-LEFT: 16px; PADDING-BOTTOM: 0px; VERTICAL-ALIGN: top; PADDING-TOP: 4px
+}
+.contentbody TD.label2PadTop {
+        PADDING-RIGHT: 5px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 11px; HEIGHT: 38px
+}
+.contentbody TD.label2PadBottom {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 16px; PADDING-BOTTOM: 5px;  HEIGHT: 25px; 
+}
+.contentbody TD.lineDark {
+	BACKGROUND-COLOR: #808080
+}
+.contentbody TD.list {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; BORDER-BOTTOM: #dddddd 1px solid; HEIGHT: 21px; BACKGROUND-COLOR: #ffffff
+}
+.contentbody TD.list2 {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; HEIGHT: 21px
+}
+.contentbody TD.listNoPad {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; COLOR: #336666; PADDING-TOP: 0px; BORDER-BOTTOM: #dddddd 1px solid; HEIGHT: 21px
+}
+.contentbody TD.pageTitle {
+	PADDING-BOTTOM: 20px
+}
+.contentbody TD.space {
+	WIDTH: 10px; BACKGROUND-COLOR: #cccccc
+}
+.contentbody TD.readonly {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 0px; PADDING-TOP: 11px; HEIGHT: 38px
+}
+.contentbody TD.subTitle {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #666666
+}
+.contentbody TD.noBorder {
+	BORDER-RIGHT: #ffffff 0px; BORDER-TOP: #ffffff 0px; BORDER-LEFT: #ffffff 0px; BORDER-BOTTOM: #ffffff 0px
+}
+.contentbody TD.minor {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; HEIGHT: 21px; BACKGROUND-COLOR: #ffff00
+}
+.contentbody TD.tableDisplay {   
+    PADDING-TOP: 13px; PADDING-LEFT: 15px;   
+}
+.contentbody TD.list3{   
+    PADDING-RIGHT: 0px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; COLOR: #336666; PADDING-TOP: 0px; BORDER-BOTTOM: #dddddd 1px solid; HEIGHT: 21px   
+}
+.contentbody TD.header {   
+    PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 4px; COLOR: #336666; PADDING-TOP: 4px; BORDER-BOTTOM: #bbbbbb 1px solid   
+}
+.contentbody TD.headerNoborder {   
+    PADDING-RIGHT: 12px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; COLOR: #336666; PADDING-TOP: 4px; BORDER-BOTTOM: 0px;   
+}
+.contentbody TD.propertyLabel {
+        PADDING-RIGHT: 10px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; COLOR: #2f6681; PADDING-TOP: 0px; FONT-FAMILY: verdana, arial, san-serif; HEIGHT: 26px
+}
+.contentbody TD.lineProp {
+        BACKGROUND-COLOR: #638fa6
+}
+.contentbody TD.propertyLabel2 {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 20px; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: top; PADDING-TOP: 5px; FONT-FAMILY: verdana, arial, san-serif
+}
+.contentbody TD.list4 {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; BORDER-BOTTOM: #dddddd 1px solid; BACKGROUND-COLOR: #ffffff
+}
+.contentbody TH {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 4px; VERTICAL-ALIGN: bottom; COLOR: #1a5e80; PADDING-TOP: 4px; BORDER-BOTTOM: #bbbbbb 1px solid
+}
+.contentbody TH.noborder {   
+    PADDING-RIGHT: 12px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; COLOR: #1a5e80; PADDING-TOP: 4px; BORDER-BOTTOM: 0px;   
+}
+.contentbody SUP {
+    font-style:italic; TEXT-DECORATION: underline; COLOR: #0000ff; FONT-SIZE: 9px;FONT-WEIGHT: bold;FONT-FAMILY: Verdana, Helvetica, sans-serif
+}
+.contentbody TH.label1h {   
+    PADDING-RIGHT: 4px; PADDING-LEFT: 3px; PADDING-BOTTOM: 0px; PADDING-TOP: 10px; COLOR:black; HEIGHT: 25px; FONT-WEIGHT: normal; BORDER-BOTTOM: 0px;   
+}
+.contentbody TH.label1 {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 4px; VERTICAL-ALIGN: bottom; COLOR: #666666; PADDING-TOP: 4px; BORDER-BOTTOM: #bbbbbb 1px solid
+}
+.contentbody TR.list {
+	BACKGROUND-COLOR: #ffffff
+}
+.contentbody DIV.tabcontent {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; PADDING-TOP: 20px
+}
+.contentbody .bigstatictextbox {
+    COLOR: #000000;
+    BACKGROUND-COLOR: #FFFFFF;
+    TEXT-ALIGN: LEFT;
+    FONT-SIZE: 11pt;
+    FONT-STYLE: normal;
+    FONT-WEIGHT: 700;
+    BORDER-BOTTOM: #000000 0px inset;
+    BORDER-LEFT: #000000 0px outset;
+    BORDER-RIGHT: #000000 0px inset;
+    BORDER-TOP: #000000 0px outset;
+}
+.contentbody .dojoDialog { 
+	background : #eee; 
+	border : 1px solid #999; 
+	-moz-border-radius : 5px; 
+	padding : 4px; 
+}
+.contentbody IMG { 
+	BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; BORDER-RIGHT: medium none; BORDER-TOP: medium none 
+}
+.contentbody #footNoteDojo {
+    position: absolute; left: 20px; margin-top: 0px;
+}
+.contentbody #footNote {
+    position: absolute; left: 9px; margin-top: 10%;
+}

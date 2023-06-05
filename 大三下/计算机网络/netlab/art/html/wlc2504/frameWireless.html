@@ -1,0 +1,350 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Wireless';
+
+function ptOnload() {
+    refreshForm();updateTitleAttrs();
+}
+
+var textAttrs = new Array();
+var numAttrs = new Array();
+var notAllowedChars = new Array("'");
+var notAllowedChars1 = new Array();
+notAllowedChars1[0] = " ";
+notAllowedChars1[1] = "'";
+textAttrs[0] = new textAttr("ap_name","AP Name",32,notAllowedChars,null,false);
+textAttrs[1] = new textAttr("mac_addr","Mac String",17,notAllowedChars1,null,false);
+textAttrs[2] = new textAttr("pri_ver","Primary Version",16,notAllowedChars1,null,false);
+textAttrs[3] = new textAttr("back_ver","Backup Version",16,notAllowedChars1,null,false);
+textAttrs[4] = new textAttr("ap_model","AP Model",30,notAllowedChars,null,false);
+numAttrs[0]= new numberAttr("port_no","Port Number",1,25,null,false);
+
+thisFormAttrs = new formAttrs(numAttrs,textAttrs,null,null);
+
+top.subFormImplemented=true;
+var url = 'cell_list.html';
+var list_size = 75;
+
+
+function refreshForm() {
+   if ( document.forms["cellList"].info_flag.value == 1 ) {
+        if ( document.forms["cellList"].refresh_flag.value == 1 ) {
+             alert(document.forms["cellList"].info_msg.value);
+             window.setTimeout(screen_refresh,1000);
+        }
+   }
+}
+
+function updateTitleAttrs() {
+   	CheckError();
+  	var elms = document.forms["cellList"].getElementsByTagName('input');
+  	var ind = 0;
+  	for (i=0; i < elms.length; i++) {
+  	  	var str = elms[i].name;
+  	  	if (str.match(/\d.cell_name/g) != null) {
+            elms[i].title = elms[i].value;
+        }
+    }
+}
+
+function submitTheDataForm()
+{
+  document.forms["cell_listSubmitForm"].buttonClicked.value = document.forms["cellList"].buttonClicked.value ;
+  document.forms["cell_listSubmitForm"].query_str.value = document.forms["cellList"].query_str.value;
+  document.forms["cell_listSubmitForm"].apId.value = document.forms["cellList"].apId.value;
+  document.forms["cell_listSubmitForm"].submit();
+  return false;
+}
+
+//overridden edit action
+function editAction(index) {
+     // here index is - indexVal
+     // need to get the value of index- which will be 1.index.listSize.index.
+    // then stored in the indexClicked.
+     debugMsg("<editAction> index is "+index);
+     setRadId(index); 
+     document.forms["cellList"].buttonClicked.value = EDIT_CLICKED;
+     debugMsg("<editAction> Calling submit");
+     submitTheDataForm();
+}
+
+// overridden 
+function custom1ListAction(index) {
+     debugMsg("<custom1ListAction> index is "+index);
+     setRadId(index); 
+     document.forms["cellList"].buttonClicked.value = CUSTOM1_CLICKED;
+     debugMsg("<custom1ListAction> Calling submit");
+     submitTheDataForm();
+}
+
+// overridden
+function custom2ListAction(index) {
+     debugMsg("<custom2ListAction> index is "+index);
+     setRadId(index);
+     document.forms["cellList"].buttonClicked.value = CUSTOM2_CLICKED;
+     debugMsg("<custom1ListAction> Calling submit");
+     submitTheDataForm();
+}
+
+function setRadId(index){
+     var listSize=document.forms["cellList"].listSize.value;
+     debugMsg("<setRadId> list size  is "+listSize);
+     var elms=document.forms["cellList"].elements;
+     for ( loop = 0;loop < elms.length;loop++){
+       var str = elms[loop].name;
+       if(str.match(/\d.index/g) != null){
+     debugMsg("<setRadId> elm name is   "+str);
+          var id = str.match(/\d+/g);
+           if(id != null && id[1] == index){
+     debugMsg("<setRadId> ap Id is "+elms[loop].value);
+                document.forms["cellList"].apId.value = elms[loop].value;
+                break;
+            }
+       }
+     }
+}
+
+</script>
+
+
+<FORM method="post" name="cellList" ACTION="/frameWireless.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+  <INPUT type="hidden" name="page_index" VALUE="1">
+  <INPUT type="hidden" name="query_str" size="512" maxlength="512" VALUE="">
+  <INPUT type="hidden" name="total_entries" VALUE="1">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <!-- the header as part of the table -->
+    <tr>
+      <td class="pageTitle">
+        <h1>All APs</h1>
+      </td>
+      <td align="right" class="pageTitle">
+      </td>
+      <td align="right" valign="top" >
+        <!-- To display paging in top right corner-->
+<div id=pagingStr>
+ <table cellSpacing=0 cellPadding=0 border=0 >
+	<tr align="left" valign=top>
+		<td colspan="25" class="headerNoBorder" style="COLOR: #666666; " align="center" noWrap>
+			Entries <?=ENTRIES=?>
+	    </td>
+	</tr> 
+ </table>
+</div>
+      </td>
+    </tr>
+  </table>
+  <table  border="0" cellpadding="0" cellspacing="0">
+    <tbody><tr>
+      <td class="headerNoBorder" nowrap="nowrap" width="20%" valign="top">Current Filter</td>
+      <td id="filter" nowrap align="left" valign="top" class="label2PadBottom">
+      </td>
+      <td width="3%">&nbsp;</td>
+      <td valign="top" align="left" width="35%" class="notSupported">
+         [<a href="javascript:showSearchDlg();" id="change" disabled="true">Change Filter</a>]
+         [<a href="javascript:clearFilter();" id="clear" disabled="true">Clear Filter</a>]
+      </td>
+
+    </tr>
+
+    <tr>
+      <td colspan="3">&nbsp;</td>
+    </tr>
+        <td class= "header">Number of APs</td>
+        <td class="header">
+        <INPUT type="TEXT" class="statictextboxlist" name="total_number_of_APs" readonly SIZE="10" MAXLENGTH="10" VALUE="<?=AP-COUNT=?>">
+    </td>
+    <td >&nbsp;</td>
+    </tr>
+  </table>
+  <table cellspacing="1" cellpadding="0" border="0" style="margin-top: 13px" summary="Lists All APs" title="All AP Table">
+ <tbody>
+    <tr> 
+      <!-- Name  -->
+      <th align="left" scope="col">AP Name</th>
+      <!-- spacer ID -->
+      <th nowrap scope="col">&nbsp;</th>
+      <!-- rad IP -->
+      <!--th align="left" scope="col">IP Address</th-->
+
+      <!-- rad IPv6 -->
+      <th align="left" scope="col">IP Address(Ipv4/Ipv6)</th>
+      <!-- rad ID -->
+ <!-- END of USMWEB_NATIVE_IPV6_SUPPORTED -->
+      <!--th nowrap scope="col">AP ID</th-->
+      <!-- Radio slots -->
+      <!--th align="left" scope="col">Radio Slots</th-->
+      <!-- Model  -->
+      <th align="left" scope="col">AP Model</th>
+      <!-- Mac Address  -->
+      <th align="left" scope="col">AP MAC</th>
+      <!-- AP Uptime -->
+      <th nowrap width="100" align="left" scope="col">AP Up Time</th>
+      <!-- Admin Status  -->
+      <th nowrap width="100" align="left" scope="col">Admin Status</th>
+      <!-- Oper Status  -->
+      <th nowrap width="100" align="left" scope="col">Operational Status</th>
+      <!-- PoE Status  -->
+      <th nowrap width="100" align="left" scope="col">PoE Status</th>
+      <th align="left" scope="col" >Speed <BR> Eth0 </th>
+      <th align="left" scope="col" >Speed <BR> Eth1 </th>
+      <th align="left" scope="col" >Speed <BR> Eth2 </th>
+      <th align="left" scope="col" >Speed <BR> Eth3 </th>
+      <th align="left" scope="col" >Speed <BR> Eth4 </th>
+      <!-- Client Count  -->
+      <th nowrap width="100" align="left" scope="col">No of Clients</th>
+      <!-- Port -->
+      <th nowrap width="1" align="left" scope="col">Port</th>
+      <!-- AP MODE -->
+	  <th scope="col" align="left" nowrap="nowrap" width="80">AP Mode</th>
+      <!-- Certificate Type -->
+      <th align="left" scope="col">Certificate Type</th>
+      <th align="left" align="left" nowrap scope="col">OEAP</th>
+      <th align="left" scope="col">Primary SW version</th>
+      <th align="left" scope="col">Backup SW version</th>
+      <!-- AP SUB MODE -->
+      <th align="left" scope="col">AP Sub Mode</th>
+      <th align="left" scope="col">Download Status</th>
+      <th align="left" scope="col">Upgrade Role (Master/Slave)</th>
+      <th align="left" scope="col">mDNS Status</th>
+      <th align="left" scope="col">Universal AP</th>
+        <!-- HYPERLOCATION -->
+      <th align="left" scope="col">Hyperlocation</th>
+
+      <td align="left" width="0" scope="col"></td>
+      <td align="left" width="0" scope="col"></td>
+      <th align="left" scope="col">&nbsp;</th>
+    </tr>
+	<label for="table elements">
+
+
+<?=AP-ENTRY-begin=?>
+    <tr>
+
+      <td class="listNoPad">
+		<a href="javascript:notSupported()">
+			<INPUT type="TEXT" class="statictextboxlink" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.cell_name" readonly SIZE="25" MAXLENGTH="32" VALUE="<?=AP-NAME=?>">
+		</a>
+      </td>
+      <td ALIGN=left class="listNoPad"> 
+        <INPUT TYPE="TEXT" class="statictextboxlist" NAME="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.spacer" readonly SIZE="2" MAXLENGTH="2" VALUE="  ">
+      </td>
+
+      <!-- Rad IPv6Address -->
+      <td class="listNoPad">
+        <INPUT type=TEXT class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.rad_ipv6" readonly SIZE="46" MAXLENGTH="46" VALUE="<?=AP-IP=?>">
+      </td>      
+ <!-- END of USMWEB_NATIVE_IPV6_SUPPORTED -->
+      <!--td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.cell_id" readonly SIZE="3" MAXLENGTH="2" VALUE="0">
+      </td>
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.slots" readonly SIZE="3" MAXLENGTH="2" VALUE="2">
+      </td-->
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.cell_model" readonly SIZE="30" MAXLENGTH="30" VALUE="<?=AP-MODEL=?>">
+      </td>
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.cell_mac" readonly SIZE="21" MAXLENGTH="20" VALUE="<?=AP-MAC=?>">
+      </td>
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.ap_uptime" readonly SIZE="23" MAXLENGTH="23" VALUE="<?=AP-UP-TIME=?>">
+      </td>
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.admin_status" readonly SIZE="10" MAXLENGTH="9" VALUE="Enabled">
+      </td>
+      <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.oper_status" readonly SIZE="12" MAXLENGTH="12" VALUE="<?=AP-STATUS=?>">
+      </td>
+      <td class="listNoPad">
+         <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.poe_stat" readonly SIZE="36" MAXLENGTH="36" VALUE="<?=AP-POE-STATUS=?>"> 
+     </td>
+
+     <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.eth0" readonly SIZE="8" MAXLENGTH="8" VALUE="<?=AP-ETHERNET-SPEED=?>">
+      </td>
+     <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.eth1" readonly SIZE="8" MAXLENGTH="8" VALUE="NA">
+      </td>
+     <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.eth2" readonly SIZE="8" MAXLENGTH="8" VALUE="NA">
+      </td>
+     <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.eth3" readonly SIZE="8" MAXLENGTH="8" VALUE="NA">
+      </td>
+     <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.eth4" readonly SIZE="8" MAXLENGTH="8" VALUE="NA">
+     </td>
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.client_count" readonly SIZE="4" MAXLENGTH="3" VALUE="<?=AP-CLIENT-COUNT=?>">
+      </td>
+      <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.cell_port" readonly SIZE="4" MAXLENGTH="4" VALUE="1"> 
+      </td>
+      <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.rad_monitor_mode" readonly SIZE="18" MAXLENGTH="18" VALUE="FlexConnect">
+      </td>
+      <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.ap_cert_type" readonly SIZE="6" MAXLENGTH="6" VALUE="MIC">
+      </td>
+     <td class="listNoPad"> 
+        <INPUT TYPE="TEXT" class="statictextboxlist" NAME="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.home_ap" readonly SIZE="4" MAXLENGTH="4" VALUE="No">
+     </td>
+     <td class="listNoPad">
+        <INPUT TYPE="TEXT" class="statictextboxlist" NAME="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.pri_sw_version" readonly SIZE="16" MAXLENGTH="15" VALUE="8.3.111.0">
+     </td>
+     <td class="listNoPad">
+        <INPUT TYPE="TEXT" class="statictextboxlist" NAME="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.back_sw_version" readonly SIZE="16" MAXLENGTH="15" VALUE="0.0.0.0">
+     </td>
+      <td class="listNoPad"> 
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.ap_sub_mode" readonly SIZE="5" MAXLENGTH="5" VALUE="None">
+      </td>
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.download_status" readonly SIZE="15" MAXLENGTH="15" VALUE="None">
+      </td>
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.upgrade_role" readonly SIZE="20" MAXLENGTH="25" VALUE="">
+      </td>
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.mdns" readonly SIZE="20" MAXLENGTH="25" VALUE="Disabled">
+      </td>
+      <td class="listNoPad">
+        <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.universal_ap" readonly SIZE="4" MAXLENGTH="4" VALUE="Yes">
+      </td>
+
+      <td class="listNoPad">
+         <INPUT type="TEXT" class="statictextboxlist" name="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.hyperlocation_status" readonly SIZE="4" MAXLENGTH="4" VALUE="Disable">
+       </td>
+
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.index" SIZE="16" MAXLENGTH="15" VALUE="5">
+      </td>
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="1.<?=AP-INDEX=?>.<?=AP-COUNT=?>.isBridgingAP" SIZE="1" MAXLENGTH="1" VALUE="0">
+      </td>
+	 <td class=listNoPad>
+      </td>
+
+    </tr>
+<?=AP-ENTRY-end=?>
+
+</label>
+</tbody>
+  </table>
+  <INPUT TYPE="hidden" NAME="indexClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="apId" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="listSize" SIZE="16" MAXLENGTH="15" VALUE="1">
+  <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+  <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="refresh_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+
+
+</FORM>
+
+
+<?=PAGE-FOOTER=?>

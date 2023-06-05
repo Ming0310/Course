@@ -1,0 +1,457 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Switch';
+
+function ptOnload() {
+//	showMulticastGroupAddress();
+//	showIpv6MulticastGroupAddress();
+}
+
+function submitTheDataForm() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("sysName", document.forms[0].sysName.value);
+		document.forms[0].submit();
+	}
+	
+	return false;   
+}
+</script>
+
+<script>
+var numAttrs = new Array();
+numAttrs[0] = new numberAttr("arp_timeout","ARP Timeout (seconds)",10,2147483647,null,true);
+numAttrs[1] = new numberAttr("user_timeout","User Idle Timeout (seconds)",15,100000,null,true);
+numAttrs[2] = new numberAttr("webAuthProxyRedirectionPort","WebAuth Proxy Redirection Port",0,65535,null,false);
+
+var textAttrs = new Array();
+textAttrs[0] = new textAttr("rf_network_name","RF Group Name",19,null,null,false);
+textAttrs[1] = new textAttr("sysName","Name",31,null,null,true);
+
+thisFormAttrs = new formAttrs(numAttrs,textAttrs,null,null);
+displayInfoMsg = true;
+
+businessLogicImplemented = true;
+function validateBusinessLogic(attrs) {
+
+
+
+
+
+
+    if(document.forms[0].lagModePrev.value != 0
+        && document.forms[0].lag_mode.options[document.forms[0].lag_mode.selectedIndex].value == "Disable"){
+        return confirm("Disabling LAG will map all interfaces to port 1. !!! You MUST reboot the system after updating the LAG config. After Applying the LAG config, you would still need to reboot the system and reconfigure LAG to revert back !!! Please press ok to continue.");
+    }else if(document.forms[0].lagModePrev.value == 0
+        && document.forms[0].lag_mode.options[document.forms[0].lag_mode.selectedIndex].value == "Enable"){
+        return confirm("Enabling LAG will map your current interface settings to LAG interface. All dynamic AP manager interfaces and untagged interfaces will be deleted. All WLANs will be disabled and mapped to Mgmt interface.!!! You MUST reboot the system after updating the LAG config. After Applying the LAG config, you would still need to reboot the system and reconfigure LAG to revert back !!! Please press ok to continue.");
+    }
+
+    var getPreferDropdown = document.forms[0].preferred_mode_global.value;
+    if(getPreferDropdown != document.forms[0].preferredModeGet.value){
+       if(!confirm("Changing the AP's preferred mode will cause the AP to rejoin.\nNote: Global Prefer-mode will not be applied to AP Group(s) whose Prefer-mode is configured.\n Do you want to continue?"))
+          return false;
+       if(getPreferDropdown == "ipv6")
+          alert("Note: Preferred Mode IPv6 is not applicable for these AP Models \nAP 600,801,802,802H,1130,1240,1250,1520,1524 and also for AP1530, AP1550 in Bridge mode.");
+    }
+
+	// PT71: commented out
+//    if((document.forms[0].pkt_fwd.options[document.forms[0].pkt_fwd.selectedIndex].value=="Multicast") && (document.forms[0].multicast_ipAddr.value == "")){
+//        alert("Multicast Group Address should be in Range of 224.0.0.0 to 239.255.255.255");
+//       return false;
+//    }
+     
+    return true;
+    
+}
+
+var ipAttrs = new Array();
+function showMulticastGroupAddress() {
+if(document.forms[0].pkt_fwd.options[document.forms[0].pkt_fwd.selectedIndex].value=="Multicast"){
+    ipAttrs[0] = new ipAttr("multicast_ipAddr","Invalid Multicast IP Address",null,true);
+    thisFormAttrs = new formAttrs(null,null,ipAttrs,null);
+}
+
+
+        var index=document.forms[0].pkt_fwd.selectedIndex;
+        if(document.forms[0].pkt_fwd.options[index].value=="Multicast") {
+                document.getElementById("mcast_ipaddr").style.display="";
+                ipAttrs[0]=new ipAttr("multicast_ipAddr","Multicast Group Address",null,true);
+        } else {
+                document.getElementById("mcast_ipaddr").style.display="none";
+                ipAttrs.length=0;
+        }
+
+
+
+}
+
+function showIpv6MulticastGroupAddress() {
+
+
+
+        var index=document.forms[0].pkt_fwd_ipv6.selectedIndex;
+        if(document.forms[0].pkt_fwd_ipv6.options[index].value=="Multicast") {
+                document.getElementById("mcast_ipaddr_ipv6").style.display="";
+        } else {
+                document.getElementById("mcast_ipaddr_ipv6").style.display="none";
+        }
+
+
+
+
+}
+function frameRefresh() {
+     if(document.getElementById("webColorChange").value == "True")
+        {
+         top.frames[0].document.all['hSelectedTab'].value= 'Switch';
+         top.frames[0].location.reload();
+         top.frames[1].location.reload(true);
+        }
+}
+</script>
+
+<FORM method="post" ACTION="frameSwitching.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+
+
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr> 
+<td class="pageTitle"> <h1>General</h1>
+</td>
+
+<td align="right" class="pageTitle">
+    <script> document.writeln('\
+	<input type="button" name="apply" value="',top.APPLY,'" class="button" onClick="javascript:submitTheDataForm()">\
+	')</script>
+
+</td>
+</tr>
+<tr> 
+<td colspan="3">
+<table border="0" cellspacing="0" cellpadding="0">
+<!--<tr> <td class="label1">Broadcast Storm Recovery Mode</td>
+
+<td class="label1"> <SELECT name="bstorm_rec_mode">
+<OPTION value="Disable" SELECTED>Disabled</option>
+<OPTION value="Enable" >Enabled</option>
+</SELECT>
+</td>
+</tr>-->
+<tr> 
+     <td class="label2">Name</td>
+     <td class="label2"> 
+         <INPUT type="TEXT" name="sysName" autocomplete="off" SIZE="32" MAXLENGTH="31" VALUE="<?=SYSTEM-NAME=?>">
+     </td>
+</tr>
+ 
+<tr class="notSupported">
+<td class="label2" width="200">802.3x Flow Control Mode</td>
+
+<td class="label2"> <SELECT name="flow_ctrl_mode" disabled>
+<OPTION value="Disable" SELECTED>Disabled</option>
+<OPTION value="Enable" >Enabled</option>
+</SELECT>
+</td>
+</tr>
+ 
+
+
+<tr class="notSupported"> 
+    <td class="label2" width="200">LAG Mode on next reboot</td>
+    
+    <td class="label2"> <SELECT name="lag_mode" disabled>
+
+
+
+        <OPTION value="Disable" SELECTED>Disabled</option>
+
+
+
+        <OPTION value="Enable" >Enabled</option>
+        </SELECT>
+    </td>
+    <td class="label2">
+		<INPUT type="text" class="statictextbox" name="current_lag_mode" readonly SIZE="50" MAXLENGTH="50" VALUE="(LAG Mode is currently disabled).">
+    </td>    
+</tr>
+
+
+<tr class="notSupported"> 
+  <td class="label2">Broadcast Forwarding</td>
+  <td class="label2"> 
+	  <SELECT name="broadcast_forward" disabled>
+        <OPTION value="Disable" SELECTED>Disabled</option>
+        <OPTION value="Enable" >Enabled</option>
+      </SELECT>
+  </td>
+</tr>
+
+<tr class="notSupported">
+  <td class="label2">AP Multicast Mode
+
+        <sup title="See foot note below" onclick="alert('See foot note below');"  >1</sup>
+
+  </td>
+  <td class="label2" colspan="2">
+    <table border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td>
+       <SELECT name="pkt_fwd" onChange="showMulticastGroupAddress()" disabled>
+
+        <OPTION value="Multicast" SELECTED>Multicast</option>
+       </SELECT>
+      </td>
+      <td id="mcast_ipaddr">
+       <INPUT type="text" name="multicast_ipAddr" SIZE="16" MAXLENGTH="15" VALUE="" disabled>Multicast Group Address
+      </td>
+     </tr>
+    </table>
+   </td>
+</tr>
+
+<tr class="notSupported">
+  <td class="label2">AP IPv6 Multicast Mode
+
+        <sup title="See foot note below" onclick="alert('See foot note below');"  >1</sup>
+
+  </td>
+  <td class="label2" colspan="2">
+    <table border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td>
+       <SELECT name="pkt_fwd_ipv6" onChange="showIpv6MulticastGroupAddress()" disabled>
+
+        <OPTION value="Multicast" SELECTED>Multicast</option>
+       </SELECT>
+      </td>
+      <td id="mcast_ipaddr_ipv6">
+       <INPUT type="text" name="multicast_ipAddr_ipv6" SIZE="40" MAXLENGTH="40" VALUE="::" disabled>IPv6 Multicast Group Address
+      </td>
+     </tr>
+    </table>
+   </td>
+</tr>
+
+<!-- USMWEB_IF_4404_OR_BROFF -->
+
+
+<tr class="notSupported">
+    <td class="label2">AP Fallback</td>
+    <td class="label2">
+    <SELECT name="apfallback_mode" disabled>
+        <OPTION value="Disable" >Disabled</option>
+        <OPTION value="Enable" SELECTED>Enabled</option>
+    </SELECT>
+    </td>
+</tr>
+<tr class="notSupported">
+    <td class = "label2" >CAPWAP Preferred Mode</td>
+    <td class="label2">
+      <table><tr>
+        <td>
+          <SELECT name="preferred_mode_global" disabled>
+             <OPTION value="ipv4" SELECTED>ipv4</option>
+             <OPTION value="ipv6" >ipv6</option>
+             </SELECT>
+        </td>
+      </tr></table>
+    </td>
+</tr>
+
+<!-- If not Branch office-->
+<!-- If not AES IDS-->
+<!--<tr> <td class="label1">Real Time Protocol Priority</td>
+
+<td class="label1"> <SELECT name="rtp">
+<OPTION value="nopriority" SELECTED>No Priority</option>
+<OPTION value="highpriority" >High Priority</option>
+</SELECT>
+</td>
+</tr>-->
+	<tr class="notSupported">
+	    <td class="label2"> Fast SSID change</td>
+	    <td class="label2">
+	      <SELECT name="fast_ssid_change" disabled>
+    	        <OPTION value="Disable" SELECTED>Disabled</option>
+    	        <OPTION value="Enable" >Enabled</option>
+	      </SELECT>
+	    </td>
+	</tr>
+    <tr class="notSupported">
+        <td class="label2">Link Local Bridging</td>
+        <td class="label2">
+          <SELECT name="link_local_bridge" disabled>
+                <OPTION value="Disable" SELECTED>Disabled</option>
+                <OPTION value="Enable" >Enabled</option>
+          </SELECT>
+        </td>
+    </tr> 
+          <tr class="notSupported">
+            <td class="label2">Default Mobility Domain Name</td>
+            <td class="label2">
+              <INPUT type="text" name="rf_mobility" SIZE="20" MAXLENGTH="31" VALUE="" disabled>
+            </td>
+          </tr>
+          <tr class="notSupported">
+            <td class="label2">RF Group Name</td>
+            <td class="label2">
+              <INPUT type="text" name="rf_network_name" SIZE="20" MAXLENGTH="19" VALUE="" disabled>
+            </td>
+          </tr>
+          <tr class="notSupported"> 
+            <td class="label2">User Idle Timeout (seconds)</td>
+            <td class="label2"> 
+              <INPUT type="text" name="user_timeout" SIZE="20" MAXLENGTH="10" VALUE="300" disabled>
+            </td>
+          </tr>
+          <tr class="notSupported"> 
+            <td class="label2">ARP Timeout (seconds)</td>
+            <td class="label2"> 
+              <INPUT type="text" name="arp_timeout" SIZE="20" MAXLENGTH="10" VALUE="300" disabled>
+            </td>
+          </tr>
+
+    <tr class="notSupported">
+        <td class="label2" width="200">Web Radius Authentication </td>
+          <td class="label2">
+	    <SELECT name="webAuthType" disabled>
+    	      <OPTION value="PAP" SELECTED>PAP</option>
+    	      <OPTION value="CHAP" >CHAP</option>
+    	      <OPTION value="MD5CHAP" >MD5-CHAP</option>
+	    </SELECT>
+	   </td>
+     </tr>
+
+
+
+    <tr class="notSupported">
+        <td class="label2">Operating Environment</td>
+        <td class="label2">
+            <INPUT type="TEXT" name="operatingenv" class="statictextboxlist" readonly SIZE="32" MAXLENGTH="31" VALUE="Commercial (0 to 40 C)" disabled>
+        </td>
+    </tr>
+    <tr class="notSupported">
+        <td class="label2">Internal Temp Alarm Limits</td>
+        <td class="label2">
+            <INPUT type="TEXT" name="internal_limits" class="statictextboxlist" readonly SIZE="32" MAXLENGTH="31" VALUE="0 to 65 C" disabled>
+        </td>
+    </tr>
+
+	 <tr class="notSupported">
+	    <td class="label2">WebAuth Proxy Redirection Mode</td>
+	    <td class="label2">
+	      <SELECT name="webAuthProxyRedirectionMode" disabled>
+    	        <OPTION value="Disable" SELECTED>Disabled</option>
+    	        <OPTION value="Enable" >Enabled</option>
+	      </SELECT>
+	    </td>
+     </tr>
+     <tr class="notSupported"> 
+	    <td class="label2">WebAuth Proxy Redirection Port</td>
+            <td class="label2">
+            <INPUT type="text" name="webAuthProxyRedirectionPort" SIZE="20" MAXLENGTH="10" VALUE="0" disabled>
+            </td>
+	 </tr>
+
+     <tr class="notSupported">
+	    <td class="label2">Global IPv6 Config</td>
+	    <td class="label2">
+	      <SELECT name="globalIPv6Config" disabled>
+    	        <OPTION value="Disable" >Disabled</option>
+    	        <OPTION value="Enable" SELECTED>Enabled</option>
+	      </SELECT>
+	    </td>
+     </tr>
+     <tr class="notSupported">
+         <td class="label2">Web Color Theme</td>
+         <td class="label2">
+           <SELECT name="color" id="color" disabled>
+             <OPTION value="col_default" SELECTED>Default</option>
+             <OPTION value="col_red" >Red</option>
+           </SELECT>
+         </td>
+     </tr>
+     <tr class="notSupported">
+            <td class="label2">HA SKU secondary unit</td>
+            <td class="label2">
+              <SELECT name="haSku" disabled>
+                <OPTION value="Disable" SELECTED>Disabled</option>
+                <OPTION value="Enable" >Enabled</option>
+              </SELECT>
+            </td>
+     </tr>
+     <tr class="notSupported">
+            <td class="label2">Nas-Id</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="sysNasId" autocomplete="off" SIZE="32" MAXLENGTH="31" VALUE="" disabled>
+            </td>
+     </tr>
+
+
+
+    <tr>
+       <td style="padding-left: 16px" colspan="2"><em>1. Multicast is not supported with FlexConnect on this platform.</em></td>
+    </tr>
+
+
+
+</table>
+
+</td>
+</tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="indexClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="lagModePrev" SIZE="1" MAXLENGTH="1" VALUE="0">
+      </td>      
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+      <td ALIGN=left>
+        <INPUT TYPE="hidden" NAME="webColorChange" ID="webColorChange" SIZE="16" MAXLENGTH="15" VALUE="False">
+      </td>
+      <td>
+        <INPUT TYPE="hidden" NAME="preferredModeGet" ID="preferredModeGet" SIZE="16" MAXLENGTH="15" VALUE="ipv4">         
+      </td>
+    </tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+
+      </td>
+    </tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+      </td>
+    </tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+
+    </tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+      </td>
+    </tr>
+    </tr>
+</table>
+</FORM>
+
+
+<?=PAGE-FOOTER=?>

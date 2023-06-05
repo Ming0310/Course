@@ -1,0 +1,80 @@
+<head>
+  <meta charset="utf-8">
+  <title>Meraki Dashboard Login</title>
+  <meta name="description" content="Networks that simply work.">
+  <meta name="author" content="Meraki, Inc.">
+  <link href="stylesheets/pt.css" media="all" rel="stylesheet" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
+
+<script type="text/javascript">
+
+var SUBMIT_CLICKED = 0x04;
+
+function submitForm() 
+{
+  document.forms[0].commit.value = SUBMIT_CLICKED;
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].commit.value);
+  top.CHttpFormExtractor.addKeyValue("email", document.forms[0].email.value);
+  top.CHttpFormExtractor.addKeyValue("password", document.forms[0].password.value);
+  document.forms[0].submit();
+
+  return false;
+}
+
+</script>
+</head>
+
+<body>
+
+<div id="container">
+
+  <header id="masthead">
+    <div id="masthead-content">
+      <a href="https://meraki.cisco.com/"><img alt="Cisco Meraki" src="images/cisco-meraki.png" width="165" /></a>
+    </div>
+  </header>
+
+  <div id="content" role="main">
+  
+    <div id="login-box">
+      <h1>Dashboard Login</h1>
+
+      <div id="login_form" class="formarea shortform">   
+      
+        <?=MESSAGE=?>
+
+        <form accept-charset="UTF-8" action="dashboard_login" method="post">
+          <label id="label_for_email">
+            <span>Email</span>
+            <input class="txt_inpt" id="email" maxlength="128" name="email" type="email" />
+          </label>
+          <label id="pass">
+            <span>Password</span>
+            <input autocomplete="off" class="txt_inpt jsAnalyticsExclude" id="password" name="password" type="password" value="" />
+          </label>
+          <div id="formarea-buttons">
+            <input id="commit" type="submit" name="commit" onClick="submitForm();" value="Log in">
+        </div>
+        </form>   
+        <div id="formarea-bottom">
+          <ul>
+            <li><a href="new_account">Create an account</a></li>
+          </ul>
+        </div>
+        
+      </div> <!-- /.formarea -->
+    </div>
+
+    
+    <img src="images/new_mx.jpg" width="614" alt="New Meraki MX models" />
+    
+  </div> <!-- /#content -->
+
+  <?=FOOTER=?>
+  
+</div> <!-- /#container -->
+
+</body>
+</html>
+

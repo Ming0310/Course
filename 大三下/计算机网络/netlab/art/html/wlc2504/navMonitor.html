@@ -1,0 +1,420 @@
+<!-- <link rel="stylesheet" href="styles/navBar41.css" type="text/css"> -->
+<script language="JavaScript" type="text/javascript">
+//	dojo.require("dojo.fx.*");
+</script>
+<!----  This file contains only javascript code used for Navigation sidemenu. (Could not put this in a seperate javascript file since this javascript code contains EMWEB tags)----->
+<script language="javascript">
+function wipe(tdiv){
+	if(document.getElementById(tdiv).style.display == 'none')
+	{
+		wipeIn(tdiv);
+		document.getElementById(tdiv+'minus').style.display = 'inline';
+		document.getElementById(tdiv+'plus').style.display = 'none';
+		
+	}
+	else
+	{
+		wipeOut(tdiv);
+		document.getElementById(tdiv+'minus').style.display = 'none';
+		document.getElementById(tdiv+'plus').style.display = 'inline';
+		
+	}
+							
+}
+function selectLink(link){
+	removeLinkSelection();
+	
+	if(link.className == 'navBar1')
+		link.className = "selected1";
+	if(link.className == 'navBar2')
+		link.className = "selected2";
+}
+function removeLinkSelection(){
+	var lnks = document.getElementsByTagName('A');
+	for(i=0;i<lnks.length;i++)
+	{
+		if(lnks[i].className == 'selected1')
+		lnks[i].className = "navBar1";
+	if(lnks[i].className == 'selected2')
+		lnks[i].className = "navBar2";
+	}
+}
+function wipeOut(elId){
+	//dojo.fx.wipeOut(dojo.byId(elId), 200);
+document.getElementById(elId).style.display = 'none';
+}
+function wipeIn(elId) {
+	//dojo.fx.wipeIn(dojo.byId(elId), 200);	
+document.getElementById(elId).style.display = 'inline';		
+}
+function getHtmlforImg(divId,defaultExpand,innerImg){
+	var displayMinus = ' ';
+	var displayPlus = ' ';
+	var htmlCd;
+        
+        var imgSrcDown ='data:image/gif;base64,R0lGODlhDQANAHAAACwAAAAADQANAITw8PDp7Ozm6urs7e2nwsKGra3H1ta90NCNsrJmmZl1oqKhvr7T3t7D1NR6paVrnJxxoKCWt7fn6uro6+vS3d2BqqqkwcHf5ubu7+/r7e2/0dGOsrKkwMDf5eUAAAAAAAAFNiAgjmRpniiJrZiwuizGFQ5tOw61HkXi/44Ig0Vx/HyR2Kr4I8CUh0iCo1OyosqRlWWynryiEAA7';
+        var imgSrcDown2='data:image/gif;base64,R0lGODlhCgAKAPcAAO3t7eTk5Obm5srKyqOjo7y8vOXl5cPDw319fX5+fru7u3V1dVhYWLq6uk9PT2ZmZqSkpOHh4VxcXIaGhsHBwefn54GBgYWFhb6+vs7Ozqqqqtzc3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACgAKAAAIKwABCBxIsKDBgwgLDiiwsKHADQ8iSnwwsMDEBwUGbrAYMWNBiwU2HBRJMCAAOw==';
+        var imgSrcRight='data:image/gif;base64,R0lGODlhDQANAHAAACH5BAEAAAwALAAAAAANAA0Ag/Dw8O7v79Ld3dPe3nqlpZa3t+bq6oatrWaZmafCwqTAwL3Q0AAAAAAAAAAAAAAAAAQ2EMhAq7xzjEoxJQUXYEBAgOJYHQiiCFz5tW680kjYyXixWDIWgvADlghDWCx4UC5LiuIzBYwAADs=';
+        var imgSrcRight2='data:image/gif;base64,R0lGODlhCgAKAPcAAO3t7eTk5Obm5srKyqOjo7y8vOXl5cPDw319fX5+fru7u3V1dVhYWLq6uk9PT2ZmZqSkpOHh4VxcXIaGhsHBwefn54GBgYWFhb6+vs7Ozqqqqtzc3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACgAKAAAIKwABCBxIsKDBgQMeKDio4IHCDQUTOlxIsKHDBxARXqQ40CJHjQoyFhQJICAAOw==';
+        
+        
+
+	if(!defaultExpand)
+	{
+		displayMinus = ' style="display:none" ';
+	}else{
+		displayPlus = ' style="display:none" ';
+        }
+	if(innerImg)
+	{
+		htmlCd = '<TD width="11%" align="right" valign="middle"><img valign="top" id="'+divId+'minus" src="'+imgSrcDown2+'" alt="Expand Menu" onClick="javascript:wipe(\''+divId+'\');" '+displayMinus+' ></img><img align="center" valign="bottom" id="'+divId+'plus" src="'+imgSrcRight2+'" alt="Collapse Menu" '+displayPlus+'  onClick="javascript:wipe(\''+divId+'\');"></img></TD>';
+	}
+	else{
+		htmlCd = '<TD width="11%" align="left" class="level1"><img id="'+divId+'minus" src="'+imgSrcDown+'" alt="Expand Menu" onClick="javascript:wipe(\''+divId+'\');" '+displayMinus+' ></img><img align="center" id="'+divId+'plus" src="'+imgSrcRight+'" alt="Collapse Menu" '+displayPlus+'  onClick="javascript:wipe(\''+divId+'\');"></img></TD>';
+	}
+	
+	document.write(htmlCd);
+}
+</script>
+<table border="0" cellspacing="0" cellpadding="1" width="100%">
+  <tr>
+    <td colspan="4">
+      <h1>Monitor</h1>
+    </td>
+  </tr>
+  <tr>
+	<TD class=space>&nbsp;</TD>
+    <td class="level1" colspan="3"><a href="frameMonitor.html" id="LnMSummary" onclick="selectLink(this);" class="navBar1">
+    Summary</a></td>
+  </tr>
+  <tr>
+    <script>getHtmlforImg('wpAP');</script>
+    <TD class=level1 colspan=3><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('wpAP')">Access Points</A></td>
+  </tr>
+  <TR>
+    <TD colSpan=4>
+	  <div id="wpAP"  style="display:none">
+	  <table cellSpacing=0 cellPadding=1 width="100%" border=0>
+    
+      <tr>
+        <script>getHtmlforImg('radio',true,true);</script>
+        <td class="level2" colspan="2"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('radio')">Radios</a></td>
+      </tr>
+      <tr>
+        <td colspan="3">
+            <div id="radio">
+	        <table border="0" cellpadding="1" cellspacing="0" width="100%">
+
+            <tr>
+		        <td class="space" style="width:25%">&nbsp;</td>
+                <td class="level2" colspan="2"><a href="spam/celldot11a_stats_list.html" id="lndot11a"
+      onclick="selectLink(this);" class="navBar2">802.11a/n/ac</a></td>
+	        </tr>
+ <!-- NOT SMB -->
+	        <tr>
+		        <td class="space" style="width:18%">&nbsp;</td>
+                <td class="level2" colspan="2"><a href="spam/celldot11b_stats_list.html" id="lndot11bg"
+      onclick="selectLink(this);" class="navBar2">802.11b/g/n</a></td>
+	        </tr>
+	        <tr>
+		        <td class="space" style="width:18%">&nbsp;</td>
+                <td class="level2" colspan="2"><a href="spam/celldot11xor_stats_list.html" id="lndot11xor"
+      onclick="selectLink(this);" class="navBar2">Dual-Band Radios</a></td>
+	        </tr>
+	        </table>
+	        </div>
+	    </td>
+      </tr>
+      </table>
+	  </div>
+    </td>
+  </tr>
+
+  <tr>
+    <script>getHtmlforImg('cleanair');</script>
+    
+    <TD class=level1 colspan=3><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('cleanair')">Cisco CleanAir</A></td>
+    
+  </tr>
+  <TR>
+    <TD colSpan=4>
+	  <div id="cleanair"  style="display:none">
+	  <table cellSpacing=0 cellPadding=1 width="100%" border=0>
+    
+
+      <tr>
+        <script>getHtmlforImg('cleanAira',true,true);</script>
+        <td class="level2" colspan="2"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('cleanAira')">802.11a/n/ac</a></td>
+      </tr>
+      <tr>
+        <td colspan="3">
+            <div id="cleanAira">
+	        <table border="0" cellpadding="1" cellspacing="0" width="100%">
+            <tr>
+		        <td class="space" style="width:18%">&nbsp;</td>
+                <td class="level2" colspan="2"><a id="idrList11a" href="javascript:notSupported();" class="navBar2 notSupported">Interference Devices</a></td>
+	        </tr>
+	        <tr>
+		        <td class="space" style="width:18%">&nbsp;</td>
+                <td class="level2" colspan="2"><a id="aqList11a" href="javascript:notSupported();" class="navBar2 notSupported">Air Quality Report</a></td>
+	        </tr>
+	        </table>
+	        </div>
+	    </td>
+      </tr>
+ <!-- NOT SMB -->
+      <tr>
+        <script>getHtmlforImg('cleanAirb',true,true);</script>
+        <td class="level2" colspan="2"><a class="navBar2" href="javascript:void(0);" onclick="javascript:wipe('cleanAirb')">802.11b/g/n</a></td>
+      </tr>
+      <tr>
+        <td colspan="3">
+            <div id="cleanAirb">
+	        <table border="0" cellpadding="1" cellspacing="0" width="100%">
+            <tr>
+		        <td class="space" style="width:18%">&nbsp;</td>
+                <td class="level2" colspan="2"><a id="idrList11b" href="javascript:notSupported();" class="navBar2 notSupported">Interference Devices</a></td>
+	        </tr>
+            <tr>
+		        <td class="space" style="width:18%">&nbsp;</td>
+                <td class="level2" colspan="2"><a id="idrList11bBle" href="javascript:notSupported();" class="navBar2 notSupported">BLE Beacons</a></td>
+	        </tr>
+	        <tr>
+		        <td class="space" style="width:18%">&nbsp;</td>
+                <td class="level2" colspan="2"><a id="aqList11b" href="javascript:notSupported();" class="navBar2 notSupported">Air Quality Report</a></td>
+	        </tr>
+	        </table>
+	        </div>
+	    </td>
+      </tr>
+      <tr>
+        <td class="space">&nbsp;</td>
+        <td class="level2" colspan="2"><a id="lnkai" href="javascript:notSupported();" class="navBar2 notSupported">Worst Air-Quality Report</a></td>
+      </tr>
+      </table>
+	  </div>
+    </td>
+  </tr>
+
+ 
+  <tr>
+	 <script>getHtmlforImg('mSummary');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('mSummary')" >
+    Statistics</A></td>
+  </tr>
+  <TR><TD colSpan=4>
+	<div id="mSummary" style="display:none">
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnstatc"
+      class="navBar2 notSupported">Controller</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" 
+       id="lnstatap" class="navBar2 notSupported">
+          AP Join</a></td>
+  </tr>
+  <!--<tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="apf/mobility_directory.html" class="navBar2">Mobility</a></td>
+  </tr>-->
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnstatp"
+      class="navBar2 notSupported">Ports</a></td>
+  </tr>
+ <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnrds"
+      class="navBar2 notSupported">RADIUS Servers</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="1"><a href="javascript:notSupported();" id="lnmbstats"
+       class="navBar2 notSupported">Mobility Statistics</a></td>
+  </tr>
+  <tr>
+	<td class="space">&nbsp;</td>
+	<td class="level2" colspan="1"><a href="javascript:notSupported();" id="ipv6_counter"
+	  class="navBar2 notSupported">IPv6 Neighbor Bind Counters</a></td>
+  </tr>
+
+   <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="1"><a href="javascript:notSupported();" id="prefer_stats"
+      class="navBar2 notSupported">Preferred Mode</a></td>
+   </tr>
+   <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="1"><a href="javascript:notSupported();" id="optimizedroam_stats" 
+      class="navBar2 notSupported">Optimized Roaming</a></td>
+   </tr>
+  </table>
+	  </div></td></tr>
+ 
+
+  <tr>
+	 <script>getHtmlforImg('cdp');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('cdp')" >
+    CDP</A></td>
+  </tr>
+  <TR><TD colSpan=4>
+  <div id="cdp" style="display:none">
+  <table cellSpacing=0 cellPadding=1 width="100%" border=0>
+ 
+ 
+  <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" 
+      title="Interface Neighbors" id="cdpinfneighlist" 
+      class="navBar2 notSupported">Interface Neighbors</a></td>
+  </tr>
+  
+ 
+  <!--<tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="apf/mobility_directory.html" class="navBar2">Mobility</a></td>
+  </tr>-->
+
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" 
+      title="CDP AP List" id="cdpaplist" 
+      class="navBar2 notSupported">AP Neighbors</a></td>
+  </tr>
+  
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" 
+      title="CDP Traffic Metrics" id="cdpmetrics" 
+      class="navBar2 notSupported">Traffic Metrics</a></td>
+  </tr>
+  </table>
+  </div></td></tr>
+ <!-- NOT SMB -->
+
+  <tr>
+	 <script>getHtmlforImg('rogues');</script>
+    <td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('rogues')" >Rogues</A></td>
+  </tr>
+<TR><TD colSpan=4>
+	<div id="rogues" style="display:none" >
+	<table cellSpacing=0 cellPadding=1 width="100%" border=0>
+   <tr>
+    <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnkrgp"
+      class="navBar2 notSupported">Friendly APs</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnkrgp"
+      class="navBar2 notSupported">Malicious APs</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnkrgp"
+      class="navBar2 notSupported">Custom APs</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnkrgp"
+      class="navBar2 notSupported">Unclassified APs</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnrgcl"
+      class="navBar2 notSupported">Rogue Clients</a></td>
+  </tr>
+  <tr>
+	 <script>getHtmlforImg('roguesAdhoc',true,true);</script>
+    <td class="level2" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('roguesAdhoc')" >Adhoc Rogues</A></td>
+  </tr>
+  <tr><td colspan="3">
+   <div id="roguesAdhoc" >
+	 <table border="0" cellpadding="1" cellspacing="0" width="100%">
+  <tr>
+    <td class="space" style="width:25%">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnadrg"
+      class="navBar2 notSupported">Friendly Adhoc</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnadrg"
+      class="navBar2 notSupported">Malicious Adhoc</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnadrg"
+      class="navBar2 notSupported">Custom Adhoc</a></td>
+  </tr>
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnadrg"
+      class="navBar2 notSupported">Unclassified Adhoc</a></td>
+  </tr>
+  </table>
+	</div>
+	</td>
+	</tr>
+  
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level2" colspan="2"><a href="javascript:notSupported();" id="lnadrg"
+      class="navBar2 notSupported">Rogue AP ignore-list</a></td>
+  </tr>
+   <!-- NOT SMB -->
+</table>
+</div></td></tr>
+ <!-- HA -->
+ <!-- NOT DATA ONLY -->
+
+  <tr>
+    <td class="space">&nbsp;</td>
+	<td class="level1" colspan="3"><a href="javascript:notSupported();" id="LnC"
+      onclick="selectLink(this);"  class="navBar1">Clients</a></td>
+  </tr>
+  <tr>
+         <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+         <td class="level1" colspan="3"><a href="javascript:notSupported();" id="lnwebauthsleepingclient" class="navBar1 notSupported">Sleeping Clients</a></td>
+  </tr>
+
+
+  <tr>
+    <td class="space">&nbsp;</td>
+    <td class="level1" colspan="3"><a href="javascript:notSupported();" id="lnmusum"
+      class="navBar1 notSupported">Multicast</a></td>
+  </tr>
+
+<!-- NBAR -->
+
+   <tr>
+        <script>getHtmlforImg('applications');</script>
+	<td class="level1" colspan="3"><A class=navBar1 href="javascript:void(0);" onclick="javascript:wipe('applications')" > Applications</A></td>
+  </tr>
+  <TR><TD colSpan=4>
+         <div id="applications" style="display:none">
+         <table cellSpacing=0 cellPadding=1 width="100%" border=0>
+
+      <tr>
+        <td class="space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td class="level2" colspan="2"><a href="javascript:notSupported();" id="wlan_avc_stats"
+             class="navBar2 notSupported">WLAN</a></td>
+      </tr>
+
+
+
+        </table></div></TD>
+        </TR>
+
+
+ 
+
+  <tr>
+        <td class="space">&nbsp;</td>
+        <td class="level1" colspan="3"><a href="javascript:notSupported();" id="device_stats"
+          class="navBar1 notSupported">Local Profiling</a></td>
+  </tr>
+ 
+</table>

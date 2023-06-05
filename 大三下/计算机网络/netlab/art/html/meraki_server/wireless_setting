@@ -1,0 +1,257 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+var enabled = "<?=LOAD-ENABLED=?>";
+var security = "<?=LOAD-SECURITY=?>";
+var visibility = "<?=LOAD-VISIBILITY=?>";
+var encryption = "<?=LOAD-ENCRYPTION=?>"
+
+function ptOnload() 
+{
+  var sel = document.getElementById("ssid1_enable");
+  if (enabled == "enabled")
+     sel.selectedIndex = "0";
+  else
+     sel.selectedIndex = "1";
+  ssidEnableToggle();
+ 
+  sel = document.getElementById("ssid1_security");
+  if (security == "wep")
+     sel.selectedIndex = "1";  
+  else if (security == "wpa2-psk")
+     sel.selectedIndex = "2";   
+  else if (security == "wpa2-enterprise")
+     sel.selectedIndex = "3";       
+  else
+     sel.selectedIndex = "0";
+  ssidSecurityToggle(); 
+
+  sel = document.getElementById("ssid1_visible");
+  if (visibility == "private")
+     sel.selectedIndex = "1";
+  else
+     sel.selectedIndex = "0";   
+     
+  sel = document.getElementById("ssid1_wpa_encryption");
+  if (encryption == "wpa1-wpa2")
+     sel.selectedIndex = "1";
+  else
+     sel.selectedIndex = "0";   
+}
+
+var SUBMIT_CLICKED = 0x04;
+
+function submitNetworkSettings() 
+{
+  document.wireless_setting.commit.value = SUBMIT_CLICKED;
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.wireless_setting.commit.value);
+  top.CHttpFormExtractor.addKeyValue("ssid1_enable", document.wireless_setting.ssid1_enable.value);
+  top.CHttpFormExtractor.addKeyValue("ssid1_name", document.wireless_setting.ssid1_name.value); 
+  
+  top.CHttpFormExtractor.addKeyValue("ssid1_security", document.wireless_setting.ssid1_security.value); 
+  if (document.wireless_setting.ssid1_security.value == "wep")
+    top.CHttpFormExtractor.addKeyValue("ssid1_wepkey", document.wireless_setting.ssid1_wepkey.value); 
+  else if (document.wireless_setting.ssid1_security.value == "wpa2-psk")
+  {
+    top.CHttpFormExtractor.addKeyValue("ssid1_wpakey", document.wireless_setting.ssid1_wpakey.value); 
+    top.CHttpFormExtractor.addKeyValue("ssid1_wpa_encryption", document.wireless_setting.ssid1_wpa_encryption.value); 
+  }
+  else if (document.wireless_setting.ssid1_security.value == "wpa2-enterprise")
+  {
+    top.CHttpFormExtractor.addKeyValue("radius_host", document.wireless_setting.radius_host.value); 
+    top.CHttpFormExtractor.addKeyValue("radius_secret", document.wireless_setting.radius_secret.value);   
+  }
+  top.CHttpFormExtractor.addKeyValue("ssid1_visible", document.wireless_setting.ssid1_visible.value); 
+  document.wireless_setting.submit();
+
+  return false;
+}
+
+function ssidEnableToggle()
+{
+  var sel = document.getElementById("ssid1_enable");
+  if (sel.selectedIndex != -1)
+  {
+    if (sel.options[sel.selectedIndex].value == "disabled")
+    {
+       document.getElementById("ssid1_tb_name").style.display = "none";
+       document.getElementById("ssid1_tb_security").style.display = "none"; 
+       document.getElementById("ssid1_tb_visibility").style.display = "none";     
+    }
+    else
+    {
+       document.getElementById("ssid1_tb_name").style.display = "inline";
+       document.getElementById("ssid1_tb_security").style.display = "inline"; 
+       document.getElementById("ssid1_tb_visibility").style.display = "inline";
+    }
+    
+    ssidSecurityToggle();
+  }
+}
+
+function ssidSecurityToggle()
+{
+  var sel = document.getElementById("ssid1_security");
+  if (sel.selectedIndex != -1)
+  {
+     if (sel.options[sel.selectedIndex].value == "open")
+     {
+       document.getElementById("ssid1_tb_wep").style.display = "none";
+       document.getElementById("ssid1_tb_wpa2_psk").style.display = "none"; 
+       document.getElementById("ssid1_tb_wpa2_enterprise").style.display = "none";        
+     }
+     else if (sel.options[sel.selectedIndex].value == "wep")
+     {
+       document.getElementById("ssid1_tb_wep").style.display = "inline";
+       document.getElementById("ssid1_tb_wpa2_psk").style.display = "none"; 
+       document.getElementById("ssid1_tb_wpa2_enterprise").style.display = "none";        
+     }  
+     else if (sel.options[sel.selectedIndex].value == "wpa2-psk")
+     {
+       document.getElementById("ssid1_tb_wep").style.display = "none"; 
+       document.getElementById("ssid1_tb_wpa2_psk").style.display = "inline"; 
+       document.getElementById("ssid1_tb_wpa2_enterprise").style.display = "none";        
+     }   
+     else if (sel.options[sel.selectedIndex].value == "wpa2-enterprise")
+     {
+       document.getElementById("ssid1_tb_wep").style.display = "none";
+       document.getElementById("ssid1_tb_wpa2_psk").style.display = "none"; 
+       document.getElementById("ssid1_tb_wpa2_enterprise").style.display = "inline"; 
+     }      
+  }
+}
+
+</script>
+
+
+<div style="position:relative;left:20px;">
+
+<?=MESSAGE=?>
+
+<h2 style="font-family: sans-serif;">Wireless settings</h2>
+ 
+<br>
+
+<form accept-charset="UTF-8" name="wireless_setting" action="wireless_setting" id="wireless_setting_form" method="post">
+
+
+<b>SSID 1</b><br>
+<div style="clear: both; height: 10px;"></div>
+
+<table id="ssid1_tb_enable" style="font-size:96%;">
+<tr>
+<td valign="top">Status <span style="padding-left:92px"></td>
+<td>
+<select id="ssid1_enable" name="ssid1_enable" onChange="ssidEnableToggle();">
+<option value="enabled">Enabled</option>
+<option value="disabled" selected>Disabled</option>
+</select>
+</td>
+</tr>
+</table>
+<br/>
+
+<table id="ssid1_tb_name" style="font-size:96%; display:none;">
+<tr>
+<td valign="top">Name <span style="padding-left:92px"></td>
+<td><input type="text" name="ssid1_name" value="<?=SSID-NAME=?>"></td>
+</tr>
+</table>
+<br/>
+
+<table id="ssid1_tb_security" style="font-size:95%; display:none;">
+<tr>
+<td valign="top"><br/>Security <span style="padding-left:83px"></td>
+<td><br/>
+<select name="ssid1_security" id="ssid1_security"  onChange="ssidSecurityToggle();">
+<option value="open">Open</option>
+<option value="wep">WEP</option>
+<option value="wpa2-psk">WPA2 PSK</option>
+<option value="wpa2-enterprise">WPA2 Enterprise</option>
+</select>
+</td>
+</tr>
+</table>
+<br>
+
+<table id="ssid1_tb_wep" style="font-size:95%; display:none;">
+<tr>
+<td valign="top">WEP key <span style="padding-left:75px"></td>
+<td><input type="password" id="ssid1_wepkey" name="ssid1_wepkey" value="<?=WEP-KEY=?>" /></td>
+</tr>
+</table>
+
+<table id="ssid1_tb_wpa2_psk" style="font-size:95%; display:none;">
+<tr>
+<td valign="top">WPA key <span style="padding-left:20px"></td>
+<td><input type="password" id="ssid1_wpakey" name="ssid1_wpakey" value="<?=WPA-KEY=?>" /></td>
+</tr>
+<tr>
+<td valign="top">WPA encryption mode &nbsp;&nbsp;</td>
+<td>
+<select name="ssid1_wpa_encryption" id="ssid1_wpa_encryption">
+<option value="wpa2">WPA2 only</option>
+<option value="wpa1-wpa2">WPA1 and WPA2</option>
+</select>
+</td>
+</tr>
+</table>
+<br/>
+
+<table id="ssid1_tb_wpa2_enterprise" style="font-size:95%; display:none;">
+<tr>
+<td valign="top">Authentication <span style="padding-left:50px"></td>
+<td>
+<select name="ssid1_wpa2_enterprise_authen" id="ssid1_wpa2_enterprise_authen">
+<option value="radius">My RADIUS server</option>
+</select>
+</td>
+</tr>
+<tr>
+<td valign="top">RADIUS server</td>
+<td>
+	<table id="meraki_table">
+	<tr>
+	  <th width="150" align="center">Host</th>
+	  <th width="20" align="center">Port</th>
+	  <th width="150" align="center">Secret</th>
+	</tr>
+
+	<tr>
+	  <td align="center"><input type="text" id="radius_host" name="radius_host" value="<?=RADIUS-HOST=?>" /></td>
+	  <td align="center">1645</td>
+	  <td><input type="text" id="radius_secret" name="radius_secret" value="<?=RADIUS-SECRET=?>" /></td>
+	</tr>
+	</table>
+</td>
+</tr>
+</table>
+<br>
+
+<table id="ssid1_tb_visibility" style="font-size:95%; display:none;">
+<tr>
+<td valign="top"><br/>Visibility <span style="padding-left:83px"></td>
+<td></br>
+<select name="ssid1_visible" id="ssid1_visible">
+<option value="public">Adverstise this SSID publicly</option>
+<option value="private">Hide this SSID</option>
+</select>
+</td>
+</tr>
+</table>
+
+<table style="font-size:95%;">
+<tr>
+<td><br/><span style="padding-left:123px"></td>
+<td><br/><input type="button" id="commit" name="commit" class="btn btn-primary update_modal_state next" onClick="submitNetworkSettings();" value="Save Changes" /></td>
+</tr>
+</table>
+</form>
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

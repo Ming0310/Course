@@ -1,0 +1,110 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+var CUSTOM1_CLICKED = 0x20;
+var CUSTOM2_CLICKED  = 0x40;
+
+function submitEmailChangeForm() 
+{
+  document.change_email.commit.value = CUSTOM1_CLICKED;
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.change_email.commit.value);
+  top.CHttpFormExtractor.addKeyValue("email", document.change_email.email.value);
+  document.change_email.submit();
+
+  return false;
+}
+
+function submitPasswordChangeForm() 
+{
+  document.change_password.commit.value = CUSTOM2_CLICKED;
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.change_password.commit.value);
+  top.CHttpFormExtractor.addKeyValue("password", document.change_password.password.value);
+  top.CHttpFormExtractor.addKeyValue("confirm_password", document.change_password.confirm_password.value); 
+  top.CHttpFormExtractor.addKeyValue("current_password", document.change_password.current_password.value); 
+  document.forms[1].submit();
+
+  return false;
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<?=MESSAGE=?>
+
+<h2 style="font-family: sans-serif;">Update your account information</h2>
+
+This computer is using IP address <?=IP-ADDRESS=?>.
+
+<div style="clear: both; height: 20px;"></div>
+
+
+<b>Your email address</b><br/>
+<!-- When you change your email address, an email will be sent to your new address for verification.
+<br/>
+<br/> -->
+
+<form accept-charset="UTF-8" name="change_email" action="user_edit" id="update_email_form" method="post">
+
+<table class="cfg cfg_first" style="width:auto;">
+<tr>
+<td class="cfgq">Email</td>
+<td class="cfgo"><input id="email" name="email" style="font-size: 80%;" size="20" type="email" value="<?=EMAIL?>" /></td>
+</tr>
+<tr>
+<td class="cfgq"></td>
+<td class="cfgo"><div class="medspace"></div>
+<input class="button" id="submit_email" name="commit" type="submit" value="Change email" onClick="submitEmailChangeForm();" />
+</td>
+</tr>
+</table>
+</form>
+
+<div style="clear: both; height: 20px;"></div>
+
+<div>
+<b>Change your password</b><br/>
+
+<form accept-charset="UTF-8" name="change_password" action="user_edit" id="password_form" method="post">
+<table class="cfg cfg_first" style="width:auto;">
+<tr>
+  <td class="cfgq">Current password</td>
+  <td class="cfgo">
+  <input class="jsAnalyticsExclude" id="current_password" name="current_password" type="password" value="" />
+  </td>
+</tr>
+<tr>
+  <td class="cfgq">New password</td>
+  <td class="cfgo">
+  <input class="jsAnalyticsExclude" id="password" name="password" type="password" value="" />
+  </td>
+</tr>
+<tr>
+  <td class="cfgq">Confirm password</td>
+  <td class="cfgo" style="width:125px;">
+  <input class="jsAnalyticsExclude" id="confirm_password" name="confirm_password" type="password" value="" />
+  </td>
+</tr>
+<tr>
+  <td class="cfgq"></td>
+  <td class="cfgo">
+  <div class="medspace"></div>
+  <input class="button" id="submit_pw" name="commit" type="submit" value="Change password" onClick="submitPasswordChangeForm();" /></td>
+</tr>
+</table>
+</form>
+</div>
+
+<?=FOOTER=?>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+  <div class="dropdown">
+      <button class="dropbtn">Network-wide</button>
+      <div class="dropdown-content">
+        &nbsp;&nbsp;&nbsp;&nbsp;<font color="#d7d7d9" size="1"><b>CONFIGURE</b></font><br>
+        <a href="general">General</a>
+      </div>
+  </div>
+  <div class="dropdown">
+      <button class="dropbtn">Security Appliance</button>
+      <div class="dropdown-content">
+        &nbsp;&nbsp;&nbsp;&nbsp;<font color="#d7d7d9" size="1"><b>MONITOR</b></font><br>
+        <a href="appliance_status">Appliance Status</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;<font color="#d7d7d9" size="1"><b>CONFIGURE</b></font><br>
+        <a href="addressing_vlans">Addressing & VLANs</a>
+        <a href="wireless_setting">Wireless Settings</a>
+        <a href="dhcp">DHCP</a>
+        <a href="firewall">Firewall</a>
+        <!-- <a href="site_to_site_vpn">Site-to-site VPNs</a>
+        <a href="client_vpn">Client VPN</a> -->
+      </div>
+  </div>

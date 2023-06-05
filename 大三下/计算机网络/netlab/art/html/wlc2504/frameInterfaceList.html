@@ -1,0 +1,206 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Switch';
+
+function ptOnload() {
+}
+</script>
+
+
+<!-- <script language="javascript" src="../../popup.js"></script>
+<script language="javascript" src="../../javascript/paging.js"></script> -->
+<script>
+createNewBusinessLogicImplemented = true;
+var shwWar = false;
+
+function validateCreateNewBusinessLogic(){
+// check if total entries is == maxEntries then don't allow
+// any more create 
+  var totalEntries = 0;
+  totalEntries=document.forms[0].listSize.value;   
+  if(totalEntries < (parseInt(document.forms[0].maxEntries.value))) return true;
+  else {
+    alert("Can't create more than "+ document.forms[0].maxEntries.value+" entries");
+    return false;
+  }
+}
+
+function setInterfaceName(index) {
+  var totalEntries=document.forms[0].listSize.value;   
+  var name="1."+index+"."+totalEntries+"."+"interface_name";
+  elms=document.forms[0].elements;
+  for ( loop=0; loop < elms.length; loop++)
+  {
+     if ( elms[loop].name == name){
+       document.forms[1].selected_interface_name.value = elms[loop].value;
+     }
+  }
+} 
+
+function showWarning(index) {
+  var totalEntries=document.forms[0].listSize.value;
+  var name="1."+index+"."+totalEntries+"."+"ap_management";
+  elms=document.forms[0].elements;
+  for ( loop=0; loop < elms.length; loop++)
+  {
+     if ( elms[loop].name == name){
+        var attr=document.forms[0].elements[loop];
+        if ( (attr.value == "Enabled"))
+        shwWar = true;        
+     }
+  }
+}
+
+
+function editAction(index) {
+  setInterfaceName(index);
+  document.forms[1].buttonClicked.value = EDIT_CLICKED;
+
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[1].buttonClicked.value);
+  top.CHttpFormExtractor.addKeyValue("selected_interface_name", document.forms[1].selected_interface_name.value);
+
+  document.forms[1].submit();
+}
+
+function deleteAction(index) {
+  var delSubmit = true;
+  if(confirm(top.ARE_YOU_SURE_DELETE)){
+     showWarning(index);
+     if ( shwWar == true ) {
+        if( !confirm("If APs are connected to this AP-manager interface, deleting the same will reboot the connected APs. Are you sure you want to continue?") ) {    
+           delSubmit = false; 
+        }
+     }
+     if ( delSubmit == true){
+           setInterfaceName(index);
+           document.forms[1].buttonClicked.value = DELETE_CLICKED;
+		   
+		   top.CHttpFormExtractor.clearKeyValues();
+		   top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[1].buttonClicked.value);
+		   top.CHttpFormExtractor.addKeyValue("selected_interface_name", document.forms[1].selected_interface_name.value);
+
+           document.forms[1].submit();
+    }
+  }
+}
+
+// Following is required for paging.
+top.subFormImplemented=true;
+var url = 'interface_list.html';
+var list_size = 50;
+
+</script>
+
+<FORM method="post" ACTION="frameInterfaceList.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+  <INPUT type="hidden" name="page_index" VALUE="1">
+  <INPUT type="hidden" name="query_str" size="512" maxlength="512" VALUE="">
+  <INPUT type="hidden" name="total_entries" VALUE="4">
+  <table CELLSPACING=0  WIDTH =" 100%" nowrap cellpadding="0" border="0">
+    <!-- the header as part of the table -->
+
+    <tr> 
+      <td nowrap class="pageTitle"> 
+        <h1>Interfaces</h1>
+      </td>
+      <td align="right" valign="top" >
+        <!-- To display paging in top right corner-->
+<div id=pagingStr>
+ <table cellSpacing=0 cellPadding=0 border=0 >
+	<tr align="left" valign=top>
+		<td colspan="25" class="headerNoBorder" style="COLOR: #666666; " align="center" noWrap>
+				Entries <?=ENTRIES=?>
+	    </td>
+	</tr> 
+ </table>
+</div>
+
+      </td>
+      <td nowrap align="right" class="pageTitle"> 
+       <script>getHtmlForCreateNewButton("frameInterfaceCreate.html");</script>
+      </td>
+    </tr>
+
+    <tr> 
+      <td colspan="2" style="padding-top: 13px"> 
+        <table border="0" cellspacing="1" cellpadding="0">
+          <tr> 
+<TH align="left">Interface Name</Th>
+<th align="left">VLAN Identifier</Th>
+<th align="left">IP Address</Th>
+<th align="left">Interface Type</Th>
+
+
+<th align="left">Dynamic AP Management</Th>
+
+
+
+<th align="left">IPv6 Address</Th> <th>&nbsp;</th>
+
+</tr>
+
+<?=INTERFACE-ENTRY-begin=?>
+<tr>
+<TD class="listNoPad">
+
+<INPUT TYPE="hidden" NAME="1.<?=INTERFACE-INDEX=?>.<?=INTERFACE-COUNT=?>.index" SIZE="16" MAXLENGTH="15" VALUE="">
+<SCRIPT>getHtmlForEdit(<?=INTERFACE-INDEX=?>);</SCRIPT>
+<INPUT type=TEXT name="1.<?=INTERFACE-INDEX=?>.<?=INTERFACE-COUNT=?>.interface_name" class="statictextboxlink" readonly SIZE="33" MAXLENGTH="32" VALUE="<?=INTERFACE-NAME=?>">
+<SCRIPT>endHtmlEdit();</SCRIPT>
+</TD>
+<TD class="listNoPad"><INPUT type=TEXT name="1.<?=INTERFACE-INDEX=?>.<?=INTERFACE-COUNT=?>.interface_vlan" class="statictextboxlist" readonly SIZE="9" MAXLENGTH="8" VALUE="<?=INTERFACE-VLAN=?>"></TD>
+<TD class="listNoPad"><INPUT type=TEXT name="1.<?=INTERFACE-INDEX=?>.<?=INTERFACE-COUNT=?>.interface_address" class="statictextboxlist" readonly SIZE="16" MAXLENGTH="15" VALUE="<?=INTERFACE-IP=?>"></TD>
+<TD class="listNoPad"><INPUT type=TEXT name="1.<?=INTERFACE-INDEX=?>.<?=INTERFACE-COUNT=?>.interface_type" class="statictextboxlist" readonly SIZE="9" MAXLENGTH="8" VALUE="<?=INTERFACE-TYPE=?>"></TD>
+<TD class="listNoPad"><INPUT type=TEXT name="1.<?=INTERFACE-INDEX=?>.<?=INTERFACE-COUNT=?>.ap_management" class="statictextboxlist" readonly SIZE="16" MAXLENGTH="15" VALUE="<?=INTERFACE-DYNAMIC-AP-MANAGER=?>"></TD>
+<TD class="listNoPad"><INPUT type=TEXT name="1.<?=INTERFACE-INDEX=?>.<?=INTERFACE-COUNT=?>.ipv6_addr" class="statictextboxlist" readonly SIZE="46" MAXLENGTH="46" VALUE="<?=INTERFACE-IPV6=?>"></TD> 
+</td>
+<TD class=listNoPad><a href="javascript:deleteAction(<?=INTERFACE-INDEX=?>);" style="display:<?=INTERFACE-REMOVE=?>">Remove</a></TD>
+</tr>
+
+<?=INTERFACE-ENTRY-end=?>
+
+
+
+        </table>
+      </td>
+    </tr>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="listSize" SIZE="16" MAXLENGTH="15" VALUE="<?=INTERFACE-COUNT=?>"></TD>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="indexClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="selected_interface_name" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="maxEntries" VALUE="524"></TD>
+</TR>
+<TR>
+
+</TABLE>
+</FORM>
+<script>
+document.writeln('<FORM name="interfaceSubmitForm" method="post" ACTION="frameInterfaceList.html">');
+document.writeln('<INPUT TYPE="hidden" NAME="selected_interface_name" VALUE="">');
+document.writeln('<INPUT TYPE="hidden" NAME="buttonClicked" VALUE="">');
+document.writeln('</FORM>');
+</script>
+
+
+<?=PAGE-FOOTER=?>

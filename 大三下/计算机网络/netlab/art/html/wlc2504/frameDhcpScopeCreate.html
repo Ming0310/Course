@@ -1,0 +1,82 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Switch';
+
+function ptOnload() {
+}
+
+function submitFormApply() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("scope_name", document.forms[0].scope_name.value);
+		document.forms[0].submit();
+	}
+
+	return false;
+}
+
+</script>
+
+<!--
+<link rel="stylesheet" href="../../styles/content41.css" type="text/css">
+<script language="javascript" src="../../servicescript41.js"></script>
+-->
+
+<script>
+var textAttrs = new Array();
+var notAllowedChars = new Array("'");
+textAttrs[0] = new textAttr("scope_name","Scope Name",79,notAllowedChars,null,true);
+thisFormAttrs = new formAttrs(null,textAttrs,null,null);
+</script>
+
+<FORM method="post" ACTION="frameDhcpScopeCreate.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="A5Pqxtxnq3qd9BWGEZBOWtk22eOcSsq">
+
+  <table CELLSPACING=0  WIDTH="100%" nowrap cellpadding="0" border="0">
+
+    <!-- the header as part of the table -->
+    <tr>
+      <td nowrap class="pageTitle">
+        <h1>DHCP Scope &gt; New</h1>
+      </td>
+      <td align="right" class="pageTitle">
+        <script> getHtmlForBackButton();</script>
+        &nbsp;&nbsp;&nbsp;
+        <script>getHtmlForButton("apply", "Apply", "buttonStretch", "submitFormApply()"); </script>
+        <!-- <script> getHtmlForApplyButton();</script> -->
+        <script>getHtmlForHelpButton("DHCP_Scope_New","/helppages/wwhelp.htm");</script>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="label2">Scope Name</td>
+            <td class="label2">
+              <INPUT type=TEXT name="scope_name" SIZE="70" MAXLENGTH="79" VALUE="">
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+
+  <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+  <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+</FORM>
+
+<?=PAGE-FOOTER=?>

@@ -1,0 +1,131 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Switch';
+
+function ptOnload() {
+}
+</script>
+
+<link rel="stylesheet" href="../../styles/content41.css" type="text/css">
+
+<!--
+<script language="javascript" src="../../servicescript41.js"></script>
+<script language="javascript" src="../../popup.js"></script>
+<script language="javascript" src="../../javascript/paging.js"></script>
+-->
+
+<script>
+var url = 'dhcp_alloc_lease.html';
+var list_size = 50;
+</script>
+</HEAD>
+
+<BODY class = "bodyattributes" ONLOAD="showPaging();CheckError()">
+<FORM method="post" ACTION="/screens/base/dhcp_alloc_lease.html">
+<INPUT type="hidden" name="page_index" VALUE="1">
+<INPUT type="hidden" name="query_str" size="512" maxlength="512" VALUE="">
+<INPUT type="hidden" name="total_entries" VALUE="0">
+
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="A5Pqxtxnq3qd9BWGEZBOWtk22eOcSsq">
+  <table CELLSPACING=0  WIDTH ="640" nowrap cellpadding="0" border="0">
+    <!-- the header as part of the table -->
+
+    <tr>
+      <td nowrap class="pageTitle">
+        <h1>DHCP Allocated Lease</h1>
+      </td>
+
+      <td nowrap align="right" class="pageTitle">
+	   <script>getHtmlForHelpButton("DHCP_Scopes","/helppages/wwhelp.htm");</script>
+      </td>
+      <td align="right" valign="top" >
+        <!-- To display paging in top right corner-->
+<div id=pagingStr>
+ <table cellSpacing=0 cellPadding=0 border=0 >
+	<tr align="left" valign=top>
+		<td colspan="25" class="headerNoBorder" style="COLOR: #666666; " align="center" noWrap>
+			<SCRIPT>getPagingStr();</SCRIPT>
+	    </td>
+	</tr>
+ </table>
+</div>
+<div id=pagingDiv style="display:none">
+	<TABLE cellSpacing=0 cellPadding=0 border=0 >
+		<tr align="left" valign=top>
+			<td colspan="25" class="header" style="COLOR: #666666; " align="center" noWrap>
+				<SCRIPT>getPagingStr();</SCRIPT>
+			</td>
+		</tr>
+		<TR vAlign=top align=center  >
+			<TD><NOBR><A id=pager_first href="javascript:getPage('first');"><IMG
+                        alt=First height=16
+                        src="/images/first.gif" width=20
+                        border=0 ></A> </NOBR>
+			</TD>
+			<TD align=center id="prev_disabled" style="display:none"><NOBR>
+				<IMG alt="Show previous 5" height=16 src="/images/previous_disabled.gif" width=20
+                        border=0> </NOBR>
+			</TD>
+			<TD align=center id="prev" style="display:none"><NOBR>
+				<A id=pager_first href="javascript:getPage('previous');">
+				<IMG alt="Show previous 5" height=16 src="/images/previous.gif" width=20
+                        border=0>
+				</A>  </NOBR>
+			</TD>
+			<td><script>getPages();</script></td>
+			<TD id="next" style="display:none"><NOBR><A id=pager_next
+                 href="javascript:getPage('next');"><IMG
+                 alt="Show Next 5" height=16 src="/images/next.gif"
+                  width=20 border=0></A> </NOBR></TD>
+			<TD id="next_disabled" style="display:none"><NOBR><IMG
+                        alt="Show Next 5" height=16 src="/images/next_disabled.gif"
+                        width=20 border=0></NOBR></TD>
+			<TD><NOBR><A id=pager_last
+                        href="javascript:getPage('last');"><IMG
+                        alt=Last height=16 src="/images/last.gif"
+                        width=20 border=0></A>
+                </NOBR></TD>
+		</TR>
+	</TABLE>
+</div>
+
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" style="padding-top: 13px">
+        <table WIDTH= "680" border="0" cellspacing="1" cellpadding="0">
+          <tr>
+            <TH align="left">MAC Address</Th>
+            <TH align="left">IP Address</Th>
+            <TH align="left">Lease Remaining Time</Th>
+         </tr>
+<?=LEASE-ENTRY-begin=?>
+<tr>
+      <td class="listNoPad"><?=LEASE-MAC=?></td>
+      <td class="listNoPad"><?=LEASE-IP=?></td>
+      <td class="listNoPad"><?=LEASE-TIME=?></td>
+</tr>
+<?=LEASE-ENTRY-end=?>
+
+        </table>
+      </td>
+    </tr>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="indexClicked" SIZE="3" MAXLENGTH="3" VALUE=""></TD>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="3" MAXLENGTH="3" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+
+</TABLE>
+</FORM>
+
+<?=PAGE-FOOTER=?>

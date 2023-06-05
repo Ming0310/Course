@@ -1,0 +1,88 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<?=MESSAGE=?>
+
+<h2 style="font-family: sans-serif;">DHCP</h2>
+ 
+<?=BEGIN-SUBNET=?>
+
+<b>Main subnet</font> &nbsp;&nbsp;&nbsp;<?=NETWORK-IP=?></b>
+
+ <br/><br/>
+ <table style="width:auto; font-size: 95%;">
+ <tr>
+ <td valign="top">Client addressing</td>
+ <td>
+ <select>
+ <option value="false" selected="selected">Run a DHCP server</option>
+</select>
+<br/><br/>
+ </td>
+</td></tr>
+ <tr>
+ <td valign="top">Lease time</td>
+ <td>
+ <select>
+ <option value="false" selected="selected">Infinite</option>
+</select>
+<br/><br/>
+ </td>
+</td></tr>
+ <tr>
+ <td valign="top">DNS nameservers</td>
+ <td>
+ <select>
+ <option value="false" selected="selected">Proxy to upstream DNS</option>
+</select>
+<br/><br/>
+ </td>
+</td></tr>
+ <tr>
+ <td valign="top">Boot options</td>
+ <td>
+ <select>
+ <option value="false" selected="selected">Boot options disabled</option>
+</select>
+<br/><br/>
+ </td>
+</td></tr>
+ <tr>
+ <td valign="top">DHCP options</td>
+ <td>
+There are no special DHCP options on this DHCP section.
+<br/><br/>
+ </td>
+</td></tr>
+ <tr>
+ <td valign="top">Reserved IP ranges</td>
+ <td>
+There are no reserved IP address ranges on this DHCP section.
+<br/><br/>
+ </td>
+</td></tr>
+ <tr>
+ <td valign="top">Fixed IP assignments&nbsp;&nbsp;&nbsp;</td>
+ <td>
+There are no fixed IP assignments on this DHCP section.
+<br/><br/>
+ </td>
+</td></tr>
+</table>
+ 
+ <?=END-SUBNET=?>
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Switch';
+
+function ptOnload() {
+}
+
+function submitFormApply() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("scope_name", "<?=SCOPE-NAME=?>");
+		top.CHttpFormExtractor.addKeyValue("start_address", document.forms[0].start_address.value);
+		top.CHttpFormExtractor.addKeyValue("end_address", document.forms[0].end_address.value);
+		top.CHttpFormExtractor.addKeyValue("network", document.forms[0].network.value);
+		top.CHttpFormExtractor.addKeyValue("netmask", document.forms[0].netmask.value);
+		//top.CHttpFormExtractor.addKeyValue("lease_time", document.forms[0].lease_time.value);
+		top.CHttpFormExtractor.addKeyValue("router_address1", document.forms[0].router_address1.value);
+		top.CHttpFormExtractor.addKeyValue("dns_server1", document.forms[0].dns_server1.value);
+		document.forms[0].submit();
+	}
+
+	return false;
+}
+
+</script>
+
+<!--
+<link rel="stylesheet" href="../../styles/content41.css" type="text/css">
+<script language="javascript" src="../../servicescript41.js"></script>
+-->
+
+
+<script>
+
+var textAttrs = new Array();
+var notAllowedChars = new Array("'");
+textAttrs[0] = new textAttr("domain_name","DNS Domain Name",79,notAllowedChars,null,false);
+
+var numAttrs = new Array();
+numAttrs[0] = new numberAttr("lease_time","Lease Time",120,8640000,null,false); // 30 days
+
+var ipAttrs = new Array();
+ipAttrs[0] = new ipAttr("start_address","Pool Start Address",null,true); // Start Address is mandatory
+ipAttrs[1] = new ipAttr("end_address","Pool End Address",null,true); // End address is mandatory
+ipAttrs[2] = new ipAttr("network","Network",null,true); // Network address is mandatory
+ipAttrs[3] = new ipAttr("netmask","Netmask",null,true); // Netmask is mandatory
+ipAttrs[4] = new ipAttr("router_address1","Router Address 1",null,false);
+ipAttrs[5] = new ipAttr("router_address2","Router Address 2",null,false);
+ipAttrs[6] = new ipAttr("router_address3","Router Address 3",null,false);
+ipAttrs[7] = new ipAttr("dns_server1","DNS Server 1",null,false);
+ipAttrs[8] = new ipAttr("dns_server2","DNS Server 2",null,false);
+ipAttrs[9] = new ipAttr("dns_server3","DNS Server 3",null,false);
+ipAttrs[10] = new ipAttr("netbios_server1","Netbios Name Server 1",null,false);
+ipAttrs[11] = new ipAttr("netbios_server2","Netbios Name Server 2",null,false);
+ipAttrs[12] = new ipAttr("netbios_server3","Netbios Name Server 3",null,false);
+
+thisFormAttrs = new formAttrs(numAttrs,textAttrs,ipAttrs,null);
+
+businessLogicImplemented = true;
+function validateBusinessLogic(attrs){
+	// Whenever user enters whitespace in router address, read it as 0.0.0.0
+	// This will help avoid conversion error in usmDbInetAton.
+	if (document.forms[0].router_address1.value == "")
+		document.forms[0].router_address1.value = "0.0.0.0";
+	if (document.forms[0].router_address2.value == "")
+		document.forms[0].router_address2.value = "0.0.0.0";
+	if (document.forms[0].router_address3.value == "")
+		document.forms[0].router_address3.value = "0.0.0.0";
+
+	// Whenever user enters whitespace in DNS server address, read it as 0.0.0.0
+	// This will help avoid conversion error in usmDbInetAton.
+	if (document.forms[0].dns_server1.value == "")
+		document.forms[0].dns_server1.value = "0.0.0.0";
+	if (document.forms[0].dns_server2.value == "")
+		document.forms[0].dns_server2.value = "0.0.0.0";
+	if (document.forms[0].dns_server3.value == "")
+		document.forms[0].dns_server3.value = "0.0.0.0";
+
+	// Whenever user enters whitespace in Netbios server address, read it as 0.0.0.0
+	// This will help avoid conversion error in usmDbInetAton.
+	if (document.forms[0].netbios_server1.value == "")
+		document.forms[0].netbios_server1.value = "0.0.0.0";
+	if (document.forms[0].netbios_server2.value == "")
+		document.forms[0].netbios_server2.value = "0.0.0.0";
+	if (document.forms[0].netbios_server3.value == "")
+		document.forms[0].netbios_server3.value = "0.0.0.0";
+
+	return true;
+}
+
+</script>
+
+<FORM method="post" ACTION="frameDhcpScopeEdit.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="lA7uZliHpjwxtaKkFEcParhKgoLH0Iz">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+    <tr>
+      <td class="pageTitle">
+	    <h1>DHCP Scope &gt; Edit</h1>
+      </td>
+      <td align="right" class="pageTitle">
+        <script>getHtmlForBackButton();</script>
+        &nbsp;&nbsp;&nbsp;
+	<!-- <script>getHtmlForApplyButton();</script> -->
+	<script>getHtmlForButton("apply", "Apply", "buttonStretch", "submitFormApply()"); </script>
+	<script>getHtmlForHelpButton("DHCP_Scope_Edit","/helppages/wwhelp.htm");</script>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <table border="0" cellspacing="5" cellpadding="5">
+          <tr>
+		    <td class="label2" width="160">Scope Name</td>
+            <td class="label2" colspan="3">
+              <INPUT type="TEXT" class="statictextbox" readonly name="scope_name" SIZE="70" MAXLENGTH="79" VALUE="<?=SCOPE-NAME=?>">
+            </td>
+
+          </tr>
+          <tr>
+		    <td class="label2" width="147">Pool Start Address</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="start_address" SIZE="16" MAXLENGTH="15" VALUE="<?=START-ADDR=?>">
+            </td>
+          </tr>
+          <tr>
+		    <td class="label2">Pool End Address</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="end_address" SIZE="16" MAXLENGTH="15" VALUE="<?=END-ADDR=?>">
+            </td>
+          </tr>
+          <tr>
+		    <td class="label2">Network</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="network" SIZE="16" MAXLENGTH="15" VALUE="<?=NETWORK=?>">
+            </td>
+          </tr>
+          <tr>
+		    <td class="label2">Netmask</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="netmask" SIZE="16" MAXLENGTH="15" VALUE="<?=MASK=?>">
+            </td>
+          </tr>
+          <tr>
+		    <td class="label2">Lease Time (seconds)</td>
+            <td class="label2" colspan="3">
+              <INPUT type="TEXT" name="lease_time" class="notSupported" SIZE="16" MAXLENGTH="15" VALUE="86400">
+            </td>
+          </tr>
+          <tr>
+		    <td class="label2">Default Routers</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="router_address1" SIZE="16" MAXLENGTH="15" VALUE="<?=ROUTER-ADDR=?>">
+            </td>
+            <td class="label2">
+              <INPUT type="TEXT" name="router_address2" class="notSupported" SIZE="16" MAXLENGTH="15" VALUE="0.0.0.0">
+            </td>
+            <td class="label2">
+              <INPUT type="TEXT" name="router_address3" class="notSupported" SIZE="16" MAXLENGTH="15" VALUE="0.0.0.0">
+            </td>
+          </tr>
+          <tr>
+		    <td class="label2">DNS Domain Name</td>
+            <td class="label2" colspan="3">
+              <INPUT type="TEXT" name="domain_name" class="notSupported" SIZE="70" MAXLENGTH="79" VALUE="Not Supported">
+            </td>
+          </tr>
+          <tr>
+		    <td class="label2">DNS Servers</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="dns_server1" SIZE="16" MAXLENGTH="15" VALUE="<?=DNS-ADDR=?>">
+            </td>
+            <td class="label2">
+              <INPUT type="TEXT" name="dns_server2" class="notSupported" SIZE="16" MAXLENGTH="15" VALUE="0.0.0.0">
+            </td>
+            <td class="label2">
+              <INPUT type="TEXT" name="dns_server3" class="notSupported" SIZE="16" MAXLENGTH="15" VALUE="0.0.0.0">
+            </td>
+          </tr>
+          <tr>
+		    <td class="label2">Netbios Name Servers</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="netbios_server1" class="notSupported" SIZE="16" MAXLENGTH="15" VALUE="0.0.0.0">
+            </td>
+            <td class="label2">
+              <INPUT type="TEXT" name="netbios_server2" class="notSupported" SIZE="16" MAXLENGTH="15" VALUE="0.0.0.0">
+            </td>
+            <td class="label2">
+              <INPUT type="TEXT" name="netbios_server3" class="notSupported" SIZE="16" MAXLENGTH="15" VALUE="0.0.0.0">
+            </td>
+          </tr>
+          <tr>
+            <td class="label2">Status</td>
+            <!-- Unit -->
+            <td class="label2">
+              <SELECT name="scope_status">
+                <!-- <OPTION value="Enabled" >Enabled</option> -->
+                <!-- <OPTION value="Disabled" SELECTED>Disabled</option> -->
+                <OPTION value="Disabled" SELECTED>Not Supported</option>
+              </SELECT>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0"></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+  </table>
+</FORM>
+
+<?=PAGE-FOOTER=?>

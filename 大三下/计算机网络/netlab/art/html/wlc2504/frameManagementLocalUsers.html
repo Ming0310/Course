@@ -1,0 +1,238 @@
+<?=PAGE-HEADER=?>
+
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Management';
+
+function ptOnload() {
+}
+
+//function getDeleteConfirmation() {
+//var retVal = confirm("Are you sure you want to delete?");
+//if (retVal == true) {
+//	top.CHttpFormExtractor.addKeyValue("delete", "yes");
+//	return true;
+//} else {
+//top.CHttpFormExtractor.addKeyValue("delete", "no");
+//	return false;
+//}
+//}
+
+</script>
+
+<script>
+//function getHtmlForMgmtUserRemoveButton(index){
+//debugMsg("<getHtmlForRemoveButton>index is"+index);
+//if(document.forms[0].access_control.value != 1) return;
+//debugMsg("<getHtmlForRemoveButton> access granted");
+//document.writeln('\
+//<a href="javascript:deleteUserAction(',index,')">Remove</a>\
+//');
+//}
+
+function deleteUserAction(index){
+  var noOfReadWriteUsers = 0;
+  var isReadWriteUser = false;
+
+  if(document.forms[0].access_control.value != 1) return;
+  for(var i =0;i < document.forms[0].elements.length;i++){
+    var name = (document.forms[0].elements[i].name);
+    var value = (document.forms[0].elements[i].value);
+    if (name.indexOf("index") >= 0 && (document.forms[0].elements[i+2].value) == "ReadWrite"){
+       noOfReadWriteUsers +=1;
+        if (value == index){
+            isReadWriteUser = true;
+        }
+    }
+  }
+  if(noOfReadWriteUsers == 1 && isReadWriteUser){
+      if( confirm("Deleting the last Read-Write user will no longer allow administrative access by Web or CLI unless an alternate database is used, such as RADIUS. Are you sure you want to delete the last Read-Write user??"))
+          deleteActionWithNoMsg(index);
+          return;
+  }
+  deleteAction(index);
+}
+function checkLobby(){
+
+ for(var i =0;i < document.forms[0].elements.length;i++){
+    var value = (document.forms[0].elements[i].value);
+    if ((document.forms[0].elements[i].value) == "LobbyAdmin") {
+       i++;
+       if((document.forms[0].elements[i].type)=="checkbox") {
+        document.forms[0].elements[i].style.display ="none";
+        document.forms[0].elements[i].style.visibility ="hidden";
+       }
+       i--;
+    }
+ }
+
+}
+
+var url = 'frameManagementLocalUsers.html';
+var list_size = 32;
+</script>
+</HEAD>
+<BODY class = "bodyattributes" ONLOAD = 'CheckError();showPaging(); checkLobby();'>
+<script>
+drawPeerTabs("mgmtuser_list.html");
+</script>
+
+<FORM method="post" ACTION="frameManagementLocalUsers.html">
+<INPUT type="hidden" name="page_index" VALUE="1">
+<INPUT type="hidden" name="query_str" size="512" maxlength="512" VALUE="">
+<INPUT type="hidden" name="total_entries" VALUE="<?=USER-COUNT=?>">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="Daq8YLeOE6EexVoCDVxFLfi9ngUlnkc">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td class="pageTitle">
+        <h1>Local Management Users</h1>
+      </td>
+      <td align="right" class="pageTitle">
+          <script>
+              getHtmlForApplyButton();
+          </script>
+                  &nbsp;&nbsp;&nbsp;
+<script>
+getHtmlForCreateNewButton("frameManagementLocalUsersCreate.html");
+</script>
+        &nbsp;&nbsp;&nbsp;
+<script>getHtmlForHelpButton("Local_Management_Users","/helppages/wwhelp.htm");</script>
+      </td>
+    </tr>
+    <tr>
+    <table width="600" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="label1" width="400"><h2>Services</h2></td>
+            <td align="right" valign="middle" >
+               <!-- To display paging in top right corner-->
+<!-- <div id=pagingStr>
+ <table cellSpacing=0 cellPadding=0 border=0 >
+	<tr align="left" valign=top>
+		<td colspan="25" class="headerNoBorder" style="COLOR: #666666; " align="center" noWrap>
+			<SCRIPT>getPagingStr();</SCRIPT>
+	    </td>
+	</tr>
+ </table>
+</div> -->
+
+<!-- <div id=pagingDiv style="display:none">
+	<TABLE cellSpacing=0 cellPadding=0 border=0 >
+		<tr align="left" valign=top>
+			<td colspan="25" class="header" style="COLOR: #666666; " align="center" noWrap>
+				<SCRIPT>getPagingStr();</SCRIPT>
+			</td>
+		</tr>
+		<TR vAlign=top align=center  >
+			<TD><NOBR><A id=pager_first href="javascript:getPage('first');"><IMG
+                        alt=First height=16
+                        src="/images/first.gif" width=20
+                        border=0 ></A> </NOBR>
+			</TD>
+			<TD align=center id="prev_disabled" style="display:none"><NOBR>
+				<IMG alt="Show previous 5" height=16 src="/images/previous_disabled.gif" width=20
+                        border=0> </NOBR>
+			</TD>
+			<TD align=center id="prev" style="display:none"><NOBR>
+				<A id=pager_first href="javascript:getPage('previous');">
+				<IMG alt="Show previous 5" height=16 src="/images/previous.gif" width=20
+                        border=0>
+				</A>  </NOBR>
+			</TD>
+			<td><script>getPages();</script></td>
+			<TD id="next" style="display:none"><NOBR><A id=pager_next
+                 href="javascript:getPage('next');"><IMG
+                 alt="Show Next 5" height=16 src="/images/next.gif"
+                  width=20 border=0></A> </NOBR></TD>
+			<TD id="next_disabled" style="display:none"><NOBR><IMG
+                        alt="Show Next 5" height=16 src="/images/next_disabled.gif"
+                        width=20 border=0></NOBR></TD>
+			<TD><NOBR><A id=pager_last
+                        href="javascript:getPage('last');"><IMG
+                        alt=Last height=16 src="/images/last.gif"
+                        width=20 border=0></A>
+                </NOBR></TD>
+		</TR>
+	</TABLE>
+</div> -->
+
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="horizLine"></td>
+        </tr>
+    </table>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <table border="0" cellspacing="0" cellpadding="0">
+
+          <tr>
+            <td style="padding-top: 13px">
+              <table border="0" cellspacing="1" cellpadding="0" width="600">
+                <tr>
+                  <th align="left">User Name</th>
+                  <th align="left">User Access Mode</th>
+                  <th align="left">Telnet Capable</th>
+                  <th>&nbsp;</th>
+                </tr>
+
+<?=USER-ENTRY-begin=?>
+               <!-- <INPUT TYPE="hidden" NAME="1.<?=USER-INDEX=?>.<?=USER-COUNT=?>.index" SIZE="16" MAXLENGTH="15" VALUE="<?=USER-INDEX=?>"></TD> -->
+                <tr>
+                  <td class="listNoPad">
+                    <INPUT type="TEXT" name="1.<?=USER-INDEX=?>.<?=USER-COUNT=?>.username" class="statictextboxlist" SIZE="32" MAXLENGTH="24" VALUE="<?=USER-ID=?>">
+                  </td>
+                  <td class="listNoPad">
+                  	Not Supported
+                  	<!-- <INPUT type="TEXT" name="1.<?=USER-INDEX=?>.<?=USER-COUNT=?>.access_mode" class="statictextboxlist" SIZE="16" MAXLENGTH="15" VALUE="<?=USER-ACCESS=?>"> -->
+                  </td>
+                  <td class="listNoPad">
+                  	Not Supported
+                    <!-- <INPUT type="checkbox" name="1.<?=USER-INDEX=?>.<?=USER-COUNT=?>.telnet_cap" id="telnet_cap" value="<?=USER-TELNET-?>" <?=USER-TELNET-?> > -->
+                  </td>
+				  <!-- <script>var indexVal=<?=USER-INDEX=?>;</script>
+		  		  <script>addMenuItem("Remove", "deleteUserAction", indexVal);</script>
+                  <td class="list"><script>getHtmlForPopupMenu(indexVal);</script></td> -->
+                  <TD class=listNoPad><a href="javascript:deleteUserAction(<?=USER-INDEX=?>);">Remove</a></TD>
+                </tr>
+<?=USER-ENTRY-end=?>
+
+
+              </table>
+            </td>
+
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+    </tr>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="indexClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+
+</table>
+
+</FORM>
+
+<!-- <script>buildMenu();</script> -->
+
+
+<?=PAGE-FOOTER=?>

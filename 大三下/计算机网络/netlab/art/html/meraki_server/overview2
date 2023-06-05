@@ -1,0 +1,128 @@
+<script type="text/javascript">
+
+var CUSTOM1_CLICKED  = 0x20;
+var CUSTOM2_CLICKED  = 0x40;
+
+var networkCount = <?=NETWORK-COUNT=?>;
+var deviceCount = <?=DEVICE-COUNT=?>;
+
+function submitEditNetwork()
+{
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", CUSTOM1_CLICKED);
+  
+  for (var i = 0; i < networkCount; i++)
+  {
+    var colDelete = document.getElementById("network_delete_row_" + i);
+    var colNetwork = document.getElementById("network_row_" + i);
+
+    if (colDelete.value = "checked")
+      top.CHttpFormExtractor.addKeyValue(colNetwork.value, colNetwork.value);
+  } 
+  
+  document.edit_network.submit();
+
+  return false;
+}
+
+function submitEditDevice()
+{
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", CUSTOM2_CLICKED);
+
+  for (var i = 0; i < deviceCount; i++)
+  {
+    var colDelete = document.getElementById("device_delete_row_" + i);
+    var colDevice = document.getElementById("device_row_" + i);
+
+    if (colDelete.value = "checked")
+      top.CHttpFormExtractor.addKeyValue(colDevice.value, colDevice.value);
+  } 
+  
+  document.edit_device.submit();
+
+  return false;
+}
+
+
+</script>
+
+<h2 style="font-family: sans-serif;">Dash Board</h2>
+ 
+<form accept-charset="UTF-8" name="edit_network" action="network_device_edit" id="edit_network_form" method="post">
+
+<b>Networks</b>
+<table id="meraki_table" border="1" style="font-size: 90%;" border="0">
+<tr>
+  <th>Delete</th>
+  <th>Name</th>
+  <th>Usage</th>
+  <th>Clients</th>
+  <th>Tags</th>
+  <th>Network type</th>
+  <th>Network health</th>
+  <th>Devices</th>
+  <th>Offline devices</th>
+</tr>
+
+<?=BEGIN-NETWORK-CONFIG=?>
+<tr>
+  <td align="center"><input type="checkbox" name="network_delete_row_<?=NUM=?>" id="network_delete_row_<?=NUM=?>" /></td>
+  <td align="center"><?=NETWORK-NAME=?><input type="hidden" name="network_row_<?=NUM=?>" id="network_row_<?=NUM=?>" value="<?=NETWORK-NAME=?>" /></td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td align="center">Appliance</td>
+  <td>&nbsp;</td>
+  <td align="center"><?=DEVICE-COUNT=?></td>
+  <td align="center"><?=OFFLINE-DEVICE-COUNT=?></td>
+</tr>
+<?=END-NETWORK-CONFIG=?>
+
+</table>
+
+<div style="clear: both; height: 20px;"></div>
+<div style="position:relative;left:250px;">
+<a id="next" class="btn btn-primary update_modal_state next" onClick="submitEditNetwork();">Save networks</a>
+</div>
+</form>
+
+
+<br>
+
+<form accept-charset="UTF-8" name="edit_device" action="network_device_edit" id="edit_device_form" method="post">
+
+<b>Devices</b>
+<table id="meraki_table">
+<tr>
+  <th>Delete</th>
+  <th>Model</th>
+  <th>Name</th>
+  <th>Network</th>
+  <th>MAC address</th>
+  <th>Tags</th>
+  <th>Clients</th>
+  <th>Usage</th>
+  <th>Connectivity</th>
+</tr>
+
+<?=BEGIN-DEVICE-CONFIG=?>
+<tr>
+  <td align="center"><input type="checkbox" name="device_delete_row_<?=NUM=?>" id="device_delete_row_<?=NUM=?>" /></td>
+  <td><?=MODEL=?></td>
+  <td><?=MAC-ADDRESS=?><input type="hidden" name="device_row_<?=NUM=?>" id="device_row_<?=NUM=?>" value="<?=SERIAL-NUMBER=?>" /></td>
+  <td><?=NETWORK=?></td>
+  <td><?=MAC-ADDRESS=?></td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<?=END-DEVICE-CONFIG=?>
+</table>
+	
+<div style="clear: both; height: 20px;"></div>
+<div style="position:relative;left:250px;">
+<a id="next" class="btn btn-primary update_modal_state next" onClick="submitEditDevice();">Save devices</a>
+</div>
+</form>	

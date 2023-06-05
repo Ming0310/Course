@@ -1,0 +1,10 @@
+int main(){
+	int a;
+	int b;
+	int c;
+	int result;
+	a = 1;
+	b = 1;
+	c = 1;
+	result = a + b - a * c / b;
+}

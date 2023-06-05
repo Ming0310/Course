@@ -1,0 +1,343 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Security';
+
+function ptOnload() {
+	for (var i=0; i<freeServerIds.length; i++)
+	{
+		var id = freeServerIds[i];
+		var option = document.createElement("option");
+		option.value = id;
+		option.text = id;
+		document.forms[0].authServerIndex.add(option);
+	}
+}
+
+var freeServerIds = <?=FREE-RADIUS-SERVER-IDS=?>;
+
+function submitTheDataForm() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("authServerIndex", document.forms[0].authServerIndex.value);
+		top.CHttpFormExtractor.addKeyValue("server_addr", document.forms[0].server_addr.value);
+		top.CHttpFormExtractor.addKeyValue("server_key", document.forms[0].server_key.value);
+		top.CHttpFormExtractor.addKeyValue("portNo", document.forms[0].portNo.value);
+		document.forms[0].submit();
+	}
+	
+	return false;
+}
+</script>
+
+<script>
+function showIpsecparams(){
+	var field_obj = document.getElementById("ipsec_param_table");
+    var showIpsec = document.forms[0].radius_ipsec.checked;
+    if(showIpsec){
+        field_obj.style.display = "block";
+    }else
+        field_obj.style.display = "none";
+  
+}
+
+var textAttrs = new Array();
+var notAllowedChars = new Array();
+
+
+
+
+textAttrs[0] = new textAttr("server_key","Shared Secret",128,notAllowedChars,null,true);
+textAttrs[1] = new textAttr("server_key_cnfrm","Confirm Shared Secret",128,notAllowedChars,null,true);
+
+var numAttrs = new Array();
+numAttrs[0] = new numberAttr("portNo","Port Number",1,65535,null,true);
+numAttrs[1] = new numberAttr("retransmit_timeout","Server Timeout",2,30,null,true);
+numAttrs[2] = new numberAttr("mgmt_timeout","Management Retransmit Timeout",2,30,null,true);
+
+
+thisFormAttrs = new formAttrs(numAttrs,textAttrs,null,null);
+
+
+businessLogicImplemented = true;
+
+function validateBusinessLogic(attrs){
+    if(document.forms[0].key_format[1].selected == true){
+        if((document.forms[0].server_key.value.length)%2 != 0){
+            alert("Please enter even number of hex characters to set the shared secret in hex format.");
+            return false;
+        }
+    }
+
+    if(document.forms[0].server_key.value != document.forms[0].server_key_cnfrm.value){
+        alert("Shared Secret doesn't match.Try again.");
+        document.forms[0].server_key.value = "";
+        document.forms[0].server_key_cnfrm.value = "";
+        return false;
+	}
+	
+        //check shared secret key
+	if(document.forms[0].key_format[0].selected == true){ //Ascii
+		//if ascci is chosen shared secret key can be of max of 64 chars
+		if ( (document.forms[0].server_key.value.length) >64){
+				alert("Shared secret key should be of less than 64 characters in ASCII and less than 128 charcaters in HEX ");
+			return false;
+		}
+	}
+
+
+    //check for key wrap keys
+	if ( document.forms[0].key_wrap.checked == true){
+		//this is a create screen so *** will not be there
+		if(document.forms[0].keywrap_format[0].selected == true){ //Ascii
+			// KEK should be 16 bytes
+			if ( (document.forms[0].keyWrap_kek.value.length) !=16){
+				alert("Key Encryption Key (KEK) should be of length 16 in ASCII and 32 in HEX ");
+				return false;
+			}
+			//MACK should be 20 bytes
+			if ( document.forms[0].keyWrap_mack.value.length!=20){
+				alert("Message Authentication Code (MACK) should be of length 20 in ASCII and 40 in HEX ");
+				return false;
+			}
+
+		}
+		else{ //hex
+			// KEK should be 32 bytes
+			if ( document.forms[0].keyWrap_kek.value.length!=32){
+				alert("Key Encryption Key (KEK) should be of length 16 in ASCII and 32 in HEX");
+				return false;
+			}
+			// MACK should be 40 bytes
+			if ( document.forms[0].keyWrap_mack.value.length!=40){
+				alert("Message Authentication Code (MACK) should be of length 20 in ASCII and 40 in HEX");
+				return false;
+			}
+		}
+	}
+	
+	return true;
+}
+
+function showKeyWrapKeys(){
+	if ( document.forms[0].key_wrap.checked==true){
+	   document.getElementById("keyWrap_divId").style.display="block";
+	}else{
+	   document.getElementById("keyWrap_divId").style.display="none";
+	}	
+}
+
+
+</script>
+
+<FORM method="post" ACTION="frameRadiusCreate.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+    <tr> 
+      <td class="pageTitle"> 
+        <h1>RADIUS Authentication Servers &gt; New</h1>
+      </td>
+      <td align="right" class="pageTitle"> 
+        <input type="button" name="back" value="&lt; BACK" class="button" onclick="javascript:window.location='frameRadiusList.html';">
+        &nbsp;&nbsp;&nbsp; 
+        <script> document.writeln('\
+	<input type="button" name="apply" value="',top.APPLY,'" class="button" onClick="javascript:submitTheDataForm()">\
+	')</script>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="label2" width="200">Server Index (Priority)</td>
+            <td class="label2">
+				<SELECT name="authServerIndex"></SELECT>
+            </td>
+          </tr>
+          <tr>
+            <td class="label2" width="160">Server IP Address(Ipv4/Ipv6)</td>
+            <td class="label2">
+                <INPUT type="TEXT" name="server_addr" SIZE="50" MAXLENGTH="50" VALUE="">
+            </td>
+
+          </tr>
+          <tr class="notSupported">
+            <td class="label2" width="160">Shared Secret Format</td>
+            <td class="label2">
+              <SELECT name="key_format" SIZE="1">
+                <OPTION value="format_ascii" >ASCII</option>
+                <OPTION value="format_hex" >Hex</option>
+              </SELECT>
+            </td>
+          </tr>
+
+          <tr>
+            <td width="147" class="label2">Shared Secret</td>
+            <td class="label2">
+              <INPUT type="Password" name="server_key" emweb_type=PASSWORD autocomplete="off" SIZE="64" MAXLENGTH="128" VALUE="">
+            </td>
+          </tr>
+          <tr>
+            <td width="147" class="label2">Confirm Shared Secret</td>
+            <td class="label2">
+              <INPUT type="Password" name="server_key_cnfrm" emweb_type=PASSWORD autocomplete="off" SIZE="64" MAXLENGTH="128" VALUE="">
+            </td>
+          </tr>
+          <tr class="notSupported">
+             <td class ="label2">Key Wrap</td>
+	         <td class="label2PadTop">
+			  <INPUT type="checkbox" name="key_wrap" value="false" onClick="showKeyWrapKeys()" >&nbsp;&nbsp;(Designed for FIPS customers and requires a key wrap compliant RADIUS server) 
+	        </td>
+	     </tr>
+         <tr>
+          <td colspan="2">
+			  <div id="keyWrap_divId" style="display:none">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+						<td class="label2" width="210">Key Wrap Format</td>
+                        <td class="label2">
+                          <SELECT name="keywrap_format" SIZE="1">
+                           <OPTION value="format_ascii" >ASCII</option>
+                           <OPTION value="format_hex" >Hex</option>
+                          </SELECT>
+                        </td>
+                    </tr>
+                    <tr>
+						<td class="label2" width="210">Key Encryption Key(KEK)</td>
+                      <td class="label2">
+						  <INPUT type="text" name="keyWrap_kek" SIZE="32" MAXLENGTH="32" VALUE="">
+                      </td>
+                    </tr>
+                    <tr>
+						<td class="label2" width="210">
+							Message Authentication Code Key(MACK)</td>
+                      <td class="label2">
+						  <INPUT type="text" name="keyWrap_mack" SIZE="40" MAXLENGTH="40" VALUE="">
+                      </td>
+                    </tr>
+			    </table>
+			</div>
+		  </td>
+	   </tr>
+	   <!-- port no -->
+          <tr>
+            <td class="label2">Port Number</td>
+
+            <td class="label2">
+              <INPUT type="text" name="portNo" SIZE="7" MAXLENGTH="6" VALUE="1812">
+            </td>
+          </tr>
+          <tr class="notSupported">
+            <td class="label2">Server Status</td>
+            <td class="label2">
+              <SELECT name="server_status" SIZE="1">
+                <OPTION value="Enable" >Enabled</option>
+
+                <OPTION value="Disable" >Disabled</option>
+              </SELECT>
+            </td>
+          </tr>
+          <tr class="notSupported">
+            <td class="label2">Support for CoA</td>
+            <td class="label2">
+              <SELECT name="rfc3576" SIZE="1">
+                <OPTION value="Enable" >Enabled</option>
+
+                <OPTION value="Disable" SELECTED>Disabled</option>
+              </SELECT>
+            </td>
+          </tr>
+	
+	  <tr class="notSupported">
+	    <td class ="label2">Server Timeout</td>
+	    <td class="label2">
+	      <INPUT type="TEXT" name="retransmit_timeout" SIZE="2" MAXLENGTH="2" VALUE="2">&nbsp; seconds
+	    </td>
+	  </tr>
+	
+	  <tr class="notSupported">
+	    <td class ="label2">Network User</td>
+	    <td class="label2">
+			<INPUT type="checkbox" name="network_user" value="" CHECKED>&nbsp;Enable
+	    </td>
+	  </tr>
+
+	  <tr class="notSupported">
+	    <td class ="label2">Management</td>
+	    <td class="label2">
+	      <INPUT type="checkbox" name="mgmt_user" value="" CHECKED>&nbsp;Enable
+	    </td>
+	  </tr>
+
+      <tr class="notSupported">
+        <td class ="label2">Management Retransmit Timeout</td>
+        <td class="label2">
+<INPUT type="TEXT" name="mgmt_timeout" SIZE="2" MAXLENGTH="2" VALUE="2">&nbsp;seconds
+        </td>
+      </tr>
+
+
+          <tr class="notSupported">
+            <td class ="label2">IPSec</td>
+            <!-- Unit -->
+            <td>
+              <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td class="label2">
+					  <INPUT type="checkbox" name="radius_ipsec" value="false" onClick="showIpsecparams()" >
+                  </td>
+                  <td class="label2">Enable</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+      
+          <tr>
+           <td colspan="2">
+            <div id="ipsec_param_table" style="display:none">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                       <td class="label2" width="215">IPSec Profile Name</td>
+                       <td>
+                          <SELECT name="ipsec_nameAuth">
+<OPTION value="none" SELECTED>none</SELECT>
+                       </td>
+                    </tr>                      
+                </table>
+            </div>
+        </td>
+    </tr>
+          
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+  </table>
+
+</FORM>
+
+<?=PAGE-FOOTER=?>

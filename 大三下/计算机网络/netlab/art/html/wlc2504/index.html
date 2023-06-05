@@ -1,0 +1,215 @@
+<HTML>
+<HEAD>
+<TITLE>Cisco Systems Login</TITLE>
+
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<STYLE type=text/css>
+.configLoginScreen .k-button {
+	padding: 6px 20px;
+	border-radius: 25px;
+	color: #232f34;
+	border: 1px solid #9ec654;
+	outline: 0;
+	font-size: 16pt;
+	margin-right: 4px;
+	min-width: 130px;
+	background-color: #9ec654;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+.configLoginScreen {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	display: block;
+	background-color: #E6E9F0;
+	text-align: center;
+	overflow: auto;
+	color: #70717B;
+	font-family: CiscoSansThin, "Helvetica Neue", Arial, Tahoma, sans-serif;
+}
+
+.configLoginScreen .configLoginScreenContainer {
+	margin: auto;
+	display: inline-block;
+	padding: 1rem;
+	width: 500px;
+	background-color: #ffffff;
+	position: relative;
+	top: 50%;
+	-webkit-transform: translate(0%, -50%);
+	-moz-transform: translate(0%, -50%);
+	-ms-transform: translate(0%, -50%);
+	transform: translate(0%, -50%);
+}
+
+.configLoginScreen .configLoginCompanyLogoWrapper {
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	font-size: 5.5 rem;
+	color: #70717B;
+	margin: 70px 0 60px 0;
+}
+
+.configLoginScreen .configLoginScreenContainer .configProductName {
+	font-size: 38px;
+	line-height: 60px;
+	padding: 0 5px 20px 5px;
+}
+
+.configLoginScreen .configWelcomeMessage {
+	font-size: 13px;
+}
+
+.configLoginScreen .configLoginScreenContainer .configLoginCopyright {
+	margin: 0 0 20px 0;
+	font-size: 12px;
+	text-align: justify;
+}
+
+.configLoginScreen .configLoginScreenContainer .configLoginFields {
+	display: inline-block;
+	margin: 80px 0;
+}
+
+
+
+.logintitle {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px; COLOR: #ffffff; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+.login {
+	FONT-WEIGHT: normal; FONT-SIZE: 11px; COLOR: #ffffff; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+.style1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+TEXTAREA.area{
+        COLOR: #4682B4;
+        BACKGROUND-COLOR: #FFFFFF;
+}
+span.copyright {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+        font-weight: bold;
+        text-align: left;
+	color: #999999;
+}
+
+.icon-cisco_logo {
+	height: 50px;
+	background-image: url('data:image/png;base64,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');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+</STYLE>
+<SCRIPT>
+function showLogin() {
+	if (document.getElementById('loginDiv').style.display != 'block') {
+		document.getElementById('loginDiv').style.display = 'block';
+		document.getElementById('userid').value = '';
+		document.getElementById('pw').value = '';
+		document.getElementById('userid').focus();
+	}
+}
+
+function cancelLogin() {
+	document.getElementById('loginDiv').style.display = 'none';
+}
+
+function submitLogin() {
+	var username = document.getElementById('userid').value;
+	var password = document.getElementById('pw').value;
+	if ((username != "") && (password != ""))
+	{
+		CHttpFormExtractor.submitIoeLogin();
+		cancelLogin();
+		document.forms["loginForm"].submit();
+	}
+}
+
+function displayLoginFailMessage() {
+	document.getElementById('errorDiv').style.display = 'block';
+}
+
+function hideLoginFailMessage() {
+	document.getElementById('errorDiv').style.display = 'none';
+}
+</SCRIPT>
+
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR>
+</HEAD>
+<BODY text=#000000 leftMargin=0 topMargin=0 marginwidth="0" marginheight="0" height="100%">
+<div id="loginDiv" style="position: absolute; left: calc(50% - 140px); top: 50px; background-color: lightgray; border-style: solid; border-width: 3px; display:none; z-index: 1000;">
+	<form name="loginForm" action="main.html" method="POST">
+		<TABLE>
+			<TR>
+				<TD colspan="2">Authentication Required</TD>
+			</TR>
+			<TR>
+				<TD>User Name:</TD>
+				<TD><input value="" maxlength="32" tabindex="0" id="userid" class="inputInner" autocomplete="on" name="userid" type="text"></TD>
+			</TR>
+			<TR>
+				<TD>Password:</TD>
+				<TD><input value="" maxlength="80" tabindex="0" id="pw" class="inputInner" autocomplete="on" name="pw" type="password"></TD>
+			</TR>
+			<TR>
+				<TD></TD>
+				<TD>
+					<INPUT style="cursor:pointer;" type=submit value="Login" name="bSubmit " onclick="submitLogin()">
+					<INPUT style="cursor:pointer;" type=button value="Cancel" onclick="cancelLogin()">
+				</TD>
+			</TR>
+		</TABLE>
+	</form>
+</div>
+<div id="errorDiv" style="position: absolute; left: calc(50% - 120px); top: 50px; background-color: lightgray; border-style: solid; border-width: 3px; display:none; z-index: 2000;">
+	<TABLE>
+		<TR>
+			<TD colspan="2">Authentication Error</TD>
+		</TR>
+		<TR>
+		</TR>
+		<TR>
+			<TD>Invalid User Name or Password.</TD>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TD>
+				<INPUT style="cursor:pointer;" type=button value="OK" onclick="hideLoginFailMessage()">
+			</TD>
+		</TR>
+	</TABLE>
+</div>
+
+<div class="configLoginScreen" valign="middle" id="loginPage">
+	<div class="configLoginScreenContainer">
+		<div class="configLoginCompanyLogoWrapper">
+			<div class="icon-cisco_logo" title="Cisco Logo" id="cisco_logo"></div>
+		</div>
+		<div class="configProductName ng-binding">
+			Wireless LAN Controller
+		</div>
+		<div class="configWelcomeMessage ng-binding">
+			Welcome! Please click the login button to enter your user name and password
+		</div>
+	   	<p></p>
+		<div id="banner" class="configWelcomeMessage">
+                </div>
+		<div class="configLoginFields">
+			<button class="k-button ng-binding" name="bSubmit " onclick="showLogin()" type="button">Login</button>
+		</div>
+                <div id="copyrightmessage" class="configLoginCopyright ng-binding">
+			<span id="copyrightYear">&copy 2005 - 2017</span>
+			Cisco Systems, Inc. All rights reserved. Cisco, the Cisco logo, and Cisco Systems are registered trademarks or trademarks of Cisco Systems, Inc. and/or its affiliates in the United States and certain other countries. All third party trademarks are the property of their respective owners.
+		</div>
+	</div>
+</div>
+
+</FORM>
+ </BODY></HTML>

@@ -1,0 +1,20 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<?=CONTENT=?>
+
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

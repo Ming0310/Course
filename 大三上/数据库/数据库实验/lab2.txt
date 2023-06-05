@@ -1,0 +1,27 @@
+use sakila;
+SELECT * FROM customer;
+ 
+CREATE VIEW customer_info AS
+SELECT customer.customer_id CID,
+CONCAT(customer.first_name,' ',customer.last_name) CNAME,
+SUM(payment.amount) TOTAL_SPEND,
+GROUP_CONCAT(CONCAT(film.title) SEPARATOR ',') film_info
+FROM customer,payment,rental,inventory,film
+WHERE rental.rental_id = payment.rental_id AND rental.inventory_id = inventory.inventory_id 
+AND film.film_id = inventory.film_id AND customer.customer_id = rental.customer_id
+GROUP BY customer.customer_id;
+
+SELECT * FROM customer_info;
+
+delimiter $$
+CREATE TRIGGER customer_upd AFTER INSERT ON rental
+	FOR EACH ROW BEGIN
+		UPDATE customer_info SET customer_info.TOTAL_SPEND = customer_info.TOTAL_SPEND + payment.amount,
+		customer_info.film_info = CONCAT(customer_info.film_info,',',film.title)
+		WHERE customer_infor.CID = new.customer_id AND payment.rental_id = rental.rental_id AND new.inventory_id = inventory.inventory_id
+		AND film.film_id = inventory.film_id;
+END$$
+
+SELECT * FROM rental() VALUES;
+
+INSERT INTO rental 

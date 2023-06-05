@@ -1,0 +1,255 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Wlans';
+
+function ptOnload() {
+	initOnload();
+}
+
+function submitTheDataForm() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("vap_profileName", document.forms[0].vap_profileName.value);
+		top.CHttpFormExtractor.addKeyValue("vap_ssid", document.forms[0].vap_ssid.value);
+		top.CHttpFormExtractor.addKeyValue("wlan_id", document.forms[0].wlan_id.value);
+		document.forms[0].submit();
+	}
+	
+	return false;   
+}
+</script>
+
+<script>
+var textAttrs = new Array();
+var numAttrs = new Array();
+textAttrs[0] = new textAttr("vap_profileName","Profile Name",32,null,null,true);
+textAttrs[1] = new textAttr("vap_ssid","SSID",32,null,null,false);
+numAttrs[0] = new numberAttr("wlan_id","WLAN ID ",1, 22, null,true);
+
+var GUEST_WLAN_START = 17;
+
+
+businessLogicImplemented = true;
+function validateBusinessLogic(attrs){
+
+     var prof = document.forms[0].vap_profileName.value;
+     if (prof.length == 0 || prof.length > 32) {
+        alert ("Maximum allowed characters for Profile name 0-32"); 
+        return false;
+     }
+     var ssid = document.forms[0].vap_ssid.value;
+     if (ssid.length == 0 || ssid.length > 32) {
+        alert ("Maximum allowed characters for SSID 0-32"); 
+        return false;
+     }
+     return true;
+}
+//set the wlan id when the selection changed.
+function setWlanId()
+{
+  var selctrl = document.forms[0].selwlanid;
+  document.forms[0].wlan_id.value =  selctrl.options[selctrl.selectedIndex].value;
+}
+
+// set the wlan field with next free wlan.
+function initWlanIdField()
+{
+       //four lines from above here can be removed if ajax works fine for this. 
+   getFreeWlans();
+
+  var Wlan_Ssid;
+  Wlan_Ssid = document.getElementById("wlan_ssid");
+  if( document.forms[0].lan_type.options[document.forms[0].lan_type.selectedIndex].value == "Wireless")
+  {
+       document.forms[0].wlan_id.value = document.forms[0].selwlanid.value; //document.forms[0].next_wlanid.value;
+       // Show the SSID field for WLAN.
+       Wlan_Ssid.style.display = "";
+  }
+  if( document.forms[0].lan_type.options[document.forms[0].lan_type.selectedIndex].value == "RemoteLan")
+  {
+       document.forms[0].wlan_id.value = document.forms[0].next_wlanid.value;
+	// Show the SSID field for Remote Lan.
+       Wlan_Ssid.style.display = "none";
+  }
+  if( document.forms[0].lan_type.options[document.forms[0].lan_type.selectedIndex].value == "Wired") 
+  {
+       document.forms[0].wlan_id.value = document.forms[0].next_guestlanid.value; 
+       //Dont show the SSID field for Guest-lan.
+       Wlan_Ssid.style.display = "none";
+  }
+}
+
+function initOnload()
+{
+  //empty the wlans. work around to avoid compilation problem for emweb.
+  document.forms[0].selwlanid.options.length=0;
+  setTitleBg();
+  initWlanIdField();
+  CheckError();
+}
+
+// dojo functions to make Ajax calls for the wlan data.
+function getFreeWlans() {
+   if( document.forms[0].lan_type.options[document.forms[0].lan_type.selectedIndex].value == "Wireless")
+   {
+    //   dojo.io.bind ({
+    //   url: 'wlan_create.html?AgetFreeWlan=1',
+    //   handler: fillWlans      
+    // });
+     resetTheFreeWlans(document.forms[0].freeWlans.value);
+   }
+   if( document.forms[0].lan_type.options[document.forms[0].lan_type.selectedIndex].value == "RemoteLan")
+   {
+     resetTheFreeWlans(document.forms[0].freeWlans.value);
+   }
+   if( document.forms[0].lan_type.options[document.forms[0].lan_type.selectedIndex].value == "Wired")
+   {
+    //   dojo.io.bind ({
+    //   url: 'wlan_create.html?AgetFreeGuest=1',
+    //   handler: fillguests      
+    // });
+     resetTheFreeWlans(document.forms[0].freeGusets.value);
+   }
+}
+   
+function fillWlans(type, data, evt) {
+      if(type == "load"){          
+          resetTheFreeWlans(data);
+        
+      }else if(type == "error"){
+         alert("Error occured while getting free wlans");
+      }
+}
+function fillguests(type, data, evt) {
+      if(type == "load"){        
+        resetTheFreeWlans(data);        
+      }else if(type == "error"){
+         alert("Error occured while getting guest wlans");
+      }
+}
+
+//get the comma seperated data. and fill the list box.
+function resetTheFreeWlans(data)
+{
+  var slctrl = document.forms[0].selwlanid;  
+  slctrl.options.length=0;
+  var optObj;
+  var wlnId = 0;
+  if(data != null && data.length > 0)
+  {
+      var pieces = data.split(",");
+      for(var count=0; count < pieces.length; count++)
+      {
+          wlnId = (0 + trim(pieces[count])) % GUEST_WLAN_START;
+          optObj = new Option(wlnId,trim(pieces[count]), null, null);
+          slctrl.options[slctrl.options.length] = optObj;               
+      }  
+  }else {
+     if( document.forms[0].lan_type.options[document.forms[0].lan_type.selectedIndex].value == "Wireless")
+     alert("WLAN List reached its maximum.");
+     else if( document.forms[0].lan_type.options[document.forms[0].lan_type.selectedIndex].value == "RemoteLan")
+     alert("Remote LAN List reached its maximum.");
+     else
+     alert("Guest List reached its maximum.");
+  }  
+} 
+function setTitleBg()
+{
+   if(document.forms[0].isGuest.value == 1)
+   {
+      var getElmId = document.getElementById("headertext");
+      getElmId.innerHTML = "Guest LANs &gt; New";
+	  document.forms[0].lan_type.selectedIndex = 0;	 
+   }
+  // document.forms[0].lan_type.disabled = true;	
+}
+
+</script>
+
+<FORM method="post" ACTION="frameWlanCreate.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+
+  <table CELLSPACING=0  WIDTH="100%" nowrap cellpadding="0" border="0">
+
+    <!-- the header as part of the table -->
+    <tr>
+      <td nowrap class="pageTitle">
+ <H1 id="headertext">WLANs &gt; New</H1></TD>  
+      </td>
+      <td align="right" class="pageTitle">
+        <input type="button" name="back" value="&lt; BACK" class="button" onclick="javascript:window.location='frameWlan.html';">
+        &nbsp;&nbsp;&nbsp;
+        <script> document.writeln('\
+	<input type="button" name="apply" value="',top.APPLY,'" class="button" onClick="javascript:submitTheDataForm()">\
+	')</script>
+      </td>
+    </tr>
+    <tr> 
+      <td colspan="2"> 
+        <table border="0" cellspacing="0" cellpadding="0">
+
+          <tr> 
+            <td class="label2" width="160">Type</td>
+            <td class="label2"> 
+              <SELECT name="lan_type" onChange="initWlanIdField();">
+
+<!--                 <OPTION value="Wired" >Guest LAN</option> -->
+
+		        <OPTION value="Wireless" SELECTED>WLAN</option>
+
+<!-- 		        <OPTION value="RemoteLan" >Remote LAN</option> -->
+
+              </SELECT>
+            </td>
+          </tr>
+
+          <tr> 
+            <td class="label2">Profile Name</td>
+            <td class="label2"> 
+              <INPUT type=TEXT name="vap_profileName" SIZE="42" MAXLENGTH="32" VALUE="">
+            </td>
+          </tr>
+
+          <tr id="wlan_ssid"> 
+            <td class="label2">SSID</td>
+            <td class="label2"> 
+              <INPUT type=TEXT name="vap_ssid" SIZE="42" MAXLENGTH="32" VALUE="">
+            </td>
+          </tr>
+          <tr> 
+            <td class="label2">ID</td>
+            <td class="label2"> 
+               <SELECT name="selwlanid" id="selwlanid" onChange="setWlanId();">
+			      	<OPTION value="one" >1</option>					
+			   </SELECT>
+              
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <INPUT type=hidden name="wlan_id" size="10" maxlength="3" VALUE="0">
+  <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+  <INPUT TYPE="hidden" NAME="next_wlanid" SIZE="16" MAXLENGTH="15" VALUE="5">
+  <INPUT TYPE="hidden" NAME="next_guestlanid" SIZE="16" MAXLENGTH="15" VALUE="18">
+  <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+  <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="freeWlans" SIZE="2048" MAXLENGTH="15" VALUE="<?=FREE-WLAN-IDS=?>"> 
+  <INPUT TYPE="hidden" NAME="freeGusets" SIZE="256" MAXLENGTH="15" VALUE="18,19,20,21,22">
+  <INPUT TYPE="hidden" NAME="isGuest" SIZE="16" MAXLENGTH="15" VALUE="0">
+</FORM>
+
+<?=PAGE-FOOTER=?>

@@ -1,0 +1,69 @@
+B -> INT
+C -> ID
+A -> B C
+Y -> A endl
+Accept a sentence
+B -> INT
+C -> ID
+A -> B C
+Y -> A endl
+Accept a sentence
+B -> INT
+C -> ID
+A -> B C
+Y -> A endl
+Accept a sentence
+B -> INT
+C -> ID
+A -> B C
+Y -> A endl
+Accept a sentence
+F -> INT_CONST
+T -> F
+E -> T
+G -> E
+Assign -> ID = G
+Y -> Assign endl
+Accept a sentence
+F -> INT_CONST
+T -> F
+E -> T
+G -> E
+Assign -> ID = G
+Y -> Assign endl
+Accept a sentence
+F -> INT_CONST
+T -> F
+E -> T
+G -> E
+Assign -> ID = G
+Y -> Assign endl
+Accept a sentence
+F -> ID
+T -> F
+E -> T
+F -> ID
+T -> F
+E -> E + T
+F -> ID
+T -> F
+F -> ID
+T -> T * F
+F -> ID
+T -> T / F
+E -> E - T
+G -> E
+Assign -> ID = G
+Y -> Assign endl
+Accept a sentence
+Daima -> Y
+Daima -> Y Daima
+Daima -> Y Daima
+Daima -> Y Daima
+Daima -> Y Daima
+Daima -> Y Daima
+Daima -> Y Daima
+Daima -> Y Daima
+block -> { Daima }
+S -> INT main ( ) block
+共识别出8个句子

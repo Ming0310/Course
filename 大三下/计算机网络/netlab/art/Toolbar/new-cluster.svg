@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 48 48" style="enable-background:new 0 0 48 48;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#39393B;}
+	.st1{fill:#39393B;stroke:#FFFFFF;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#FFFFFF;stroke-miterlimit:10;}
+	.st3{fill:#FFFFFF;}
+	.st4{enable-background:new    ;}
+</style>
+<path class="st0" d="M44.8,22.1c0-4.6-3.2-8.4-7.4-9.4c0-0.2,0-0.5,0-0.7c0-5.5-4.4-9.8-9.7-9.8c-4.2,0-7.7,2.7-9.1,6.4
+	c-1-0.5-2.2-0.8-3.4-0.8c-4.1,0-7.4,3.3-7.4,7.4c0,0.3,0,0.6,0.1,0.9H7.8l0,0c-4.1,0.2-7.4,3.6-7.4,7.8s3.3,7.6,7.4,7.8l0,0h27.7
+	l0,0C40.7,31.5,44.8,27.3,44.8,22.1z"/>
+<g id="Router_2_">
+	<path id="Base_2_" class="st1" d="M22,13.6v3.7c0,0,0.9,2.1,6.5,2.1s5.8-2,5.8-2V14L22,13.6z"/>
+	<ellipse id="Top_2_" class="st1" cx="28.2" cy="13.3" rx="6.1" ry="2.6"/>
+	<g>
+		<g>
+			<line class="st2" x1="30" y1="13.7" x2="32.3" y2="14.2"/>
+			<g>
+				<polygon class="st3" points="30.1,14.7 28.7,13.5 30.4,13 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st2" x1="26.4" y1="13" x2="24.1" y2="12.3"/>
+			<g>
+				<polygon class="st3" points="26.4,12 27.7,13.2 26,13.7 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st2" x1="27.5" y1="14.3" x2="28.2" y2="13.6"/>
+			<g>
+				<polygon class="st3" points="28.3,14.8 26.5,15.2 27,13.6 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st2" x1="29" y1="12.3" x2="28.3" y2="13.2"/>
+			<g>
+				<polygon class="st3" points="28.2,11.9 29.9,11.5 29.5,13.2 				"/>
+			</g>
+		</g>
+	</g>
+</g>
+<g id="Router_1_">
+	<path id="Base_1_" class="st1" d="M10,22.6v3.7c0,0,0.9,2.1,6.5,2.1s5.8-2,5.8-2V23L10,22.6z"/>
+	<ellipse id="Top_1_" class="st1" cx="16.2" cy="22.3" rx="6.1" ry="2.6"/>
+	<g>
+		<g>
+			<line class="st2" x1="18" y1="22.7" x2="20.3" y2="23.2"/>
+			<g>
+				<polygon class="st3" points="18.1,23.7 16.7,22.5 18.4,22 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st2" x1="14.4" y1="22" x2="12.1" y2="21.3"/>
+			<g>
+				<polygon class="st3" points="14.4,21 15.7,22.2 14,22.7 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st2" x1="15.5" y1="23.3" x2="16.2" y2="22.6"/>
+			<g>
+				<polygon class="st3" points="16.3,23.8 14.5,24.2 15,22.6 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st2" x1="17" y1="21.3" x2="16.3" y2="22.2"/>
+			<g>
+				<polygon class="st3" points="16.2,20.9 17.9,20.5 17.5,22.2 				"/>
+			</g>
+		</g>
+	</g>
+</g>
+<g class="st4">
+	<path class="st1" d="M27.8,34.8h6.7v-6.9h5.7v6.9h6.9v5.7h-6.9v6.7h-5.7v-6.7h-6.7V34.8z"/>
+</g>
+</svg>

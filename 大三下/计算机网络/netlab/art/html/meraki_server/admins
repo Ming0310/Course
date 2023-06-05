@@ -1,0 +1,82 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+
+<script type="text/javascript">
+
+var SUBMIT_CLICKED = 0x04;
+
+var adminCount = <?=ADMIN-COUNT=?>;
+
+function submitEditAdmin()
+{
+  top.CHttpFormExtractor.clearKeyValues();
+  top.CHttpFormExtractor.addKeyValue("buttonClicked", SUBMIT_CLICKED);
+  
+  for (var i = 0; i < adminCount; i++)
+  {
+    var colDelete = document.getElementById("admin_delete_row_" + i);
+    var colAdmin = document.getElementById("admin_row_" + i);
+    if (colDelete.checked == true)
+      top.CHttpFormExtractor.addKeyValue(colAdmin.value, colAdmin.value);
+  } 
+  
+  document.edit_admin.submit();
+
+  return false;
+}
+
+</script>
+
+<?=MESSAGE=?>
+
+<h2 style="font-family: sans-serif;">Cisco administrators</h2>
+ 
+<form accept-charset="UTF-8" name="edit_admin" action="admins" id="edit_admin_form" method="post">
+
+<table id="meraki_table">
+<tr>
+  <th>Delete</th>
+  <th>Name</th>
+  <th>Email address</th>
+  <th>Privilege</th>
+  <th>Account status</th>
+  <th>Two-factor authentication</th>
+  <th>Last active</th>
+</tr>
+
+<?=BEGIN-ADMINS-CONFIG=?>
+<tr>
+  <td align="center"><input type="checkbox" name="admin_delete_row_<?=NUM=?>" id="admin_delete_row_<?=NUM=?>" /></td>
+  <td><?=ADMIN-NAME=?>
+  <td><?=ADMIN-EMAIL=?> <input type="hidden" name="admin_row_<?=NUM=?>" id="admin_row_<?=NUM=?>" value="<?=ADMIN-EMAIL=?>" /></td>
+  <td><?=PRIVILEGE=?></td>
+  <td align="center">Ok</td>
+  <td align="center">Off</td>
+  <td><?=TIME-STAMP=?></td>
+</tr>
+<?=END-ADMINS-CONFIG=?>
+
+</table>
+
+<div style="clear: both; height: 20px;"></div>
+<div style="position:relative;left:250px;">
+<a id="next" class="btn btn-primary update_modal_state next" onClick="submitEditAdmin();">Save changes</a>
+</div>
+</form>
+
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Security';
+
+function ptOnload() {
+}
+
+var numAttrs = new Array();
+numAttrs[0] = new numberAttr("mtu_frame","Framed MTU",64,1300,null,true);
+
+thisFormAttrs = new formAttrs(numAttrs,null,null,null); 
+
+createNewBusinessLogicImplemented = true;
+function validateCreateNewBusinessLogic(){
+// check if total entries is == 16 then don't allow
+// any more create 
+  var totalEntries = 0;
+  for(var loop=0; loop < document.forms[0].elements.length;loop++){
+    if(document.forms[0].elements[loop].name && (document.forms[0].elements[loop].name.indexOf("server_addr") > -1))
+      totalEntries++;
+  }
+  if(totalEntries < 32) return true;
+  else {
+    alert("Can't create more than 32 entries");
+    return false;
+  }
+
+
+}
+
+</script>
+
+<FORM method="post" ACTION="/frameRadiusList.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td class="pageTitle">
+        <h1>RADIUS Authentication Servers</h1>
+
+      </td>
+      <td align="right" class="pageTitle">
+	    <input type="button" name="apply" value="Apply" class="button" onclick="javascript:submitAction()" disabled>
+        <script>getHtmlForCreateNewButton("frameRadiusCreate.html");
+	</script>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+       <table border="0" cellspacing="1" cellpadding="0" class="notSupported">
+          <tr>
+              <td class ="label2">Auth Called Station ID Type</td>
+              <td class ="label2">
+              <SELECT name="authcallstationidtype">
+                  <OPTION value="authipaddress" SELECTED>IP Address</option>
+                  <OPTION value="authmacaddress" >System MAC Address</option>
+                  <OPTION value="authapmacaddress" >AP MAC Address</option>
+                  <OPTION value="authapmacaddress_ssid" >AP MAC Address:SSID</option>
+                  <OPTION value="authapname_ssid" >AP Name:SSID</option>
+                  <OPTION value="authapname" >AP Name</option>
+                  <OPTION value="authapgroup_name" >AP Group</option>
+                  <OPTION value="authflexgroup_name" >Flex Group</option>
+                  <OPTION value="authaplocation" >AP Location</option>
+                  <OPTION value="authapvlanid" >Vlan ID</option>
+                  <OPTION value="authapethmac" >AP Eth MAC Address</option>
+                  <OPTION value="authapethmac_ssid" >AP Eth MAC Address:SSID</option>
+                  <OPTION value="authaplabelmac" >AP Label Address</option>
+                  <OPTION value="authaplabelmac_ssid" >AP Label Address:SSID</option>
+                  <OPTION value="authapmac_ssid_apgroup" >AP MAC:SSID:AP Group</option>
+              </SELECT>
+              </td>
+          </tr>
+          <tr>
+            <td class ="label2">Use AES Key Wrap</td>
+            <td class ="label2PadTop">
+                <INPUT type="checkbox" name="auth_keyWrap" value="0" >&nbsp;&nbsp;(Designed for FIPS customers and requires a key wrap compliant RADIUS server)</td>
+          </tr>
+          <tr>
+            <td class="label2">MAC Delimiter</td>
+            <td class="label2">
+              <SELECT name="mac_delimiter">
+                <OPTION value="Colon" >Colon </option>
+                <OPTION value="Hyphen" SELECTED>Hyphen</option>
+                <OPTION value="SingleHyphen" >Single Hyphen</option>
+                <OPTION value="None" >No Delimiter</option>
+              </SELECT>
+            </td>
+                    <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="label2">Framed MTU</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="mtu_frame" SIZE="4" MAXLENGTH="4" VALUE="1300">
+            </td> 
+          <tr>
+
+        </table>
+       </td>
+      </tr>
+      <tr>
+      <td colspan="2">
+        <table border="0" cellspacing="0" cellpadding="0">
+
+          <tr>
+            <td style="padding-top: 13px">
+              <table border="0" cellspacing="1" cellpadding="0" width="630">
+                <tr>
+                  <th align="left">Network User</th>
+                  <th align="left">Management</th>
+
+		  
+                  <th align="left">Server Index</th>
+                  <th align="left"></th>
+                  <th align="left">Server Address(Ipv4/Ipv6)</th>
+                  <th align="left">Port</th>
+                  <th align="left">IPSec</th>
+                  <th align="left">Admin Status</th>
+                  <th>&nbsp;</th>
+                </tr>
+
+<?=RADIUS-SERVER-ENTRY-begin=?>
+
+                <tr>
+		  <td class="listNoPad">
+		    <center><INPUT type="checkbox" name="1.<?=RADIUS-SERVER-INDEX=?>.<?=RADIUS-SERVER-COUNT=?>.network_user" CHECKED disabled></center>
+		  </td>
+		  <td class="listNoPad">
+		    <center><INPUT type="checkbox" name="1.<?=RADIUS-SERVER-INDEX=?>.<?=RADIUS-SERVER-COUNT=?>.mgmt_user" CHECKED disabled></center>
+		  </td>
+
+	  
+                  <td class="listNoPad">
+				    <SCRIPT>getHtmlForEdit(<?=RADIUS-SERVER-ID=?>);</SCRIPT>
+                    <INPUT type="text" name="1.<?=RADIUS-SERVER-INDEX=?>.<?=RADIUS-SERVER-COUNT=?>.index" class="statictextboxlink" readonly SIZE="2" MAXLENGTH="2" VALUE="<?=RADIUS-SERVER-ID=?>">
+					<SCRIPT>endHtmlEdit();</SCRIPT>
+                    </td>
+                    <td class="listNoPad">
+       <INPUT type="TEXT" name="1.<?=RADIUS-SERVER-INDEX=?>.<?=RADIUS-SERVER-COUNT=?>.active_server" class="statictextboxlist" readonly SIZE="1" MAXLENGTH="1" VALUE="<?=RADIUS-SERVER-ACTIVE=?>">
+                  </td>
+                  <td class="listNoPad">
+                    <INPUT type="TEXT" name="1.<?=RADIUS-SERVER-INDEX=?>.<?=RADIUS-SERVER-COUNT=?>.server_addr" class="statictextboxlist" readonly SIZE="50" MAXLENGTH="50" VALUE="<?=RADIUS-SERVER-IP=?>"> 
+                  </td>
+                  <td class="listNoPad">
+                    <INPUT type="text" name="1.<?=RADIUS-SERVER-INDEX=?>.<?=RADIUS-SERVER-COUNT=?>.portNo" class="statictextboxlist" readonly SIZE="16" MAXLENGTH="15" VALUE="<?=RADIUS-SERVER-PORT=?>">
+
+                  </td>
+                  <td class="listNoPad">
+                    <INPUT type="TEXT" name="1.<?=RADIUS-SERVER-INDEX=?>.<?=RADIUS-SERVER-COUNT=?>.ipsec" class="statictextboxlist" readonly SIZE="16" MAXLENGTH="15" VALUE="Disabled">
+                  </td>
+                  <td class="listNoPad">
+                    <INPUT type="TEXT" name="1.<?=RADIUS-SERVER-INDEX=?>.<?=RADIUS-SERVER-COUNT=?>.status" class="statictextboxlist" readonly SIZE="16" MAXLENGTH="15" VALUE="Enabled">
+                  </td>
+              <td class="list"><a href="javascript:deleteAction(<?=RADIUS-SERVER-ID=?>);">Remove</a></td>
+                </tr>
+<?=RADIUS-SERVER-ENTRY-end=?>
+
+              </table>
+            </td>
+
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+       <td  colspan=2>
+       <br><br><br><br><br>
+          <table cellpadding="0" cellspacing="0" border="0">
+           <tr>
+            <td class="horizLine"></td>
+           </tr>
+          </table>
+       </td> 
+   </tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="indexClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+    </tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+
+      </td>
+    </tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+      </td>
+    </tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+      </td>
+
+    </tr>
+    <tr> 
+      <td ALIGN=left> 
+        <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+      </td>
+    </tr>
+  </table>
+</FORM>
+
+<?=PAGE-FOOTER=?>

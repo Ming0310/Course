@@ -1,0 +1,139 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Switch';
+
+function ptOnload() {
+}
+
+function deleteUserAction(idxval)
+{
+	if(confirm(top.ARE_YOU_SURE_DELETE))
+	{
+   		//get the scope (dhcp pool name) based on index.
+   		var selScope =  getEmRowElmValue(document.forms[0], "scope_name", idxval);
+		document.forms[0].buttonClicked.value = DELETE_CLICKED;
+		document.forms[0].scope_name.value = selScope;
+
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("scope_name", selScope);
+		document.forms[0].submit();
+	}
+}
+
+function editThisScope(idxval)
+{
+   	var selScope =  getEmRowElmValue(document.forms[0], "scope_name", idxval);
+   	document.forms[0].buttonClicked.value = EDIT_CLICKED;
+	document.forms[0].scope_name.value = selScope;
+
+	top.CHttpFormExtractor.clearKeyValues();
+	top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+	top.CHttpFormExtractor.addKeyValue("scope_name", selScope);
+	document.forms[0].submit();
+}
+
+</script>
+
+<!--
+<link rel="stylesheet" href="../../styles/content41.css" type="text/css">
+<script language="javascript" src="../../servicescript41.js"></script>
+<script language="javascript" src="../../popup.js"></script>
+-->
+
+<script>
+createNewBusinessLogicImplemented = true;
+function validateCreateNewBusinessLogic(){
+// check if total entries is == 16 then don't allow
+// any more create
+  var totalEntries = 0;
+  for(var loop=0; loop < document.forms[0].elements.length;loop++){
+    if(document.forms[0].elements[loop].name && (document.forms[0].elements[loop].name.indexOf("scope_name") > -1)){
+      totalEntries++;
+    }
+  }
+  if(totalEntries < 16) return true;
+  else {
+    alert("You cannot create more than 16 DHCP Scope entries.");
+    return false;
+  }
+}
+</script>
+
+<FORM method="post" ACTION="frameDhcpScopeList.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="A5Pqxtxnq3qd9BWGEZBOWtk22eOcSsq">
+<INPUT TYPE="hidden" NAME="scope_name" VALUE="">
+  <table CELLSPACING=0  nowrap cellpadding="0" border="0">
+    <!-- the header as part of the table -->
+
+    <tr>
+      <td nowrap class="pageTitle">
+        <h1>DHCP Scopes</h1>
+      </td>
+      <td nowrap align="right" class="pageTitle">
+       <script>getHtmlForCreateNewButton("frameDhcpScopeCreate.html");</script>
+        &nbsp;&nbsp;
+	   <script>getHtmlForHelpButton("DHCP_Scopes","/helppages/wwhelp.htm");</script>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" style="padding-top: 13px">
+        <table WIDTH= "680" border="0" cellspacing="1" cellpadding="0">
+          <tr>
+            <TH align="left">Scope Name</Th>
+            <TH align="left">Address Pool</Th>
+            <TH align="left">Lease Time</Th>
+            <TH align="left">Status</Th>
+            <th>&nbsp;</th>
+         </tr>
+
+<?=SCOPE-ENTRY-begin=?>
+
+<tr>
+        <td class="listNoPad">
+<script>
+ var indexVal = <?=SCOPE-INDEX=?>;
+</script>
+
+	<!--<SCRIPT>getHtmlForEdit(indexVal);</SCRIPT>-->
+            <INPUT type="TEXT" name="1.<?=SCOPE-INDEX=?>.<?=SCOPE-COUNT=?>.scope_name" class="statictextboxlink" onclick="editThisScope(<?=SCOPE-INDEX=?>);" readonly SIZE="32" MAXLENGTH="79" VALUE="<?=SCOPE-NAME=?>">
+        <!-- <SCRIPT>endHtmlEdit();</SCRIPT>-->
+        </td>
+        <td class="listNoPad">
+            <INPUT type="TEXT" name="1.<?=SCOPE-INDEX=?>.<?=SCOPE-COUNT=?>.address_pool" class="statictextboxlist" readonly SIZE="34" MAXLENGTH="34" VALUE="<?=START-ADDRESS=?> - <?=END-ADDRESS=?>">
+        </td>
+        <td class="listNoPad">
+            <INPUT type="TEXT" name="1.<?=SCOPE-INDEX=?>.<?=SCOPE-COUNT=?>.lease_time" class="statictextboxlist" readonly SIZE="30" MAXLENGTH="30" VALUE="<?=LEASE-TIME=?>">
+        </td>
+        <td class="listNoPad">
+            <!-- <INPUT type="TEXT" name="1.<?=SCOPE-INDEX=?>.<?=SCOPE-COUNT=?>.scope_status" class="statictextboxlist" readonly SIZE="8" MAXLENGTH="8" VALUE="Disabled"> -->
+        </td>
+	<!--<script>addMenuItem("Remove","deleteAction",indexVal);</script>
+	<td class="listNoPad"><script>getHtmlForPopupMenu(indexVal);</script></td>-->
+	<TD class=listNoPad><a href="javascript:deleteUserAction(<?=SCOPE-INDEX=?>);">Remove</a></TD>
+	<TD ALIGN=left><INPUT TYPE="hidden" NAME="1.<?=SCOPE-INDEX=?>.<?=SCOPE-COUNT=?>.index" SIZE="3" MAXLENGTH="3" VALUE=""></TD>
+</tr>
+
+<?=SCOPE-ENTRY-end=?>
+
+
+        </table>
+      </td>
+    </tr>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="indexClicked" SIZE="3" MAXLENGTH="3" VALUE=""></TD>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="3" MAXLENGTH="3" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0"></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+</TABLE>
+</FORM>
+
+<?=PAGE-FOOTER=?>

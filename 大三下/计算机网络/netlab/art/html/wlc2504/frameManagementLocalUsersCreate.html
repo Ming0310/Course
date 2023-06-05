@@ -1,0 +1,140 @@
+<?=PAGE-HEADER=?>
+
+
+<script>
+// PT71: used to tell banner.html which one is selected
+var selectedTab = 'Management';
+
+function ptOnload() {
+}
+
+function submitForm() {
+	debugMsg("<submitAction>");
+	var noerror = true;
+	if(thisFormAttrs != null)
+		noerror = validateForm(document.forms[0],thisFormAttrs);
+	if(noerror && businessLogicImplemented)
+		noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+	if(noerror){
+		document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+		top.CHttpFormExtractor.clearKeyValues();
+		top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+		top.CHttpFormExtractor.addKeyValue("username", document.forms[0].username.value);
+		top.CHttpFormExtractor.addKeyValue("userpwd", document.forms[0].userpwd.value);
+		//top.CHttpFormExtractor.addKeyValue("access_mode", document.forms[0].access_mode.value);
+		document.forms[0].submit();
+	}
+
+	return false;
+}
+
+</script>
+
+<script>
+
+var textAttrs = new Array();
+var notAllowedChars = new Array("'");
+textAttrs[0] = new textAttr("username","User Name",24,notAllowedChars,null,true);
+textAttrs[1] = new textAttr("userpwd","Password",24,null,null,true);
+textAttrs[2] = new textAttr("pwdconfirm","Confirm Password",24,null,null,true);
+var numAttrs = new Array();
+thisFormAttrs = new formAttrs(numAttrs,textAttrs,null,null);
+businessLogicImplemented = true;
+function validateBusinessLogic(attrs){
+//alert("value for pwd 1 is "+document.forms[0].userpwd.value);
+//alert("value for pwd 2 is "+document.forms[0].pwdconfirm.value);
+    if(document.forms[0].userpwd.value != document.forms[0].pwdconfirm.value){
+    alert("Password doesn't match.Try again.");
+    return false;
+    }else
+        return true;
+
+}
+</script>
+<style>
+<!--
+A{text-decoration:none}
+-->
+</style>
+
+<script>
+drawHeader();
+</script>
+<FORM method="post" ACTION="frameManagementLocalUsersCreate.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="csrf_token" SIZE="32" MAXLENGTH="32" VALUE="Daq8YLeOE6EexVoCDVxFLfi9ngUlnkc">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+    <tr>
+      <td class="pageTitle">
+        <h1>Local Management Users &gt; New</h1>
+      </td>
+      <td align="right" class="pageTitle">
+        <script>getHtmlForBackButton();</script>
+        &nbsp;&nbsp;&nbsp;
+	<!-- <script>getHtmlForNewApplyButton();</script> -->
+	<script>getHtmlForButton("apply","Apply","buttonStretch","submitForm()"); </script>
+	<script>getHtmlForHelpButton("Local_Management_Users_New","/helppages/wwhelp.htm");</script>
+     </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="label2" width="160">User Name</td>
+            <td class="label2">
+              <INPUT type="TEXT" name="username" SIZE="25" MAXLENGTH="24" VALUE="">
+            </td>
+
+          </tr>
+          <tr>
+            <td width="147" class="label2">Password</td>
+            <td class="label2">
+              <INPUT type="Password" name="userpwd" emweb_type=PASSWORD autocomplete="off" EMWEB_TYPE=PASSWORD SIZE="25" MAXLENGTH="24" VALUE="">
+            </td>
+          </tr>
+          <tr>
+            <td width="147" class="label2">Confirm Password</td>
+            <td class="label2">
+              <INPUT type="Password" name="pwdconfirm" emweb_type=PASSWORD autocomplete="off" EMWEB_TYPE=PASSWORD SIZE="25" MAXLENGTH="24" VALUE="">
+            </td>
+          </tr>
+	  <TR>
+	  <TD class = "label2">User Access Mode</TD>
+	        <td class="label2">
+	        	<SELECT name="access_mode" SIZE="1">
+	        		<OPTION value="" selected>Not Supported</OPTION>
+		        	<!-- <OPTION value="ReadOnly" >ReadOnly</option>
+			   		<OPTION value="ReadWrite" >ReadWrite</option>
+               		<OPTION value="LobbyAdmin" >LobbyAdmin</option> -->
+				</SELECT>
+         </td>
+         </TR>
+
+        </table>
+      </td>
+    </tr>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+  </table>
+
+
+</FORM>
+
+<?=PAGE-FOOTER=?>

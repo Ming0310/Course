@@ -1,0 +1,46 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<?=MESSAGE=?>
+
+<h2 style="font-family: sans-serif;">Client VPN</h2>
+ 
+<form accept-charset="UTF-8" action="client_vpn" class="configure_form monitor_unsaved_changes nat_enabled vlans_disabled" id="vpn_settings_edit_form" method="post" name="vpn_settings_edit_form">
+
+<div class='medspace'></div>
+
+<div>
+  <table class="cfg" id="client_vpn_enabled"><tr>
+    <td class="cfgq base">
+      <label for="wired_config_client_vpn_enabled">Client VPN server</label>
+      <i alt="[Help]" class="asx_p fa fa-info-circle auto_hohelp idh_9866599362"></i>
+    </td>
+    <td class="cfgo">
+        <select id="wired_config_client_vpn_enabled" name="wired_config[client_vpn_enabled]"><option value="true">Enabled</option>
+<option value="false" selected="selected">Disabled</option></select>
+    </td>
+  </tr></table>
+</div>
+
+<div class="save_button_container">
+  <input type="submit" value="Save Changes" /> or
+  <a href="https://n27.meraki.com/CiscoMaggie/n/mXADndB/manage/configure/client_vpn_settings" class="suppress_unsaved_changes_alert" title="Discard changes and refresh this page">cancel</a>  <div style="padding-top:.5em; font-size:.8em">(Please allow 1-2 minutes for changes to take effect.)</div>
+</div>
+
+</form>
+
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

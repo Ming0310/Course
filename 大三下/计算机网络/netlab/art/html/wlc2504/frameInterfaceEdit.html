@@ -1,0 +1,836 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Switch';
+function ptOnload() {
+	getOldPort();setApManagerCreds();hideRelaySource();showQuarantineVlan();checkNat();CheckError();recordInitialValues();
+	
+	if (document.forms[0].interface_name.value == "virtual") {
+		document.styleSheets[0].insertRule(".notVirtual { display: none !important; }");
+		document.styleSheets[0].insertRule(".virtual { display: table-row; }");
+	} else {
+		document.styleSheets[0].insertRule(".notVirtual { display: block; }");
+		document.styleSheets[0].insertRule("tr.notVirtual { display: table-row; }");
+		document.styleSheets[0].insertRule(".virtual { display: none !important; }");
+	}
+}
+
+function submitAction() 
+{
+    debugMsg("<submitAction> My Submit Action");
+    var noerror = false;
+    if(thisFormAttrs != null)
+        if(businessLogicImplemented)
+            noerror = validateBusinessLogic(document.forms[0].thisFormAttrs);
+        if(noerror)
+        {
+            noerror = validateForm(document.forms[0],thisFormAttrs);
+        }
+        if(noerror){
+            document.forms[0].buttonClicked.value = SUBMIT_CLICKED;
+			
+			top.CHttpFormExtractor.clearKeyValues();
+			top.CHttpFormExtractor.addKeyValue("buttonClicked", document.forms[0].buttonClicked.value);
+			top.CHttpFormExtractor.addKeyValue("interface_name", document.forms[0].interface_name.value);
+			top.CHttpFormExtractor.addKeyValue("port", document.forms[0].port.value);
+			top.CHttpFormExtractor.addKeyValue("ap_management", document.forms[0].ap_management.checked ? "true" : "false");
+			top.CHttpFormExtractor.addKeyValue("vlanId", document.forms[0].vlanId.value);
+			top.CHttpFormExtractor.addKeyValue("ip_address", document.forms[0].ip_address.value);
+			top.CHttpFormExtractor.addKeyValue("netmask", document.forms[0].netmask.value);
+			top.CHttpFormExtractor.addKeyValue("gateway", document.forms[0].gateway.value);
+			top.CHttpFormExtractor.addKeyValue("primary_dhcp", document.forms[0].primary_dhcp.value);
+
+            document.forms[0].submit();
+        }
+}
+</script>
+
+
+<!-- <link REL=stylesheet HREF="../../style.css" TYPE="text/css">
+<link REL=stylesheet HREF="../../oma.css" TYPE="text/css"> -->
+<script>
+var old_port;
+var old_vlanId;
+var old_primary_dhcp;
+var old_secondary_dhcp;
+var textAttrs = new Array();
+var notAllowedChars = new Array();
+var notAllowedCharsInVrfName = new Array(" ");
+textAttrs[0] = new textAttr("interface_name","Interface Name",32,notAllowedChars,null,false);
+                            
+textAttrs[1] = new textAttr("nasid","NAS-ID",32,notAllowedChars,null,false);
+
+textAttrs[2] = new textAttr("vpn_select_vrf","VPN select - VRF Name",32,notAllowedCharsInVrfName,null,false);
+    
+
+var numAttrs = new Array();
+// Maximum value of vlanid can be 4094. Bug-12898
+
+numAttrs[0] = new numberAttr("vlanId","VLAN Identifier",0,4094,null,true);
+
+
+numAttrs[1] = new numberAttr("q_vlanid","Quarantine Vlan Id",0,4094,null,true);
+
+
+
+    
+        var maxPhyPort = "4";
+        numAttrs.push(new numberAttr("port","Port Number",1,maxPhyPort,null,true));
+        
+            numAttrs.push(new numberAttr("backup_port","Backup Port",0,maxPhyPort,null,false));
+        
+    
+
+
+var ipAttrs = new Array();
+var notAllowedIPs = new Array();
+notAllowedIPs[0]="0.0.0.0";
+notAllowedIPs[1]="255.255.255.255";
+ipAttrs[0] = new ipAttr("ip_address","IP Address",null,false);
+ipAttrs[1] = new ipAttr("netmask","Netmask",null,false);
+ipAttrs[2] = new ipAttr("gateway","Gateway",null,false);
+ipAttrs[3] = new ipAttr("primary_dhcp","Primary DHCP Server",null,false);
+ipAttrs[4] = new ipAttr("secondary_dhcp","Secondary DHCP Server",null,false);
+                            
+                            
+ipAttrs[5] = new ipAttr("nat_ip_address","NAT IP Address",notAllowedIPs,false);
+
+
+
+thisFormAttrs = new formAttrs(numAttrs,textAttrs,ipAttrs,null);
+
+businessLogicImplemented = true;
+
+function getOldPort(){
+   
+   
+   old_port = document.forms[0].port.value;
+   
+   
+}
+
+function recordInitialValues()
+{
+   
+   old_vlanId = document.forms[0].vlanId.value;
+   
+
+   old_primary_dhcp = document.forms[0].primary_dhcp.value;
+   old_secondary_dhcp = document.forms[0].secondary_dhcp.value;
+}
+
+
+function apManagerClicked(){
+
+                           
+		var ap_management=0;
+		if ( document.forms[0].ap_management.checked== true){
+			ap_management=1;
+
+	
+			document.forms[0].backup_port.value=0;
+	
+
+		}
+		if(ap_management != document.forms[0].old_ap_manager.value){
+			if(document.forms[0].ap_management.checked==true){
+				return confirm("Please make sure that you have configured AP managers on all ports. Otherwise, the controller behavior will be unpredictable. Are you sure to continue?");
+			}
+			else{
+			  
+				return confirm("Warning: You have no AP manager on this port. The controller behavior will be unpredictable. Disabling the AP-manager interface will reboot APs, if connected, on this interface. Are you sure you want to continue?");
+			  
+			}
+		}	
+
+
+	return true;
+}
+
+function setBackupPortStatus(){
+
+
+    
+        
+	        if ( document.forms[0].ap_management.checked== true){
+			    document.forms[0].backup_port.disabled=true;
+		    }
+		    else
+		    {
+			    document.forms[0].backup_port.disabled=true;
+		    }
+        
+    
+
+
+	return true;
+}
+
+function setApManagerCreds()
+{
+   
+                  
+                            
+   document.getElementById("nat_attr").style.display = "none";
+   document.getElementById("nat_line").style.display = "none";
+   document.getElementById("nat_en_attr").style.display = "none";
+   document.getElementById("nat_ipaddr_id").style.display = "none";
+   
+
+   document.getElementById("quarantine_id").style.display = document.all?"block":"table-row";
+   document.getElementById("quarantine_vlan_id").style.display = document.all?"block":"table-row";
+
+   
+   if(document.forms[0].ap_management.checked== true )
+   {
+                            
+      document.getElementById("nat_attr").style.display = document.all?"block":"table-row";
+      document.getElementById("nat_line").style.display = document.all?"block":"table-row";
+      document.getElementById("nat_en_attr").style.display = document.all?"block":"table-row";
+      if( document.forms[0].en_nat.checked==true )
+      {
+         document.getElementById("nat_ipaddr_id").style.display = document.all?"block":"table-row";
+      }
+
+
+     document.getElementById("quarantine_id").style.display = "none";
+     document.getElementById("quarantine_vlan_id").style.display = "none";
+
+   }
+   else
+   {
+
+                            
+      document.forms[0].en_nat.checked=false;
+      //document.forms[0].nat_ip_address.value="";
+      checkNat();
+
+   }
+   
+   
+   setBackupPortStatus();
+   return true;
+}
+
+function showQuarantineVlan() {
+
+if(document.forms[0].quarantine.checked == false){
+                document.forms[0].q_vlanid.disabled=true;
+        }else{
+                document.forms[0].q_vlanid.disabled=false;
+        }
+
+}
+
+function quarantineClicked() {
+
+
+if (document.forms[0].guest_lan.checked == false) {
+
+   if((document.forms[0].quarantine.checked == false) && (document.forms[0].old_quarantine.value > 0))
+        return confirm("Disabling quarantine will disable NAC on all WLANs mapped to this interface.");
+
+   }
+
+
+        return true;
+}
+
+function checkIfIpIsZero(data){
+   var notZero=0;
+   var pieces = data.split(".");
+   for(var count=0; count < pieces.length; count++){
+      if ( parseInt(pieces[count],10) !=  0){
+         notZero=1;
+         break;
+      }
+   }
+   
+   if (!notZero)
+      return true;
+   else
+      return false;
+}
+
+function validateBusinessLogic(attrs)
+{
+
+
+    
+   
+   if (document.forms[0].guest_lan.checked == false){
+   
+   
+   
+      var priBlank = 0;
+      var secBlank = 0;
+      var priZero = 0;
+      var secZero = 0;
+      var showMsg = 0;
+
+      if (document.forms[0].primary_dhcp.value == "")
+         priBlank = 1;
+      else
+         priZero = checkIfIpIsZero(document.forms[0].primary_dhcp.value);
+
+      if (document.forms[0].secondary_dhcp.value == "")
+         secBlank = 1;
+      else
+         secZero = checkIfIpIsZero(document.forms[0].secondary_dhcp.value);
+
+
+      if(!(priBlank) && !(secBlank))
+      {
+         var notDupe=0;
+         var pieces1 = document.forms[0].primary_dhcp.value.split(".");
+         var pieces2 = document.forms[0].secondary_dhcp.value.split(".");
+
+
+         for(var count=0; count < pieces1.length; count++){
+            if ( parseInt(pieces1[count],10) != parseInt(pieces2[count],10) ){
+               notDupe =1;
+               break;
+            }
+         }
+
+         if (notDupe==0 && !(priZero)){
+            alert("Duplicate IP Address! Primary and secondary DHCP servers have the same IP Address");
+            return false;
+         }
+      }
+
+      if ( (priBlank ||priZero) && ((!secBlank) && (!secZero)) )
+      {
+         alert("Cannot configure secondary DHCP server without configuring primary");
+         return false;
+      }
+
+    
+   
+   } 
+   
+   
+
+                            
+                            
+    if(document.forms[0].en_nat.checked==false)
+    {
+        document.forms[0].nat_ip_address.value = "";
+        extraDebugMsg("<validateBusinessLogic> 1 nat_ip_address has been set to "+document.forms[0].nat_ip_address.value.length); 
+    }
+  
+
+
+    
+    
+    if (document.forms[0].port.value != old_port){
+     
+     
+     if ( document.forms[0].ap_management.checked== true){
+        showMsg = 1;
+     }
+     
+     if (showMsg == 1)
+     {
+	
+          if (!confirm("Change in active port configuration, might cause AP(s) to reboot. Are you sure you want to continue?"))
+          return false;
+	
+     } 
+      
+    }
+    
+    
+
+    
+	if (document.forms[0].vlanId.value != old_vlanId) 
+	{
+		 
+                
+			if ( document.forms[0].ap_management.checked== true)
+			{
+				
+			}
+		
+		
+	}
+   
+
+	 
+        
+	// If ApMgr is enabled then Check if DHCP server changed to warn for Direct AP
+	if ( document.forms[0].ap_management.checked== true)
+	{
+		if ( (document.forms[0].primary_dhcp.value != old_primary_dhcp) || 
+				(document.forms[0].secondary_dhcp.value != old_secondary_dhcp) )
+		{
+			
+		}
+	}
+   	
+	
+
+   
+    
+      
+/*          if(document.forms[0].port.value == document.forms[0].backup_port.value)
+          {
+             alert("Primary and back up port cannot be same");
+             return false;           
+          } 
+*/      
+    
+   
+
+ 
+  
+   if ((document.forms[0].ap_management.checked== true) &&
+	(document.forms[0].intBnjProfile.options[document.forms[0].intBnjProfile.selectedIndex].value != "none")){
+             alert("mDNS profile cannot be configured with AP management.");
+             return false;           
+   }
+  
+
+
+
+      if ((document.forms[0].link_dhcpOpt82.checked== true)){
+      if ((document.forms[0].RelaySrcIntName.options[document.forms[0].RelaySrcIntName.selectedIndex].value == "")){
+             alert("Please select a valid relay source interface for Link Select feature.");
+             return false;
+      }
+
+      if(document.forms[0].vpn_select_vrf.value != "" && document.forms[0].vpn_select_vpn_id.value != "") {
+             alert("Please select either VPN ID or VRF name for DHCP Option 82 VPN select feature.");
+             return false;
+      }
+      }
+
+
+
+   if ( apManagerClicked() && quarantineClicked() )
+        return confirm("Changing the Interface parameters causes the WLANs to be temporarily disabled and thus may result in loss of connectivity for some clients.");
+
+}
+
+function hideRelaySource(){
+
+        if (document.forms[0].dhcpOpt82.checked == true) {
+           document.getElementById("dhcpOpt82LinkSelect").style.display =document.all?"block":"table-row";
+           document.getElementById("linkRelay").style.display =document.all?"block":"table-row";
+           document.getElementById("vpnSelect").style.display =document.all?"block":"table-row";
+           document.getElementById("vpnVrf").style.display =document.all?"block":"table-row";
+           document.getElementById("vpnVpnId").style.display =document.all?"block":"table-row";
+        }
+        else{
+           document.getElementById("dhcpOpt82LinkSelect").style.display ="none"; 
+           document.getElementById("linkRelay").style.display ="none"; 
+           document.getElementById("vpnSelect").style.display ="none"; 
+           document.getElementById("vpnVrf").style.display ="none"; 
+           document.getElementById("vpnVpnId").style.display ="none"; 
+        }
+
+} 
+
+function hideaddress() { 
+
+
+        if (document.forms[0].guest_lan.checked == true) { 
+           document.getElementById("ipaddr_id").style.display ="none"; 
+           document.getElementById("netmask_id").style.display ="none"; 
+           document.getElementById("gateway_id").style.display ="none"; 
+           document.getElementById("vlan_id").style.display =document.all?"block":"table-row";
+           document.getElementById("quarantine_id").style.display ="none"; 
+           document.getElementById("quarantine_vlan_id").style.display ="none"; 
+           document.getElementById("guest_id").style.display =document.all?"block":"table-row";
+           document.getElementById("dhcp_id").style.display ="none"; 
+           document.getElementById("dhcpline_id").style.display ="none"; 
+           document.getElementById("dhcpsec_id").style.display ="none"; 
+           document.getElementById("dhcpprim_id").style.display ="none"; 
+                            
+           document.getElementById("apManagement_id").style.display ="none";
+           document.forms[0].ap_management.checked = false;
+                            
+           document.forms[0].en_nat.checked=false;
+           document.getElementById("nat_attr").style.display = "none";
+           document.getElementById("nat_line").style.display = "none";
+           document.getElementById("nat_en_attr").style.display = "none";
+           checkNat();
+
+
+       } 
+       else { 
+           document.getElementById("ipaddr_id").style.display =document.all?"block":"table-row";
+           document.getElementById("netmask_id").style.display =document.all?"block":"table-row";
+           document.getElementById("gateway_id").style.display =document.all?"block":"table-row";
+           document.getElementById("vlan_id").style.display =document.all?"block":"table-row";
+           document.getElementById("guest_id").style.display =document.all?"block":"table-row";
+           document.getElementById("dhcp_id").style.display =document.all?"block":"table-row";
+           document.getElementById("dhcpline_id").style.display =document.all?"block":"table-row";
+           document.getElementById("dhcpsec_id").style.display =document.all?"block":"table-row";
+           document.getElementById("dhcpprim_id").style.display =document.all?"block":"table-row";
+                            
+           document.getElementById("apManagement_id").style.display =document.all?"block":"table-row";
+           document.forms[0].ap_management.checked = false;
+           setApManagerCreds();
+ 
+       } 
+
+
+} 
+
+function wiredGuestAlert()
+{
+ if (document.forms[0].guest_lan.checked == true)
+ alert("A Guest LAN interface is used as Ingress interface for Wired Guest LANs.");
+}
+
+function checkNat()
+{
+                            
+                            
+   //make nat Ip Address mandatory
+   var is_mandatory=false;
+   var disp="none";
+   if(document.forms[0].en_nat.checked==true){
+     is_mandatory=true;
+     disp=document.all?"block":"table-row";
+   }
+   ipAttrs[5].isMandatory=is_mandatory;
+   thisFormAttrs.ipAttrs=ipAttrs;
+   document.getElementById("nat_ipaddr_id").style.display=disp;
+
+
+}
+
+
+</script>
+
+<FORM method="post" ACTION="frameInterfaceEdit.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+<INPUT TYPE="hidden" NAME="old_ap_manager" VALUE="0">
+<INPUT TYPE="hidden" NAME="old_quarantine" VALUE="0">
+  <table CELLSPACING=0  WIDTH="100%" cellpadding="0" border="0">
+    <tr>
+      <td nowrap class="pageTitle">
+        <h1>Interfaces &gt; Edit</h1>
+      </td>
+      <td nowrap class="pageTitle" align="right">
+        <input type="button" name="back" value="&lt; BACK" class="button" onclick="javascript:window.location='frameInterfaceList.html';">
+        &nbsp;&nbsp;&nbsp;
+        <script>getHtmlForApplyButton();</script>
+      </td>
+    </tr>
+  </table>
+  <table CELLSPACING=1 cellpadding="0" border="0" style="margin-top: 11px">
+    <tr>
+	  <td class ="label1" width="160">General Information</td>
+	  <td width="200">&nbsp; </td>
+	</tr>
+	<tr>
+	  <td colspan="2" class="horizLine"><img alt="" width="1" height="1"></td>
+ 	</tr>
+    <tr>
+      <td class="label2" align="left">Interface Name</td>
+      <td class="label2">
+        <INPUT type=TEXT name="interface_name" class="statictextboxlist" readonly SIZE="32" MAXLENGTH="31" VALUE="<?=INTERFACE-NAME=?>">
+      </td>
+    </tr>
+	<tr>
+      <td class="label2" align="left">MAC Address</td>
+      <td class="label2">
+        <INPUT type=TEXT name="mac_address" class="statictextboxlist" readonly SIZE="19" MAXLENGTH="18" VALUE="<?=INTERFACE-MAC=?>">
+      </td>
+    </tr>
+  </table>
+
+  <table cellspacing="0" cellpadding="0" border="0" class="notVirtual">
+  
+    <tr>
+            <td class ="label1" width="160">Configuration</td>
+            <td width="200">&nbsp; </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="horizLine"><img alt="" width="1" height="1"></td>
+		  </tr>
+    
+    
+     <tr id=guest_id class="notSupported"> 
+      <td class="label2" width="144">Guest Lan</td> 
+            <td>
+		<INPUT type=CHECKBOX name="guest_lan" onclick="hideaddress();wiredGuestAlert()" disabled>
+            </td>
+          </tr>
+    <!-- IF GUEST VLAN SUPPORTED -->
+   <!-- IF NOT SMB -->
+  
+  
+         <tr id=quarantine_id class="notSupported">
+           <td class ="label2" width="144">Quarantine</td>
+            <td>
+                <INPUT type=CHECKBOX name="quarantine" onClick="showQuarantineVlan()" disabled>
+            </td>
+          </tr>
+          <tr id=quarantine_vlan_id class="notSupported">
+            <td class="label2">Quarantine Vlan Id</td>
+            <td>
+                  <INPUT type=TEXT name="q_vlanid" id="q_vlanid" SIZE="4" MAXLENGTH="4" VALUE="0" disabled>                       </td>
+          </tr>
+ 
+                            
+            <tr id=nas_id class="notSupported">
+              <td class="label2">NAS-ID</td>
+              <td>
+                <INPUT type=TEXT name="nasid" id="nasid" SIZE="32" MAXLENGTH="31" VALUE="" disabled>
+              </td>
+            </tr>
+ 
+    </table> 
+
+      <table cellspacing="0" cellpadding="0" border="0" class="notVirtual">
+                            
+                            
+           <!-- NAT -->
+           <tr id=nat_attr>
+              <td class ="label1" width="160">NAT Address</td>
+              <td width="200">&nbsp; </td>
+           </tr>
+           <tr id=nat_line>
+            <td colspan="2" class="horizLine"><img alt="" width="1" height="1"></td>
+           </tr>
+           <tr id=nat_en_attr class="notSupported">
+              <td class ="label2" >Enable NAT Address</td>
+              <td><INPUT type=CHECKBOX name="en_nat" onClick="checkNat()" disabled></td>
+           </tr>
+           <tr id=nat_ipaddr_id class="notSupported">
+              <td class="label2" >NAT IP Address</td>
+              <td><INPUT type=TEXT name="nat_ip_address" SIZE="16" MAXLENGTH="15" VALUE="" disabled></td>
+           </tr>
+          <!-- NAT -->
+ <!-- WLCNG -->
+ <!-- AP MGR Applicable -->
+      </table>
+
+           <table cellspacing="0" cellpadding="0" border="0" class="notVirtual">
+          <tr>
+	        <td class ="label1" width="160">Physical Information</td>
+			<td width="200">&nbsp; </td>
+		  </tr>
+		  <tr>
+		    <td colspan="2" class="horizLine"><img alt="" width="1" height="1"></td>
+		  </tr>
+
+<!--Show Port Information and AP Manager check box only if LAG is disabled-->          
+          <tr>
+            <td class="label2">Port Number</td>
+            <!-- Unit -->
+            <td>
+		      <INPUT type=TEXT name="port" SIZE="3" MAXLENGTH="2" VALUE="<?=INTERFACE-PHYSICAL-PORT=?>">
+            </td>
+          </tr>
+    
+          <tr class="notSupported">
+            <td class="label2">Backup Port</td>
+            <!-- Unit -->
+            <td>
+		      <INPUT type=TEXT name="backup_port" SIZE="3" MAXLENGTH="2" VALUE="0" disabled>
+            </td>
+          </tr>
+          <tr>
+            <td class="label2">Active Port</td>
+            <!-- Unit -->
+            <td>
+		      <INPUT type=TEXT class="statictextbox" readonly name="active_port" SIZE="3" MAXLENGTH="2" VALUE="<?=INTERFACE-PHYSICAL-PORT=?>">
+            </td>
+          </tr>
+    
+          <tr id=apManagement_id>
+            <td class="label2">Enable Dynamic AP Management</td>
+            <td>
+			    <INPUT type="checkbox" name="ap_management" onClick="setApManagerCreds()" <?=INTERFACE-DYNAMIC-AP-MANAGER=?>>
+		    </td>
+          </tr>
+		</table>
+      
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+	        <td class ="label1" width="160">Interface Address</td>
+			<td width="200">&nbsp; </td>
+		  </tr>
+		  <tr>
+		    <td colspan="2" class="horizLine"><img alt="" width="1" height="1"></td>
+		  </tr>
+          <tr id=vlan_id class="notVirtual">
+              <td class ="label2">VLAN Identifier</td> 
+                
+            <td>
+                    <INPUT type=TEXT name="vlanId" SIZE="4" MAXLENGTH="4" VALUE="<?=INTERFACE-VLAN=?>">                       </td> 
+                
+                        </tr> 
+                <tr id=ipaddr_id> 
+                  <td class="label2">IP Address</td> 
+                  <!-- Unit --> 
+                  <td> 
+                                <INPUT type=TEXT name="ip_address" SIZE="16" MAXLENGTH="15" VALUE="<?=INTERFACE-IP=?>"> 
+            </td>
+          </tr>
+             <tr id=netmask_id class="notVirtual">
+            <td class ="label2">Netmask</td>
+            <!-- Unit -->
+            <td>
+               <INPUT type=TEXT name="netmask" SIZE="16" MAXLENGTH="15" VALUE="<?=INTERFACE-SUBNET-MASK=?>">
+            </td>
+          </tr>          
+        <tr id=gateway_id class="notVirtual">
+            <td class="label2">Gateway</td>
+              <td> 
+                 <INPUT type=TEXT name="gateway" SIZE="16" MAXLENGTH="15" VALUE="<?=INTERFACE-GATEWAY=?>"> 
+                  </td> 
+                </tr> 
+				
+		<tr class="virtual notSupported">
+            <td class="label2">DNS Host Name</td>
+            <!-- Unit -->
+            <td>
+			  <input type="TEXT" name="hostname" size="81" maxlength="80" value="" disabled>
+            </td>
+          </tr>
+              </table> 
+              <table border="0" cellpadding="0" cellspacing="0" class="notVirtual"> 
+                <tr id=dhcp_id> 
+	        <td class ="label1" width="160">DHCP Information</td>
+			<td width="200">&nbsp; </td>
+		  </tr>
+		  <tr id=dhcpline_id>
+		    <td colspan="2" class="horizLine" width="500"><img alt="" width="1" height="1"></td>
+		  </tr>
+          <tr id=dhcpprim_id>
+            <td class="label2" width="200">Primary DHCP Server</td>
+            <td>
+                <INPUT type=TEXT name="primary_dhcp" SIZE="16" MAXLENGTH="15" VALUE="<?=INTERFACE-DHCP-SERVER=?>">
+            </td> 
+          </tr>
+          <tr id=dhcpsec_id class="notSupported">
+            <td class="label2" width="200">Secondary DHCP Server</td>
+            <td>
+                <INPUT type=TEXT name="secondary_dhcp" SIZE="16" MAXLENGTH="15" VALUE="" disabled>
+            </td>
+          </tr>
+
+          <tr class="notSupported">
+             <td class="label2" width="200">DHCP Proxy Mode</td>
+             <td>
+                 <SELECT name="dhcp_mode" SIZE="1" disabled>
+                    <OPTION value="proxy_mode_global" SELECTED>Global</option>
+                    <OPTION value="proxy_mode_enabled" >Enabled</option>
+                    <OPTION value="proxy_mode_disabled" >Disabled</option>
+                 </SELECT>
+             </td>
+          </tr>
+
+          <tr id=dhcpOpt82 class="notSupported"> 
+          <td class="label2" width="200">Enable DHCP Option 82</td> 
+          <td>
+		<INPUT type=CHECKBOX name="dhcpOpt82" onclick="hideRelaySource()" disabled>
+          </td>
+          </tr>
+
+          <tr id=dhcpOpt82LinkSelect> 
+          <td class="label2" width="200">Enable DHCP Option 82-Link Select</td> 
+          <td>
+		<INPUT type=CHECKBOX name="link_dhcpOpt82" >
+          </td>
+          </tr>
+          <tr id=linkRelay>
+              <td class="label2" width="200">Link Select relay source </td>
+              <td>
+                <SELECT name="RelaySrcIntName">
+<OPTION value="" SELECTED>none
+<OPTION value="management">management
+</SELECT>
+              </td>
+            </tr>
+          <tr id=vpnSelect> 
+          <td class="label2" width="200">Enable DHCP Option 82 - VPN Select</td> 
+          <td>
+		<INPUT type=CHECKBOX name="vpn_sel_dhcpOpt82" >
+          </td>
+          </tr>
+           <tr id=vpnVrf>
+              <td class="label2" width="200">VPN select - VRF Name</td>
+              <td><INPUT type=TEXT name="vpn_select_vrf" SIZE="32" MAXLENGTH="32" VALUE=""></td>
+           </tr>
+           <tr id=vpnVpnId>
+              <td class="label2" width="200">VPN select - VPN ID</td>
+              <td><INPUT type=TEXT name="vpn_select_vpn_id" SIZE="16" MAXLENGTH="15" VALUE="">&nbsp;(In xxxxxx:xxxxxxxx format)</td>
+           </tr>
+
+           </table> 
+              <table border="0" cellpadding="0" cellspacing="0" class="notVirtual"> 
+          <tr>
+	        <td class ="label1" width="200">Access Control List</td>
+			<td width="200">&nbsp; </td>
+		  </tr>
+		  <tr>
+		    <td colspan="2" class="horizLine"><img alt="" width="1" height="1"></td>
+		  </tr>
+          <tr class="notSupported">
+             <td class="label2" width="200">ACL Name</td>
+             <td>
+                 <SELECT name="acl_name" disabled>
+<OPTION value="" SELECTED>none</SELECT>
+             </td>
+          </tr>
+          <tr>
+	        <td class ="label1" width="200">mDNS</td>
+			<td width="200">&nbsp; </td>
+		  </tr>
+		  <tr>
+		    <td colspan="2" class="horizLine"><img alt="" width="1" height="1"></td>
+		  </tr>
+          <tr class="notSupported">            
+	   <td class ="propertyLabel2">mDNS Profile</td> 
+	   <td>
+		<SELECT name="intBnjProfile" disabled>
+<OPTION value="none" SELECTED>none
+<OPTION value="default-mdns-profile">default-mdns-profile</SELECT>
+	   </td>
+          </tr>
+          <tr>
+                <td class ="label1" width="200">External Module</td>
+                        <td width="200">&nbsp; </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="horizLine"><img alt="" width="1" height="1"></td>
+                  </tr>
+          <tr id=module_vlan_id class="notSupported">
+              <td class ="label2" width="200">3G VLAN</td>
+               <td>
+                   <INPUT type=CHECKBOX name="module_vlan_3g" disabled>
+               </td>
+             </tr>
+        </table>
+       </td>
+    </tr>
+          <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td colspan="2" class="horizLine"><img alt="" width="1" height="1"></td>
+      </tr>          
+      <tr>
+      <td colspan="2" width="400" >
+                <em>Note: Changing the Interface parameters causes the WLANs to be temporarily disabled and thus may result in loss of connectivity for some clients.</em>
+      </td>
+      </tr>    
+  </table>
+  </table>
+
+  <INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE="
+">
+  <INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE="0">
+  <INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE="">
+  <INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE="0">
+</FORM>
+
+
+<?=PAGE-FOOTER=?>

@@ -1,0 +1,58 @@
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" href="css/main.css">
+
+<style type="text/css">
+
+a
+{
+ 	text-decoration: none;
+ 	color: #FFFFFF;
+ 	weight: bold;
+}
+
+table, th, td
+{
+	color: #FFFFFF;
+	font-size: 14px;
+}
+
+</style>
+
+<script>
+
+function selectedOption(id, val)
+{
+	var sel = document.getElementById(id);
+	for (var i = 0; i < sel.length; i++)
+	{
+		var option = sel.options[i];
+		if (option.value == val)
+		{
+			sel.selectedIndex = i;
+			break;
+		}
+	}
+}
+
+</script>
+
+</head>
+
+<body class="clearfix" onLoad="ptOnload();">
+
+<div id="top" class="clearfix">
+	<img src="images/cisco-meraki.png" width="120"><br><br><br>
+	<?=ALERT-MSG=?>
+</div>
+
+<div id="details" data-spy="affix" data-offset-top="333">
+
+	<div>
+		<ul class="simple-tabs container" style="white-space:nowrap;">
+			<li<?=LI-CONNECT-STYLE=?>><a href="index.html"<?=LINK-CONNECT-STYLE=?>>Connection</a></li>
+			<li<?=LI-CONFIG-STYLE=?>><a href="configure.html"<?=LINK-CONFIG-STYLE=?>>Configure</a></li>
+			<li<?=LI-ETHERNET-STYLE=?>><a href="ethernet.html"<?=LINK-ETHERNET-STYLE=?>>Ethernet</a></li>
+		</ul>
+	</div>

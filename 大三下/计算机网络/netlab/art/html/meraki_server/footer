@@ -1,0 +1,15 @@
+
+<div style="clear: both; height: 20px;"></div>
+<hr>
+<div id='footer' style="position:relative;left:20px; font-size:80%;">
+  
+  <p class='copyright'>
+    <!-- <a href='http://meraki.com/support/#policies:privacy'>Privacy</a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <a href='http://www.meraki.com/support/#policies:eca'>Terms</a> -->
+    Privacy&nbsp;&nbsp;|&nbsp;&nbsp;Terms
+    &nbsp;&nbsp;|&nbsp;
+    &copy; 2018 Cisco Systems, Inc.
+  </p>
+</div>
+

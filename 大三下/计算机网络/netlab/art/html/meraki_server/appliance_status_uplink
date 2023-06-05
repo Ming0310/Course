@@ -1,0 +1,72 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<?=MESSAGE=?>
+
+
+<a href="appliance_status">Summary</a> | 
+<a href="appliance_status_uplink">Uplink</a> | 
+<a href="appliance_status_dhcp">DHCP</a></td>
+
+
+<br><br>
+
+<?=BEGIN-DEVICE-STATUS=?>
+
+<table>
+<tr>
+<?=SIDE-STATUS=?>
+
+<td valign="top">
+<b>Configuration</b>
+<br><br>
+
+<b>WAN</b></font>
+<br><br>
+
+<table class="cfg cfg_first" style="width:auto; font-size: 90%;">
+<tr>
+<td class="cfgq">STATUS</td>
+<td class="cfgo">Active</td>
+</tr>
+<tr><td><br><div style="position:relative;left:20px;"></td><td></td></tr>
+
+<tr>
+<td class="cfgq">IP (DHCP)</td>
+<td class="cfgo"><?=IP-ADDRESS=?></td>
+</tr>
+<tr><td><br><div style="position:relative;left:20px;"></td><td></td></tr>
+
+<tr>
+<td class="cfgq">GATEWAY</td>
+<td class="cfgo"><?=GATEWAY-IP=?></td>
+</tr>
+<tr><td><br><div style="position:relative;left:20px;"></td><td></td></tr>
+
+<tr>
+<td class="cfgq">DNS</td>
+<td class="cfgo"><?=DNS-IP=?></td>
+</tr>
+
+
+</td>
+</tr>
+</table>
+
+<?=END-DEVICE-STATUS=?>
+ 
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

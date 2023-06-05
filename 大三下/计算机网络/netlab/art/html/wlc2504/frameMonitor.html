@@ -1,0 +1,499 @@
+<?=PAGE-HEADER=?>
+
+<script>
+// PT71: used to tell banner.html which one is selected  
+var selectedTab = 'Monitor';
+
+function ptOnload() {
+}
+</script>
+
+<style>
+.status_green {
+	content: url('data:image/gif;base64,R0lGODlhDAAMAIABAADMAP///yH5BAEAAAEALAAAAAAMAAwAAAIWjAMJd+pr3otSoYqz3uli+oET40FGAQA7');
+}
+
+.status_red {
+	content: url('data:image/gif;base64,R0lGODlhDAAMAIAAAP8AM////yH5BAEAAAEALAAAAAAMAAwAAAIWjAMJd+pr3otSoYqz3uli+oET40FGAQA7');
+}
+
+.green_port {
+	content: url('data:image/gif;base64,R0lGODlhJQAgAMQQAAAAAADfASAgIODg4NDQ0AAfAABfAKCgoAAvAAC/AUBAQAA/AMDAwAB/AYCAgAD/Av///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAABAALAAAAAAlACAAAAWbICSOJOOcaKoyZOu2ztLMdE0vzqvDzeP/wF8jt3spAMhecPloIAGKIkmRYFqBiahURL16sy+TSlD1WhMCleMQszUCZmvAbVA4lPH8MnvX+7F2eH96fIKDcYWHfomKeYyNZo+QV5KTTJWWQZiZP5ucD56coZmjlqWTp5CpjauKrYevg7F/fAULt7i5uru8uggKAwzCw8TFxsfHBCEAOw==');
+}
+
+.red_port {
+	content: url('data:image/gif;base64,R0lGODlhJQAgAMQTAC8AANDQ0OsBAHBwcBAQEI0BAG0AAJwBAF4AAGBgYH0BAKCgoJCQkICAgD4AAMDAwLwBAEBAQPsCAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAABMALAAAAAAlACAAAAWf4CSO5BKdaKoGZOu2DQLNdE0Dz6uLwfMkColwSBw6GD7WjhQBOByHolRoeAIiSyZkyiVCsFlRZNvtfl8DVYRALk8hBHW6YIMI3FxBvXBq4/9FX2OAhF59hYiCfoh4ioyEjo9/kZJulJVmh5hll5tSnZ6Gg6FvmqSBpqdDoKespK6hsJ6ym7SYtpW4koJOT76/wMHCwFc9PsfIycrLywEhADs=');
+}
+
+</style>
+<script>
+ function getHtmlForGreenPort(){
+    document.writeln('\
+    <IMG height="16" src="../../images/port_gige_green.gif" alt="" width="12">');
+ }
+ function getHtmlForRedPort(){
+    document.writeln('\
+    <IMG height="16" src="../../images/port_gige_red.gif" alt="" width="12">');
+ }
+ 
+</script> 
+
+<FORM method="post" ACTION="/screens/base/monitor_summary.html">
+<INPUT TYPE="hidden" NAME="access_control" SIZE="16" MAXLENGTH="15" VALUE="1">
+
+<INPUT type="hidden" name="indiv_cpu_usage" VALUE="0%/1%, 0%/0%">
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD class=pageTitle colSpan=4>
+      <H1 class=style2>Summary</H1></TD></TR>
+   <TR>
+     <TD vAlign=top>
+       <TABLE cellSpacing=0 cellPadding=0 width="90%" border=0>
+         <TR><TD>
+         <DIV align=right><INPUT type=text class="statictextboxlist" name="supported_aps" readonly align="right" SIZE="30" MAXLENGTH="30" VALUE="25 Access Points Supported"></DIV></TD></TR></TABLE></TD></TR><!--200 Access Points Supported-->        
+
+  <TR vAlign=top>
+    <TD colSpan=4>
+	  
+      <TABLE cellSpacing=0 cellPadding=0 width=578 border=0>
+        <!-- USMWEB_IF_WLCNG_SZABLA -->        
+        <TBODY>
+        <TR>
+        
+            <!-- USMWEB_IF_WLC2106 -->
+            
+				
+				
+                   <TD vAlign=top background=../../images/controller_2504.gif height=127>
+      <TABLE cellSpacing=0 cellPadding=0 width=578 border=0>
+         <TBODY>
+              <TR>
+                <TD width=244 height=52></TD>
+                <TD width=37 height=52></TD>
+                <TD width=8 height=52></TD>
+                <TD width=37 height=52></TD>
+                <TD width=7 height=52></TD>
+                <TD width=37 height=52></TD>
+                <TD width=6 height=52></TD>
+                <TD width=37 height=52></TD>
+                <TD width=165 height=52></TD>
+			 </TR>
+			 <TR>
+                <TD width=244 height=63></TD>
+                <TD>
+                    
+						<IMG height=32 class='<?=PORT-1-STATUS=?>' width=37>
+                    
+                </TD>
+                <TD width=8 height=63></TD>
+                <TD>
+                    
+						<IMG height=32 class='<?=PORT-2-STATUS=?>' width=37>
+                    
+                </TD>
+                <TD width=7 height=63></TD>
+                <TD>
+                    
+						<IMG height=32 class='<?=PORT-3-STATUS=?>' width=37>
+                    
+                </TD>
+                <TD width=6 height=63></TD>
+                <TD>
+                    
+						<IMG height=32 class='<?=PORT-4-STATUS=?>' width=37>
+                    
+                </TD>
+			    <TD width=165 height=63></TD>
+              </TR>
+		</TBODY>
+    </TABLE>
+</td>
+
+
+		   
+				
+               <!--USMWEB_IF_WLCNG -->        
+            <!--USMWEB_IF_WLC2106 -->  
+          <!--USMWEB_IF_NOT_FOXHOUND -->        
+        </TR>
+        <TR>
+          <TD vAlign=top>
+            <DIV class=readonly align=right>
+            <DIV align=center></DIV></DIV></TD></TR></TBODY></TABLE></TD></TR>
+  <!--Include device image-->
+  <TR>
+    <TD class=pageTitle vAlign=top>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD scope=row>
+            <TABLE cellSpacing=0 cellPadding=1 width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=label1 scope=row>
+                  <DIV align=left><SPAN>Controller Summary 
+              </SPAN></DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD scope=row>
+            <TABLE cellSpacing=1 cellPadding=0 width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=list align=left width="50%">Management IP Address</TD>
+                <TD class=list width="63%"><?=MANAGEMENT-IPv4-ADDRESS=?> , <?=MANAGEMENT-IPv6-ADDRESS=?>/128</TD></TR>
+              
+                <TD class=list align=left width="50%">Software Version</TD>
+                <TD class=list>8.3.111.0</TD></TR>
+                
+                <tr> 
+                   <td class=list align=left width=0>
+                   
+                   Field Recovery Image Version
+                   
+                   </th>
+                   <td class="listNoPad">
+                    <INPUT type="text" name="emr_version" class="statictextboxlist" readonly SIZE="26" MAXLENGTH="32" VALUE="7.6.101.1">
+                  </td>
+                </tr>
+
+              <TR>
+                <TD class=list align=left width="50%">System Name</TD>
+                <TD class=list><?=SYSTEM-NAME=?></TD></TR>
+              <TR>
+                <TD class=list align=left width="50%">Up Time</TD>
+                <TD class=list><?=UP-TIME=?></TD></TR>
+              <TR>
+                <TD class=list align=left width="50%">System Time</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=systemtime SIZE="26" MAXLENGTH="31" VALUE="<?=SYSTEM-TIME=?>"></TD></TR>
+              <TR>
+                <TD class=list align=left width="50%">Redundancy Mode</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=red SIZE="26" MAXLENGTH="16" VALUE="N/A"></TD></TR>
+              <TR>
+
+		 
+              <TR>
+                <TD class=list align=left width="50%">Internal Temperature</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=internal_temp SIZE="26" MAXLENGTH="31" VALUE="+31 C"></TD></TR>
+		  
+		
+				  <TR>
+                <TD class=list align=left width=0>802.11a Network State</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=dot11astatus SIZE="23" MAXLENGTH="23" VALUE="Enabled"></TD></TR>
+		
+              <TR>
+                <TD class=list align=left width=0>802.11b/g Network State</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=dot11bstatus SIZE="23" MAXLENGTH="23" VALUE="Enabled"></TD></TR>
+			   <tr>
+ 
+                  <td class=list align=left width=0>Local Mobility Group</th>
+ 
+                  <td class="listNoPad">
+                    <INPUT type="text" name="group_name" class="statictextboxlist" readonly SIZE="26" MAXLENGTH="32" VALUE="<?=LOCAL-MOBILITY-GROUP=?>">
+                  </td>
+                </tr>
+                <tr> 
+
+                   <td class=list align=left width=0>CPU(s) Usage</td>
+
+                   <td class="listNoPad">
+                    <INPUT type="text" name="cpu_usage" class="statictextboxlist" readonly SIZE="26" MAXLENGTH="32" VALUE="0%">
+                  </td>
+                </tr>
+
+                <tr>
+                   <td class=list align=left width=0>Individual CPU Usage</td>
+                   <td class="listNoPad">
+                     <font color="black">0%/1%, 0%/0%</font>
+                   </td>
+                </tr>
+
+                <tr> 
+                   <td class=list align=left width=0>Memory Usage</th>
+                   <td class="listNoPad">
+                    <INPUT type="text" name="memory_usage" class="statictextboxlist" readonly SIZE="26" MAXLENGTH="32" VALUE="46%">
+                  </td>
+                </tr>
+
+      
+                <tr>
+                   <td class=list align=left width=0>Fan Status</th>
+                   <td class="listNoPad">
+                    <INPUT type="text" name="fan_status" class="statictextboxlist" readonly SIZE="35" MAXLENGTH="35" VALUE="3800 rpm">
+                  </td>
+                </tr>
+      
+      
+
+				  </TBODY></TABLE></TD></TR>
+			 
+        <TR>
+          <TD scope=row>&nbsp;</TD></TR>
+        <TR>
+          <TD vAlign=top scope=row>
+            <TABLE cellSpacing=0 cellPadding=1 width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=label1 scope=row>
+                  <DIV align=left><SPAN>Access Point Summary 
+              </SPAN></DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD scope=row>
+            <TABLE style="MARGIN-TOP: 10px" cellSpacing=1 cellPadding=0 
+            width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=list align=left width=0>&nbsp;</TD>
+                <TD class=listNoPad width=0>Total</TD>
+                <TD class=listNoPad width=0>&nbsp;</TD>
+                <TD class=listNoPad width=0>Up </TD>
+                <TD class=listNoPad width=0>&nbsp;</TD>
+                <TD class=listNoPad width=0>Down</TD>
+                <TD class=list width="14%">&nbsp;</TD></TR>
+              <TBODY>
+	
+              <TR>
+                <TD class=list align=left width=0>802.11a/n/ac Radios</TD>
+                <TD class=listNoPad width=0><INPUT type="TEXT" class=statictextboxlist readonly name=dot11a_radios SIZE="6" MAXLENGTH="6" VALUE="<?=AP-COUNT=?>"></TD>
+                <TD class=listNoPad width=0><IMG height=12 
+                  class='status_green' alt="" width=12></TD>
+                <TD class=listNoPad width=0><INPUT type="TEXT" class=statictextboxlist readonly name=dot11a_up_radios SIZE="6" MAXLENGTH="6" VALUE="<?=AP-COUNT=?>"> </TD>
+                <TD class=listNoPad width=0><IMG 
+                  class='status_red' alt="" >&nbsp;</TD>
+                <TD class=listNoPad width=0><INPUT type="TEXT" class=statictextboxlist readonly name=dot11a_down_radios SIZE="6" MAXLENGTH="6" VALUE="0"> </TD>
+                <TD class="list notSupported"><A 
+                  href="../spam/celldot11a_list.html">Detail</A></TD></TR>
+	
+              <TR>
+                <TD class=list align=left width=0>802.11b/g/n Radios</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=dot11b_radios SIZE="6" MAXLENGTH="6" VALUE="<?=AP-COUNT=?>"></TD>
+                <TD class=listNoPad><IMG height=12 
+                  class='status_green' alt="" width=12></TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=dot11b_up_radios SIZE="6" MAXLENGTH="6" VALUE="<?=AP-COUNT=?>"> </TD>
+                <TD class=listNoPad><IMG 
+                  class='status_red' alt="" >&nbsp;</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=dot11b_down_radios SIZE="6" MAXLENGTH="6" VALUE="0"> </TD>
+                <TD class="list notSupported"><A 
+                  href="../spam/celldot11b_list.html">Detail</A></TD></TR>
+              <TR>
+                <TD class=list align=left width=0>Dual-Band Radios</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=dot11xor_radios SIZE="6" MAXLENGTH="6" VALUE="0"></TD>
+                <TD class=listNoPad><IMG height=12 
+                  class='status_green' alt="" width=12></TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=dot11xor_up_radios SIZE="6" MAXLENGTH="6" VALUE="0"> </TD>
+                <TD class=listNoPad><IMG 
+                  class='status_red' alt="" >&nbsp;</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=dot11xor_down_radios SIZE="6" MAXLENGTH="6" VALUE="0"> </TD>
+                <TD class="list notSupported"><A 
+                  href="../spam/celldot11xor_list.html">Detail</A></TD></TR>
+              <TR>
+                <TD class=list align=left width=0>All APs</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=current_aps SIZE="6" MAXLENGTH="6" VALUE="<?=AP-COUNT=?>"></TD>
+                <TD class=listNoPad><IMG height=12 
+                  class='status_green' alt="" width=12></TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=current_up_aps SIZE="6" MAXLENGTH="6" VALUE="<?=AP-COUNT=?>"> </TD>
+                <TD class=listNoPad><IMG 
+                  class='status_red' alt="">&nbsp;</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=current_down_aps SIZE="6" MAXLENGTH="6" VALUE="0"> </TD>
+                <TD class=list><A 
+                  href="frameWireless.html">Detail</A></TD></TR>
+ </TBODY></TABLE></TD></TR>
+
+        <TR>
+          <TD scope=row>&nbsp;</TD></TR>
+        <TR>
+          <TD scope=row>
+            <TABLE cellSpacing=0 cellPadding=1 width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=label1 scope=row>
+                  <DIV align=left>Client Summary
+</DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD scope=row>
+            <TABLE style="MARGIN-TOP: 10px" cellSpacing=1 cellPadding=0 
+            width="100%" border=0>
+              <TR>
+                <TD class=list align=left>Current Clients</TD>
+                <TD class=listNoPad width=150><INPUT type="TEXT" class=statictextboxlist readonly name=current_clients SIZE="23" VALUE="<?=CLIENT-COUNT=?>"> </TD>
+                <TD class="list notSupported"><A 
+                  href="../apf/mobile_station_list.html">Detail</A></TD></TR>
+              <TR>
+                <TD class=list align=left>Excluded Clients</TD>
+                <TD class=listNoPad><INPUT type="TEXT" class=statictextboxlist readonly name=blacklist_clients SIZE="23" VALUE="0"> </TD>
+                <TD class="list notSupported"><A 
+                  href="javascript:notSupported();">Detail</A></TD></TR>
+              <TR>
+                <TD class=list align=left>Disabled Clients</TD>
+                <TD class=listNoPad><INPUT class=statictextboxlist readonly name=disabled_clients SIZE="23" VALUE="0"></TD>
+                <TD class="list notSupported"><A 
+                  href="javascript:notSupported();">Detail</A></TD></TR>
+ </TBODY></TABLE></TD></TR></TBODY></TABLE></TD>
+    <TD class=pageTitle width="5%">&nbsp;</TD>
+    <TD class=pageTitle vAlign=top align=left width="45%">
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+	
+        <TR>
+          <TD scope=row>
+            <TABLE cellSpacing=0 cellPadding=1 width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=label1 scope=row>
+                  <DIV align=left><SPAN>Rogue Summary
+            </SPAN></DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD vAlign=top>
+            <TABLE style="MARGIN-TOP: 10px" cellSpacing=1 cellPadding=0 
+            width="75%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=list align=left >Active Rogue APs</TD>
+                <TD class=listNoPad><INPUT class=statictextboxlist readonly name=active_rogues SIZE="6" VALUE="0"> </TD>
+                <TD class="list notSupported"><A 
+                  href="javascript:notSupported();">Detail</A></TD></TR>
+              <TR>
+                <TD class=list align=left>Active Rogue Clients</TD>
+                <TD class=listNoPad><INPUT class=statictextboxlist readonly name=active_client_rogues SIZE="6" VALUE="0"> 
+                </TD>
+                <TD class="list notSupported"><A 
+                  href="javascript:notSupported();">Detail</A></TD></TR>
+              <TR>
+                <TD class=list align=left>Adhoc Rogues</TD>
+                <TD class=listNoPad><INPUT class=statictextboxlist readonly name=adhoc_rogues SIZE="6" VALUE="0"></TD>
+                <TD class="list notSupported"><A 
+                  href="javascript:notSupported();">Detail</A></TD></TR>
+              <TR>
+                <TD class=list align=left>Rogues on Wired Network</TD>
+                <TD class=listNoPad><INPUT class=statictextboxlist readonly name=rogues_on_wired SIZE="6" VALUE="0"> </TD>
+                <TD class=list>&nbsp;<!--<A 
+                  href="../apf/rogue_ap_list.html">Detail</A>--></TD></TR>
+ </TBODY></TABLE></TD></TR>
+        <TR>
+          <TD scope=row>&nbsp;</TD></TR>
+	
+        <TR>
+          <TD scope=row>
+            <TABLE cellSpacing=0 cellPadding=1 width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=label1 scope=row>
+                  <DIV align=left>Top WLANs</DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD vAlign=top scope=row></TD></TR>
+        <TR>
+          <TD vAlign=top></TD></TR>
+        <TR>
+          <TD vAlign=top>
+            <TABLE style="MARGIN-TOP: 10px" cellSpacing=1 cellPadding=0 
+            width="75%" border=0>
+              <TBODY>
+                <TR>
+                    <TD class=listNoPad align=left>Profile Name</TD>
+                    <TD class=listNoPad align=left><SPAN># of Clients</SPAN></TD>
+                    <TD class=listNoPad align=left>&nbsp;</TD></TR></TBODY>
+              <TBODY>
+                
+<!--                 <tr>
+                    <TD class="listNoPad"><INPUT type="TEXT" name="1.0.1.wlan_profileName" class="statictextboxlist" onfocus=this.blur() SIZE="40" MAXLENGTH="32" VALUE="wlc2"></TD>
+                    <TD class="listNoPad"><INPUT type="TEXT" name="1.0.1.wlan_no_of_clients" class="statictextboxlist" onfocus=this.blur() SIZE="10" MAXLENGTH="6" VALUE="1"></TD>
+                    
+                    <script>
+ var indexVal =0;
+</script>
+
+                    <td class="list">
+                    <script>getHtmlForDetailButton(indexVal);</script>
+                    </td>
+                    <TD     ALIGN=left><INPUT TYPE="hidden" NAME="1.0.1.index" SIZE="10" MAXLENGTH="3" VALUE="2"></TD>
+                </tr>
+ -->                
+                </TBODY></TABLE></TD></TR>
+        <TR>
+            <TD vAlign=top>&nbsp;</TD></TR>
+        <TR>
+          <TD vAlign=top>
+            <TABLE cellSpacing=0 cellPadding=1 width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=label1 scope=row>
+                  <DIV align=left>Most Recent Traps</DIV></TD></TR></TBODY>
+        <TR>
+          <TD vAlign=top>
+            <TABLE style="MARGIN-TOP: 10px" cellSpacing=1 cellPadding=0 
+            width="100%" border=0>
+              <TBODY>
+                    <TR>
+                      <TD class=list align=left>
+                        <DIV align=left></DIV>
+                        <DIV align=left><A 
+                            href="javascript:notSupported();">View All</A> </DIV></TD></TR>
+              </TBODY></TABLE></TD></TR></TBODY></TABLE></TD>
+    <TD class=pageTitle vAlign=top align=left width="5%">&nbsp;</TD></TR>     
+
+<tr><td><table><tbody>
+<tr>
+  <td class="propertyLabel" colspan="2">Top Applications</td>
+</tr>
+<tr>
+  <td colspan="2" class="horizLine" width="470"><img src="" height="1" width="1"></td>
+</tr>
+</tbody></table></td></tr>
+<tr><td><table><tbody>
+<tr>
+  <th align="left">Application Name</th>
+  <th align="left"></th>
+  <th align="left">Packet Count</th>
+  <th align="left">Byte Count</th>
+</tr>
+
+
+
+</tbody></table>
+</td></tr>
+<TR>
+    <TD class=list align=left>
+     <DIV align=left></DIV>
+     <DIV align=left><A href="javascript:notSupported();">View All</A></DIV>
+    </TD>
+</TR>
+
+
+
+
+
+
+
+</tbody></table>
+</td></tr>
+<TR>
+    <TD class=list align=left>
+     <DIV align=left></DIV>
+     <DIV align=left><A href="javascript:notSupported();">View All</A></DIV>
+    </TD>
+</TR>
+
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+   <TD ALIGN=left><INPUT TYPE="hidden" NAME="indexClicked" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="err_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_flag" SIZE="16" MAXLENGTH="15" VALUE=""></TD>
+</TR>
+<TR>
+ <TD ALIGN=left><INPUT TYPE="hidden" NAME="info_msg" SIZE="512" MAXLENGTH="511" VALUE=""></TD>
+</TR>
+    
+</TBODY></TABLE>
+<!-- <P align=left>This page refreshes every 30 seconds.</P> -->
+</FORM>
+
+<?=PAGE-FOOTER=?>

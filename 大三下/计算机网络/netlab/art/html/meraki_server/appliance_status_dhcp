@@ -1,0 +1,62 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<?=MESSAGE=?>
+
+<a href="appliance_status">Summary</a> | 
+<a href="appliance_status_uplink">Uplink</a> | 
+<a href="appliance_status_dhcp">DHCP</a></td>
+
+
+<br><br>
+
+<?=BEGIN-DEVICE-STATUS=?>
+
+<table>
+<tr>
+<?=SIDE-STATUS=?>
+
+<td valign="top">
+<b>DHCP Subnets</b>
+<br><br>
+<table id="meraki_table">
+<tr>
+  <th width="150" align="center">Subnet</th>
+  <th width="200" align="center">VLAN</th>
+  <th width="50" align="center">Used</th>
+  <th width="50" align="center">Free</th>
+</tr>
+
+<tr>
+  <td align="center"><?=VLAN-IP=?>/<?=VLAN-MASK=?></td>
+  <td align="center"><?=VLAN-IP=?>/<?=VLAN-MASK=?> - VLAN <?=VLAN-NUM=?></td>
+  <td></td>
+  <td></td>
+</tr>
+
+
+</table>
+
+
+
+</b>
+</tr>
+</table>
+
+<?=END-DEVICE-STATUS=?>
+ 
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<?=HEADER=?>
+
+<script type="text/javascript">
+
+function ptOnload() 
+{
+}
+
+</script>
+
+<div style="position:relative;left:20px;">
+
+<h2 style="font-family: sans-serif;">Inventory</h2>
+ 
+<table id="meraki_table">
+<tr>
+  <th>MAC address</th>
+  <th>Serial number</th>
+  <th>Network</th>
+  <th>Model</th>
+</tr>
+
+<?=BEGIN-INVENTORY=?>
+<tr>
+  <td><?=MAC=?>
+  <td><?=SN=?></td>
+  <td><?=NETWORK=?></td>
+  <td><?=MODEL=?></td>
+</tr>
+<?=END-INVENTORY=?>
+
+</table>
+
+
+</div>
+
+<?=FOOTER=?>
+</body>
+</html>
