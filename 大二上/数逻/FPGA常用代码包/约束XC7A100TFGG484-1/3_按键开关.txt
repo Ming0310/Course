@@ -1,0 +1,6 @@
+set_property PACKAGE_PIN R1  [get_ports  s1]
+set_property PACKAGE_PIN P1  [get_ports  s2]
+set_property PACKAGE_PIN P5  [get_ports  s3]
+set_property PACKAGE_PIN P4  [get_ports  s4]
+set_property PACKAGE_PIN P2  [get_ports  s5]
+set_property PACKAGE_PIN P20 [get_ports  s6]

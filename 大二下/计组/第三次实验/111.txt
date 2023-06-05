@@ -1,0 +1,86 @@
+`timescale 1ns / 1ps
+
+module cache(
+    // 全局信号
+    input clk,
+    input reset,
+    // 从CPU来的访问信号
+    input [12:0] raddr_from_cpu,     // CPU來的读地址
+    input rreq_from_cpu,            // CPU来的读请求
+    // 从下层内存模块来的信号
+    input [31:0] rdata_from_mem,     // 内存读取的数据
+    input rvalid_from_mem,          // 内存读取数据可用标志
+    // 输出给CPU的信号
+    output [7:0] rdata_to_cpu,      // 输出给CPU的数据
+    output hit_to_cpu,              // 输出给CPU的命中标志
+    // 输出给下层内存模块的信号
+    output reg rreq_to_mem,         // 输出给下层内存模块的读请求
+    output reg [12:0] raddr_to_mem  // 输出给下层模块的突发传输首地址
+    );
+   //4 7 2
+//状态机的状态：ready -> 01 TC -> 10 REFIL -> 11
+reg [1:0] current_state=2'b01;
+reg [1:0] next_state = 2'b01;
+wire [36:0]temp_reg;
+reg[1:0] w = 1'b0;
+wire [36:0] data_temp;//输出数据的缓冲。
+
+//hit的条件：状态机正在读取状态，cpu发出的tag位与cache一致，cache块的最高位有效
+assign hit_to_cpu = ((current_state == 2'b10) && (raddr_from_cpu[12:9] == data_temp[35:32]) && (data_temp[36] == 1'b1)) == 1 ? 1 : 0;
+ //temp_reg37位，最高位表示cache有效位，中间4位表示主存tag位,最后32位为从主存读取的数据
+assign temp_reg = {1'b1,raddr_from_cpu[12:9],rdata_from_mem}; 
+//输出数据
+//根据cpu提供地址的最后两位判断读取的数据选择哪个byte
+assign rdata_to_cpu[7:0] = (raddr_from_cpu[1:0] == 2'b00 ? data_temp[7:0] : raddr_from_cpu[1:0] == 2'b01 ? data_temp[15:8] : 
+raddr_from_cpu[1:0] == 2'b10 ? data_temp[23:16] : data_temp[31:24]);
+
+//更新cache
+
+always@(posedge clk or posedge reset)
+begin
+    if(reset) current_state <= 2'b01;
+    current_state <= next_state;
+end
+
+//状态机的转移
+always@(*)
+begin
+    /*
+    现态为ready，cpu发送请求，next_state变TC
+    现态为TC,未命中，次态变REFIL
+    现态为TC，已命中，次态变Ready
+    现态为REFIL,从主存读取的数据有效，次态变TC
+    */
+    if(reset) next_state = 2'b01;
+    else if((current_state == 2'b11) && (w)) next_state = 2'b10;
+    else if(current_state == 2'b10 && hit_to_cpu == 1'b1) next_state = 2'b01;
+    else if(current_state == 2'b10 && hit_to_cpu == 1'b0) next_state = 2'b11;
+    else if(current_state == 2'b01 && rreq_from_cpu == 1'b1) next_state = 2'b10;
+    else next_state = next_state;
+end
+
+always@(*)
+begin
+    if(next_state == 2'b11)
+        begin
+            rreq_to_mem = 1'b1;
+            raddr_to_mem = raddr_from_cpu;
+        end
+    else
+        rreq_to_mem = 1'b0;
+end
+
+always@(posedge clk)
+begin
+    if(rvalid_from_mem == 1'b1) w <= 1'b1;
+    else w <= 1'b0;
+end
+
+blk_mem_gen_0 memory (
+  .clka(clk),    // input wire clka
+  .wea(rvalid_from_mem),      // 只有在从主存读取且数据有效的时候写使能有效
+  .addra(raddr_from_cpu[8:2]),  // cache块号为cpu发送地址的8到2位
+  .dina(temp_reg),    // 更新cache的数据
+  .douta(data_temp)  // 从cache读取的数据
+);
+endmodule

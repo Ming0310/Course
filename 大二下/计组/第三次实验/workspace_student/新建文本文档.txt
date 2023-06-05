@@ -1,0 +1,71 @@
+`timescale 1ns / 1ps
+
+module cache(
+    // 全局信号
+    input clk,
+    input reset,
+    // 从CPU来的访问信号
+    input [12:0] raddr_from_cpu,     // CPU來的读地址
+    input rreq_from_cpu,            // CPU来的读请求
+    // 从下层内存模块来的信号
+    input [31:0] rdata_from_mem,     // 内存读取的数据
+    input rvalid_from_mem,          // 内存读取数据可用标志
+    // 输出给CPU的信号
+    output [7:0] rdata_to_cpu,      // 输出给CPU的数据
+    output hit_to_cpu,              // 输出给CPU的命中标志
+    // 输出给下层内存模块的信号
+    output reg rreq_to_mem,         // 输出给下层内存模块的读请求
+    output reg [12:0] raddr_to_mem  // 输出给下层模块的突发传输首地址
+    );
+    //4 7 2
+//ready -> 01 TC -> 10 REFIL -> 11
+reg [1:0] current_state;
+reg [1:0] next_state;
+reg [31:0] cache_mem [127:0]; // cache缓存区
+reg [3:0] tag [127:0];   //索引
+
+always@(posedge clk)
+begin
+    current_state <= next_state;
+end
+
+always@(posedge reset)
+begin
+    next_state <= 2'b01; //初态,就绪
+end
+
+//状态机的转移
+always@(*)
+begin
+    if(current_state == 2'b11 && rvalid_from_mem == 1'b1) next_state <= 2'b10;
+    else if(current_state == 2'b10 && hit_to_cpu == 1'b1) next_state <= 2'b01;
+    else if(current_state == 2'b10 && hit_to_cpu == 1'b0) next_state <= 2'b11;
+    else if(current_state == 2'b01 && rreq_from_cpu == 1'b1) next_state <= 2'b10;     // 开始读
+    
+    if(current_state == 2'b11)
+        begin
+             rreq_to_mem <= 1'b1;
+             raddr_to_mem <= raddr_from_cpu;
+        end
+end
+
+reg [31:0] data_temp;
+assign hit_to_cpu = (current_state == 2'b10) & (raddr_from_cpu[12:9] == tag[raddr_from_cpu[8:2]]);
+
+//更新cache
+always@(*)
+begin
+     if(rvalid_from_mem == 1'b1)
+     begin
+        tag[raddr_from_cpu[8:2]] <= raddr_from_cpu[12:9];
+        cache_mem[raddr_from_cpu[8:2]] <= rdata_from_mem;
+     end
+end
+//输出数据
+always@(*)
+begin
+    if(hit_to_cpu == 1'b1)
+    data_temp <=  (cache_mem[raddr_from_cpu[8:2]]);
+end
+assign rdata_to_cpu[7:0] = (raddr_from_cpu[8:2] == 2'b00 ? data_temp[7:0] : raddr_from_cpu[8:2] == 2'b01 ? data_temp[15:8] : 
+raddr_from_cpu[8:2] == 2'b10 ? data_temp[23:16] : data_temp[31:24]);
